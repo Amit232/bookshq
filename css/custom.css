@@ -1,0 +1,17 @@
+/** Your theme modifications here **/
+.modal-backdrop{
+z-index: 0!important;
+  
+}
+.invalid{
+      color: red !important;
+}
+.hidden{
+  display: none;
+}
+.gcolor{
+  color: #54c7c0;
+}
+.bcolor{
+  color: #555555;
+}
