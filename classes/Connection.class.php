@@ -2,8 +2,6 @@
 
 /**
  * Class with all the methods required for database operation
- * @author Rupraj
- * @copyright 2014
  */
 class Connection{
     
