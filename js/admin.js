@@ -361,7 +361,7 @@ $scope.getAllProducts = function()
     var searchString='';
     searchString = $rootScope.searchString;
 
-    $scope.products =[];
+    
     var params={searchString:searchString,startIndex:startIndex,limitIndex:limitIndex,categories:categories};
     $http({
     method: "post",
@@ -374,6 +374,8 @@ $scope.getAllProducts = function()
         $scope.totalItems = parseInt(data.products.total_count);
         $scope.noOfPages=Math.ceil($scope.totalItems/$scope.limitIndex);
 
+    }).error(function(data,status){
+        $scope.products =[];
     });
 }
 $scope.getAllProducts();

@@ -72,18 +72,38 @@ class AdminController
 
     public function addProduct($product,$img,$id_admin)
     {
+
+      $product = json_decode($product);
+      
       $adminObj = new Admin();
       $id_lender_notification='';
       $insertInfo =array();
-      $insertInfo['admin_id_admin'] = $id_admin;
-      $insertInfo['isbn'] = $product['isbn'];
-      $insertInfo['name'] = ucfirst($product['name']);
-      $insertInfo['description'] = ucfirst($product['description']);
-      $insertInfo['author'] = ucfirst($product['author']);
+      $file = $img['file'];
+      $file_name = $product->name."_".time()."_".$file['name'];
+      $file_size = $file['size'];
+      $file_tmp =$file['tmp_name'];
 
-      if($product['user_id_user']&&$product['user_id_user']!='')
+      $file_ext=strtolower(end(explode('.',$file['name'])));
+      $expensions= array("jpeg","jpg","png");
+       if(in_array($file_ext,$expensions)=== false){
+           echo $error="extension not allowed, please choose a JPEG or PNG file.";
+           exit;
+        }
+      if($file_size > 1000000){
+           $errors[]='File size must be less than 1 MB';
+        }
+      else{
+        move_uploaded_file($file_tmp,"../uploads/".$file_name);
+      }  
+      $insertInfo['admin_id_admin'] = $id_admin;
+      $insertInfo['isbn'] = $product->isbn;
+      $insertInfo['name'] = ucfirst($product->name);
+      $insertInfo['description'] = ucfirst($product->description);
+      $insertInfo['author'] = ucfirst($product->author);
+
+      if($product->user_id_user&&$product->user_id_user!='')
       {
-              $insertInfo['user_id_user'] =$product['user_id_user'] ;
+              $insertInfo['user_id_user'] =$product->user_id_user ;
 
       }
       else
@@ -91,9 +111,9 @@ class AdminController
         $insertInfo['user_id_user'] = NULL;
       }
 
-      if($product['id_lender_notification']&&$product['id_lender_notification']!='')
+      if($product->id_lender_notification&&$product->id_lender_notification!='')
       {
-        $id_lender_notification=$product['id_lender_notification'];
+        $id_lender_notification=$product->id_lender_notification;
       }
       else
       {
@@ -101,14 +121,23 @@ class AdminController
       }
 
 
-      $insertInfo['category_id_category'] = $product['category'];
-      $insertInfo['copies'] = $product['copies'];
-      $insertInfo['pic_name'] = $img;
+      $insertInfo['category_id_category'] = $product->category;
+      $insertInfo['copies'] = $product->copies;
+      $insertInfo['pic_name'] = NULL;
+      $insertInfo['pic']=$file_name;
       $insertInfo['created_at'] = date('Y-m-d H:i:s');
       $insertInfo['updated_at'] = date('Y-m-d H:i:s');
+     
       $res = $adminObj->setProduct($insertInfo);
       if($res)
       {
+        if ($img)
+        {
+           
+            /*$updateArrayNew=array('pic'=>$file_name);
+            $updateCondition=" id_product='$res'";
+            $updateStudentProfile=$adminObj->updateProduct($updateCondition,$updateArrayNew);*/
+        }
         if($id_lender_notification!='')
         {
           $updateArray=[];

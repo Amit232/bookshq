@@ -1,4 +1,4 @@
-var bookAppAdmin = angular.module('bookAppAdmin', ['ui.router','ngCookies','ngSanitize','timer','ngImgCrop']);
+var bookAppAdmin = angular.module('bookAppAdmin', ['ui.router','ngCookies','ngSanitize','timer','ngImgCrop','angularFileUpload']);
 var interval;
 var validateOptions= {
   errorElement: 'em',
@@ -305,7 +305,7 @@ $scope.changeLimitIndex=function(limitIndex,from)
 });
 
 
-bookAppAdmin.controller('productCtrl', function ($scope,$rootScope,$interval, $http,$cookies,$location,$stateParams,$window,$timeout){
+bookAppAdmin.controller('productCtrl', function ($scope,$rootScope,$interval, $http,$upload,$cookies,$location,$stateParams,$window,$timeout){
 $rootScope.menu='addp';
 $scope.id_user = $stateParams.id_user;
 $scope.productName = $stateParams.productName;
@@ -369,10 +369,11 @@ $scope.onChange = function ($dataURI) {
         $scope.onLoadError = function () {
             // console.log('onLoadError fired');
         };
-
+  $scope.files=null;      
   var handleFileSelect = function (evt) {
 
             var files = evt.currentTarget.files[0];
+            $scope.files=files;
             if(files.type=='image/png')
             {
             }
@@ -381,6 +382,7 @@ $scope.onChange = function ($dataURI) {
             }
             else
             {
+                $scope.files=null;
                 $scope.message="Please upload the JPG OR PNG files";
                 alert($scope.message);
                 /*$scope.ErrorMsg=true;
@@ -475,17 +477,20 @@ $scope.onChange = function ($dataURI) {
         }
         else
         {
-            $http({
+
+            $upload.upload({
                 method: "POST",
                 timeout:60000,                                    
                 url: SITE_URL+'addProduct',
-                data:$.param({product:product,img:$scope.resImageDataURI,id_admin:$cookies.id_admin}),
-                headers: {'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'}
+                //data:$.param({product:product,img:$scope.resImageDataURI,id_admin:$cookies.id_admin}),
+                file: $scope.files,
+                fields: {'product':product,'id_admin':$cookies.id_admin},
+                headers: { 'Content-Type' : 'application/x-www-form-urlencoded' }
             }).success(function (data,status) {
                 if(status==200)
                 {
                     alert(data.message);
-                     $scope.product={};
+                    $scope.product={};
                     $scope.resImageDataURI='';
                    
                     $timeout(function() {$window.location.reload();}, 1000);

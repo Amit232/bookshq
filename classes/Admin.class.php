@@ -68,6 +68,13 @@ class Admin{
       return $res;  
     }
 
+    public function updateProduct($updateInfo,$updateCondition)
+    {
+      global $db;
+      $res=$db->update('product',$updateInfo, $updateCondition);
+      return $res; 
+    }
+
     public function updateLenderStatus($updateInfo,$updateCondition){
       global $db;
       $res=$db->update('lender_product_notification',$updateInfo, $updateCondition);

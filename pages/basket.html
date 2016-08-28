@@ -32,7 +32,7 @@
                                         <tr ng-repeat="product in $root.cartProducts">
                                             <td>
                                                 <a >
-                                                    <img ng-src="{{product.pic_name}}" alt="{{product.name}}">
+                                                    <img src="./uploads/{{product.pic}}" alt="{{product.name}}">
                                                 </a>
                                             </td>
                                             <td><a href="">{{product.name}}</a>
@@ -173,7 +173,7 @@
                                         <tr ng-repeat="product in $root.recentOrders">
                                             <td>
                                                 <a >
-                                                    <img ng-src="{{product.pic_name}}" alt="{{product.name}}">
+                                                    <img src="./uploads/{{product.pic}}" alt="{{product.name}}">
                                                 </a>
                                             </td>
                                             <td><a href="">{{product.name}}</a>

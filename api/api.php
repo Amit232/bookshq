@@ -396,8 +396,9 @@
             }
             else
             {
+                $file = $_FILES;
                 $adminController = new AdminController();
-                $addP = $adminController->addProduct($this->_request['product'],$this->_request['img'],$this->_request['id_admin']);
+                $addP = $adminController->addProduct($this->_request['product'],$file,$this->_request['id_admin']);
                 $this->response($this->json($addP), 200);
  
             }

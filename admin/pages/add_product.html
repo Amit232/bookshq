@@ -34,7 +34,7 @@ img-crop canvas {
 </style>
 <div class="container">
 
-    <form id="normalProduct" name="normalProduct" class="col-xs-6" style="text-align:center"> 
+    <form id="normalProduct" name="normalProduct" enctype="multipart/form-data" class="col-xs-6" style="text-align:center"> 
         <div class="form-group">
             <input type="text" class="form-control" id="name" name="name" ng-model="product.name"  placeholder="Product Name" autosuggest="off">
         </div>
@@ -66,7 +66,7 @@ img-crop canvas {
          <div class="form-group">
             <label for="file" class="input input-file">
                 <span  class="button proImg left-30">
-                    <input type="file" id="profilePic" class="profilePicpage">
+                    <input type="file" id="profilePic" class="profilePicpage" >
                 </span>
             </label>
         </div>
@@ -113,9 +113,9 @@ img-crop canvas {
            <!--  <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 text-center">
                 <button tabindex="-1" class="btn btn-primary commonBtn" ng-click="cropAndUploadProfile();" title="Upload Cropped Image">Upload Cropped Image</button>
             </div> -->
-            <!-- <div ng-show="resImageDataURI">Croped Imgage
+            <div ng-show="resImageDataURI">Croped Imgage
             <img ng-src="{{resImageDataURI}}" ></img>
-            </div> -->
+            </div>
       </div>
       <!-- dialog buttons -->
       <div class="modal-footer"><button type="button" class="btn btn-primary" data-dismiss="modal" aria-hidden="true">close</button></div>

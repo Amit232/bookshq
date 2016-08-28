@@ -384,12 +384,12 @@
                                     <div class="flipper">
                                         <div class="front">
                                             <a ng-click="getProductDetail(p.id_product)">
-                                                <img ng-src="{{p.pic_name}}" width="253" height="367" alt="" class="img-responsive1">
+                                                <img ng-src="./uploads/{{p.pic}}" width="253" height="367" alt="" class="img-responsive1">
                                             </a>
                                         </div>
                                         <div class="back">
                                             <a ng-click="getProductDetail(p.id_product)">
-                                                <img ng-src="{{p.pic_name}}" width="253" height="367" alt="" class="img-responsive1">
+                                                <img ng-src="./uploads/{{p.pic}}" width="253" height="367" alt="" class="img-responsive1">
                                             </a>
                                         </div>
                                     </div>
@@ -477,7 +477,7 @@
                     <div class="row" id="productMain">
                         <div class="col-sm-6">
                             <div id="mainImage">
-                                <img ng-src="{{single_product.pic_name}}" alt="" class="img-responsive">
+                                <img  ng-src="./uploads/{{single_product.pic}}" alt="" class="img-responsive">
                             </div>
 <!-- 
                             <div class="ribbon sale">
@@ -500,7 +500,7 @@
 <!--                                 <p class="price">$124.00</p>
  -->
                                 <p class="text-center buttons" ng-show="single_product.copies>0">
-                                    <a href="" class="btn btn-primary"><i class="fa fa-shopping-cart" ng-click="addProductToCart(single_product)"></i> Add to cart</a> 
+                                    <a href="" class="btn btn-primary" ng-click="addProductToCart(single_product)"><i class="fa fa-shopping-cart" ></i> Add to cart</a> 
                                     <!-- <a href="" class="btn btn-default"><i class="fa fa-heart"></i> Add to wishlist</a> -->
                                 </p>
                                  <p class="text-center buttons" ng-show="!single_product.copies||single_product.copies<=0">
@@ -511,13 +511,13 @@
 
                             </div>
 
-                            <div class="row" id="thumbs">
+                            <!-- <div class="row" id="thumbs">
                                 <div class="col-xs-4">
                                     <a href="" class="thumb">
-                                        <img ng-src="{{single_product.pic_name}}" alt="" class="img-responsive">
+                                        <img src="./uploads/{{single_product.pic}}" alt="" class="img-responsive">
                                     </a>
                                 </div>
-                               <!--  <div class="col-xs-4">
+                                <div class="col-xs-4">
                                     <a href="" class="thumb active">
                                         <img src="img/product/{{single_product.pic}}" alt="" class="img-responsive">
                                     </a>
@@ -526,8 +526,8 @@
                                     <a href="" class="thumb">
                                         <img src="img/product/{{single_product.pic}}" alt="" class="img-responsive">
                                     </a>
-                                </div> -->
-                            </div>
+                                </div>
+                            </div> -->
                         </div>
 
                     </div>
