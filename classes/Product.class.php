@@ -167,9 +167,9 @@ public function getOrders($id_user='')
       {
         if($where!='')
         {
-          $where.=" AND name LIKE '%$searchString%'";
+          $where.=" AND (name LIKE '%$searchString%' OR isbn LIKE '%$searchString%' OR author LIKE '%$searchString%')";
         }
-        
+
       }
       if($categories&&count($categories)>0)
       {
@@ -229,6 +229,12 @@ public function getOrders($id_user='')
     {
       global $db;
       $res=$db->update('sub_transaction',$updateInfo,$updateCodition);
+      return $res;
+    }
+
+    public function storeSearchedFields($insertInfo){
+      global $db;
+      $res = $db->insert('search_history',$insertInfo);
       return $res;
     }
     
