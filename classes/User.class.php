@@ -14,7 +14,7 @@ class User{
     public function checkUserExists($googleUserId,$googleUserEmail)
     {
       global $db;
-      $where="user.google_id_user='$googleUserId' AND user.email='$googleUserEmail'";
+      $where=" google_id_user='$googleUserId' AND user.email='$googleUserEmail'";
       $userExists="SELECT * FROM user WHERE $where";
       $userInfo = $db->select($userExists);
       return $userInfo;
@@ -122,6 +122,13 @@ class User{
     {
       global $db;
       $q_select="SELECT pl.user_id_user as lendered_user_id,p.name,p.pic,st.* FROM sub_transaction as st JOIN product_label as pl ON pl.user_id_user=st.user_id_user AND pl.product_id_product=st.product_id_product LEFT JOIN product as p ON pl.product_id_product=p.id_product  WHERE p.user_id_user='$id_user' GROUP BY st.product_id_product";
+      $res = $db->select($q_select);
+      return $res;
+    }
+
+    public function getUser($idUser){
+      global $db;
+      $q_select ="SELECT * FROM user where id_user='$idUser'";
       $res = $db->select($q_select);
       return $res;
     }

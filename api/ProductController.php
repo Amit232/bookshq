@@ -23,7 +23,6 @@ class ProductController
 
     public function login($email,$idGoogle,$name,$csrf_token,$imgUrl)
     {
-      
       $userObj = new User();
       $userDetails =  $userObj->checkUserExists($idGoogle,$email);
       if($userDetails)
@@ -33,16 +32,18 @@ class ProductController
         $idUser =$userDetails[0]['id_user'];
         $res = $userObj->updateUserDetails($idUser,$updateArray);
         $userCartDetails=$userObj->getUserProducts($idUser);
-        return array('user_cart_details'=>$userCartDetails,'id_user'=>$idUser);  
+        $userDetails = $userObj->getUser($idUser);
+        return array('user_cart_details'=>$userCartDetails,'id_user'=>$idUser,'user_detail'=>$userDetails[0]);  
       }
       else
       {
-        $userInfo=array('name'=>$name,'email'=>$email,'google_id_user'=>$googleUserId,'csrf_token'=>$csrf_token,'img_url'=>$img_url);
+        $userInfo=array('name'=>$name,'email'=>$email,'google_id_user'=>$idGoogle,'csrf_token'=>$csrf_token,'img_url'=>$imgUrl);
         $res=$userObj->setUser($userInfo);
         if($res)
         {
           $userCartDetails=$userObj->getUserProducts($res);
-          return array('user_cart_details'=>$userCartDetails,'id_user'=>$res);
+          $userDetails = $userObj->getUser($res);
+          return array('user_cart_details'=>$userCartDetails,'id_user'=>$res,'user_detail'=>$userDetails[0]);
 
         }
       }
@@ -66,10 +67,15 @@ class ProductController
       }
     }
 
-    public function getAllProducts($startIndex,$limitIndex,$searchString,$categories)
+    public function getAllProducts($startIndex,$limitIndex,$searchString,$categories,$idUser='')
     {
       $productObj = new Product();
       $products = $productObj->getAllProducts($startIndex,$limitIndex,$searchString,$categories);
+      if(isset($searchString)&&$searchString!=''){
+        $insertInfo=array('user_id_user'=>$idUser,'search_text'=>$searchString,'created_at'=>date('Y-m-d H:i:s'));
+        $storeSearching = $productObj->storeSearchedFields($insertInfo);
+      }
+
       return array('error'=>false,'products'=>$products);
     }   
 
@@ -257,7 +263,7 @@ class ProductController
       $userObj = new User();
 
       $userDetails =  $userObj->checkUserExists1($insertInfo['email']);
-      if($userDetails&&!$userDetails[0]['password'])
+      if($userDetails&&$userDetails[0]['password']&&$userDetails[0]['password']!='')
       {
         $updateArray=[];
         $updateArray['password']=$password;
@@ -268,6 +274,19 @@ class ProductController
       }
       else
       {
+        if($userDetails&&!$userDetails[0]['password']&&$userDetails[0]['password']==NULL){
+          $updateInfo =[];
+          $updateInfo['password']=md5($userD['password']);
+          $idUser =$userDetails[0]['id_user'];
+          $res = $userObj->updateUserDetails($idUser,$updateInfo);
+          if($res)
+          {
+            $userCartDetails=$userObj->getUserProducts($res);
+            return array('error'=>200,'user_cart_details'=>$userCartDetails,'id_user'=>$idUser,'message'=>'User registered successfully.');
+
+          }
+
+        }
         $userDetails =  $userObj->checkUserExists1($insertInfo['email']);
         if($userDetails)
         {
@@ -317,6 +336,10 @@ class ProductController
         {
          return array('error'=>403,'message'=>'Email id is not registered manually.');
         }
+      }
+      else
+      {
+        return array('error'=>403,'message'=>'Email id or password is invalid.');
       }
     }
 }

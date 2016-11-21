@@ -105,9 +105,8 @@
                     if($this->get_request_method() != "POST"){
                             $this->response('',405);
                     }
-                   
                     $productControllerObj=new ProductController();
-                    $products = $productControllerObj->getAllProducts($this->_request['startIndex'],$this->_request['limitIndex'],$this->_request['searchString'],$this->_request['categories']);
+                    $products = $productControllerObj->getAllProducts($this->_request['startIndex'],$this->_request['limitIndex'],$this->_request['searchString'],$this->_request['categories'],$this->_request['id_user']);
                     if(!$products)
                     {
                     $error = array("message" => "Unauthorized access");
@@ -130,6 +129,7 @@
             }
             else
             {
+
                 $productControllerObj = new ProductController();
                 $productDetails = $productControllerObj->addProductToCart($this->_request['id_user'],$this->_request['product']);
 

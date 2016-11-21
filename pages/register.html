@@ -27,15 +27,15 @@
 
                         <hr>
 
-                        <form id="register1" name="register1">
+                        <form id="register1" name="register1" autocomplete="off">
                             <div class="form-group">
-                                <input type="text" class="form-control" id="name1" name="name1" ng-model="newUSer.name" autocomplete="false">
+                                <input type="text" class="form-control" id="name1" name="name1" ng-model="newUSer.name" autocomplete="off" placeholder="New User Name" title="New User Name">
                             </div>
                             <div class="form-group">
-                                <input type="email" class="form-control" id="email1" name="email1" ng-model="newUSer.email" autocomplete="false">
+                                <input type="email" class="form-control" id="email1" name="email1" ng-model="newUSer.email" autocomplete="off" placeholder="New User Email" title="New User Email">
                             </div>
                             <div class="form-group">
-                                <input type="password" class="form-control" id="password1"  name="password1" ng-model="newUSer.password" autocomplete="false">
+                                <input type="password" class="form-control" id="password1"  name="password1" ng-model="newUSer.password" autocomplete="new-password" placeholder="New User Password" title="New User Password">
                             </div>
                             <div class="text-center">
                                <button type="button" ng-click="registerD(newUSer)" class="btn btn-primary"><i class="fa fa-user-md"></i> Register</button>
@@ -56,10 +56,10 @@
 
                         <form id="normalLogin" name="normalLogin">
                             <div class="form-group">
-                                <input type="email" class="form-control" id="email2" name="email2" ng-model="newEmail">
+                                <input type="email" class="form-control" id="email2" name="email2" ng-model="newEmail" autocomplete="off" placeholder="Email" title="User Email">
                             </div>
                             <div class="form-group">
-                                <input type="password" class="form-control" id="password2" name="password2" ng-model="newPassword">
+                                <input type="password" class="form-control" id="password2" name="password2" ng-model="newPassword" autocomplete="new-password" placeholder="Password" title="User Password">
                             </div>
                             <div class="text-center">
                                 <button ng-click="normalLoginD(newEmail,newPassword)" class="btn btn-primary"><i class="fa fa-sign-in"></i> Log in</button>

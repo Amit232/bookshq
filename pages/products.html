@@ -50,7 +50,7 @@
                     <div class="panel panel-default sidebar-menu">
 
                         <div class="panel-heading">
-                            <h3 class="panel-title">Categories <a class="btn btn-xs btn-danger pull-right" href="#"><i class="fa fa-times-circle"></i> Clear</a></h3>
+                            <h3 class="panel-title">Categories <a class="btn btn-xs btn-danger pull-right" href="" ng-click="clearAllElemts()"><i class="fa fa-times-circle"></i> Clear</a></h3>
                         </div>
 
                         <div class="panel-body" ng-if="categories.length>0">
@@ -60,7 +60,7 @@
                                     <div class="checkbox" ng-repeat="c in categories">
                                         <label>
 
-                                            <input ng-model="categoriesIds[$index]" ng-true-value="{{c.id_category}}" ng-false-value="" type="checkbox" ng-change="startIndex=0;$limitIndex=6;getAllProducts();">{{c.name}}
+                                            <input class="ckbox" ng-model="categoriesIds[$index]" ng-true-value="{{c.id_category}}" ng-false-value="" type="checkbox" ng-change="startIndex=0;$limitIndex=6;getAllProducts();">{{c.name}}
                                         </label>
                                     </div>
                                 </div>
@@ -130,17 +130,13 @@
                         <h1>Ladies</h1>
                         <p>In our Ladies department we offer wide selection of the best products we have found and carefully selected worldwide.</p>
                     </div> -->
-
+<!--
                     <div class="box info-bar" ng-show="products.length>0">
                         <div class="row">
-                            <div class="col-sm-12 col-md-4 products-showing">
-                                Showing <strong>{{(startIndex*parseInt(limitIndex))+1}}</strong> to <strong>{{totalItems>(startIndex*parseInt(limitIndex))+parseInt(limitIndex)?(startIndex*parseInt(limitIndex))+parseInt(limitIndex):totalItems}}</strong> of <strong>{{totalItems}}</strong> products
-                            </div>
-
                             <div class="col-sm-12 col-md-8  products-number-sort">
                                 <div class="row">
                                     <form class="form-inline">
-                                        <div class="col-md-6 col-sm-6">
+                                         <div class="col-md-6 col-sm-6">
                                             <div class="products-number">
                                                 <strong>Show</strong>  
                                                 <a href="" class="btn btn-default btn-sm" ng-click="limitIndex=6;changeLimitIndex(limitIndex,'products')" ng-class="{'btn-primary':limitIndex==6}">6</a>
@@ -149,24 +145,14 @@
                                                 <a href="" class="btn btn-default btn-sm" ng-click="limitIndex=24;changeLimitIndex(limitIndex,'products')" ng-class="{'btn-primary':limitIndex==24}">24</a>  
                                                 <a href="" class="btn btn-default btn-sm" ng-class="{'btn-primary':limitIndex==totalItems}" ng-click="limitIndex=totalItems;changeLimitIndex(limitIndex,'products')">All</a> <span>products</span>
                                             </div>
-                                        </div>
-                                        <!-- <div class="col-md-6 col-sm-6">
-                                            <div class="products-sort-by">
-                                                <strong>Sort by</strong>
-                                                <select name="sort-by" class="form-control">
-                                                    <option>Price</option>
-                                                    <option>Name</option>
-                                                    <option>Sales first</option>
-                                                </select>
-                                            </div>
-                                        </div> -->
+                                        </div> 
                                     </form>
                                 </div>
                             </div>
                         </div>
                     </div>
-
-                    <div class="row products">
+-->
+                    <div class="">
 
                         <!-- <div class="col-md-4 col-sm-6">
                             <div class="product">
@@ -382,7 +368,7 @@
                             <div class="product">
                                 <div class="flip-container">
                                     <div class="flipper">
-                                        <div class="front">
+                                        <div class="back">
                                             <a ng-click="getProductDetail(p.id_product)">
                                                 <img ng-src="./uploads/{{p.pic}}" width="253" height="367" alt="" class="img-responsive1">
                                             </a>
@@ -427,26 +413,9 @@
 
                     <div class="pages" ng-show="products.length>0">
 
-                       <!--  <p class="loadMore">
-                            <a href="#" class="btn btn-primary btn-lg"><i class="fa fa-chevron-down"></i> Load more</a>
-                        </p> -->
-
-                        <!-- <ul class="pagination">
-                            <li><a href="#">&laquo;</a>
-                            </li>
-                            <li class="active"><a href="#">1</a>
-                            </li>
-                            <li><a href="#">2</a>
-                            </li>
-                            <li><a href="#">3</a>
-                            </li>
-                            <li><a href="#">4</a>
-                            </li>
-                            <li><a href="#">5</a>
-                            </li>
-                            <li><a href="#">&raquo;</a>
-                            </li>
-                        </ul> -->
+                        <div class="col-sm-12 col-md-4 products-showing">
+                                Showing <strong>{{(startIndex*parseInt(limitIndex))+1}}</strong> to <strong>{{totalItems>(startIndex*parseInt(limitIndex))+parseInt(limitIndex)?(startIndex*parseInt(limitIndex))+parseInt(limitIndex):totalItems}}</strong> of <strong>{{totalItems}}</strong> products
+                        </div>
                         <div>
                         <span>
                             <a class="prvsBtns" ng-class="{'linkDisabled':startIndex == 0}" ng-disabled="startIndex == 0" ng-click="startIndex = startIndex - 1; setPage(startIndex, 'products'); loadingBarShow = true;"><i class="fa fa-angle-double-left" aria-hidden="true"></i></a>
