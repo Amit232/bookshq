@@ -87,6 +87,10 @@
     box-shadow: none !important; 
 
 } 
+.abcRioButtonBlue {
+    background-color: #dd4b39!important;
+    box-shadow: none!important;
+}
 </style>
 <body>
 
@@ -95,7 +99,7 @@
     <div id="top">
         <div class="container">
             <div class="col-md-4 offer" >
-            <a ng-if="$root.enableSignIn" class=" btn btn-success btn-sm g-signin2" data-longtitle="true" data-onsuccess="Google_signIn" data-theme="light" data-width="200"></a>
+                <!-- <a ng-if="$root.enableSignIn" class=" btn btn-success btn-sm g-signin2" data-longtitle="true" data-onsuccess="Google_signIn" data-theme="light" data-width="200"></a> -->
 
             
             </div>
@@ -103,11 +107,8 @@
                 <ul class="menu">
                    <!--  <li ng-if="$root.enableSignIn"><a href="#" data-toggle="modal" data-target="#login-modal">Login</a>
                     </li> -->
-                    <li>
-                        <button class="btn btn-default" data-toggle="modal" data-target=".bs-example-modal-lg">Large modal</button>
-
-                    </li>
-                    <li ng-if="$root.enableSignIn"><a data-ui-sref="register">Register/Login</a>
+                    
+                    <li ng-if="$root.enableSignIn"><a data-toggle="modal" data-target=".bs-example-modal-lg" ng-click="$root.registerorloginClick();">Register/Login</a>
                     </li>
                     <li ng-if="!$root.enableSignIn&&$root.loggedUserDetails.name!=''">
                          <a>Welcome {{$root.loggedUserDetails.name}}</a>
@@ -126,7 +127,6 @@
                 </ul>
             </div>
         </div>
-        <style type="text/css">
             <style>
 /* The Modal (background) */
 .modal {
@@ -139,7 +139,7 @@
 /* Modal Content */
 .modal-content {
     position: relative;
-    margin: auto;
+    margin: 138px 62px 71px 52px;
     padding: 0;
     border: 4px solid #888;
     width: 80%;
@@ -154,34 +154,115 @@
     background-color: #5cb85c;
     color: white;
 }
+.margin{margin: 10px auto !important;}
+.margin20{margin: 30px auto !important;}
+.margin15{margin: 15px auto !important;}
+.signin-header {
+    font-weight: 400;
+    font-size: 18px   ;
+    padding:20px 110px;
+    border-bottom: 2px solid #d3d4d5;
+}
+.text-center {text-align: left !important;}
+.font205{font-size: 20.5px !important}
+.signup-btn:hover {
+    background-color: #fff;
+    border: 1px solid #ef2b27;
+}
+.signup-btn {
+    margin-top: 18px;
+    background-color: #fff;
+    color: #e24648;
+    text-transform: capitalize;
+    border: 1px solid #ef2b27;
+}
+.action-button {
+    width: 260px;
+    border: none;
+    outline: 0;
+    transition: background .25s ease;
+    cursor: pointer;
+    text-transform: uppercase;
+}
+.action-button, .socialButton {
+    font-weight: 700;
+    height: 40px;
+    text-align: center;
+}
+.already-span, label.remember-me-check {
+    text-transform: capitalize;
+}
 </style>
         </style>
-        <div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+        <div id="modalsignup" class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-lg">
-                <div class="modal-content " style="height:300px;">
+                <div class="modal-content " style="height:400px;">
+                    <div class="col-lg-12 margin" style="text-align:right;float:right;">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    </div>
                     
                     <div class="modal-body">
                        <div class="col-lg-12"> 
-                        <div class="col-lg-6">
-                            
+                        <div class="col-lg-6 margin20" style=" border-right: 2px solid #d3d4d5;">
+                            <img src="img/rachel.png" width="100%" height="300px">
                         </div>
-                        <div class="col-lg-6">
-                            <form action="customer-orders.html" method="post">
+                        <div class="col-lg-6 margin text-center"  ng-hide="signupbtn||signupisClicked1">
+                           <div class="col-xs-12 signin-header">
+                                    <span>Sign In</span>
+                            </div>
+                            <div class="col-xs-12 margin">
+                                <a  ng-if="$root.enableSignIn" class="btn btn-block g-signin2" data-longtitle="true" data-onsuccess="Google_signIn"  data-longtitle="true" data-onsuccess="Google_signIn" data-theme="light" data-width="204" style="width: 204px;height: 38px;font-size: xx-small;background-color:#fff;color:red"></a>
+
+                            </div>
+                            <div class="font205 col-xs-12 margin text-center" >
+                                 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;------------OR-------------
+                            </div>     
+                            <div class="col-xs-12" >
+                                <button class="action-button signup-screen signup-btn" ng-click="signupisClicked=true;signupisClicked1=true">signup with email</button>
+                            </div>
+                            <div class="col-xs-12 margin" >
+                                    <span style="    font-size: 12px;    float: left;" class=" FL already-span">
+                                    already have account?</span>
+                                   <a href="" ng-click="signupbtn=true;"> <span style="    font-size: 14px;    float: right;color:red" class=" FL already-span">SignIn</span>
+                                   </a>
+                                
+                            </div>
+                        </div> 
+                        <div class="col-xs-6" ng-show="signupisClicked1">
+                            <div class="col-xs-12 signin-header">
+                                <span>Sign Up</span>
+                            </div>
+                            <form id="register1" name="register1" autocomplete="off">
                             <div class="form-group">
-                                <input type="text" class="form-control" id="email-modal" placeholder="email">
+                                <input type="text" class="form-control" id="name1" name="name1" ng-model="newUSer.name" autocomplete="off" placeholder="New User Name" title="New User Name">
                             </div>
                             <div class="form-group">
-                                <input type="password" class="form-control" id="password-modal" placeholder="password">
+                                <input type="email" class="form-control" id="email1" name="email1" ng-model="newUSer.email" autocomplete="off" placeholder="New User Email" title="New User Email">
                             </div>
-
-                            <p class="text-center">
-                                <button class="btn btn-primary"><i class="fa fa-sign-in"></i> Log in</button>
-                            </p>
-
-                            </form>
-                        <div >
-                        </div>    
-                    </div>  
+                            <div class="form-group">
+                                <input type="password" class="form-control" id="password1"  name="password1" ng-model="newUSer.password" autocomplete="new-password" placeholder="New User Password" title="New User Password">
+                            </div>
+                            <div class="text-center">
+                               <button type="button" ng-click="$root.registerD(newUSer)" class="btn btn-primary"><i class="fa fa-user-md"></i> Register</button>
+                            </div>
+                        </form>
+                        </div>
+                        <div class="col-xs-6" ng-show="signupbtn">
+                            <div class="col-xs-12 signin-header">
+                                <span>Sign In</span>
+                            </div>
+                            <form id="normalLogin" name="normalLogin">
+                            <div class="form-group">
+                                <input type="email" class="form-control" id="email2" name="email2" ng-model="newEmail" autocomplete="off" placeholder="Email" title="User Email">
+                            </div>
+                            <div class="form-group">
+                                <input type="password" class="form-control" id="password2" name="password2" ng-model="newPassword" autocomplete="new-password" placeholder="Password" title="User Password">
+                            </div>
+                            <div class="text-center">
+                                <button ng-click="$root.normalLoginD(newEmail,newPassword)" class="btn btn-primary"><i class="fa fa-sign-in"></i> Log in</button>
+                            </div>
+                        </form>
+                        </div> 
                         </div>
                     </div>
               </div>
@@ -273,7 +354,7 @@
                         <i class="fa fa-search"></i>
                     </button> -->
                     <form class="navbar-form" role="search">
-                    <div class="input-group">
+                    <div class="input-group" style="z-index:0!important">
                         <input type="text" class="form-control" ng-model="$root.searchString" placeholder="Search" ng-enter="$root.seachProducts();" >
                         <span class="input-group-btn">
 
