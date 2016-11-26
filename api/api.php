@@ -1,39 +1,39 @@
 <?php
-	require_once("../mainConfig.php");
-	require_once("Rest.inc.php");
+    require_once("../mainConfig.php");
+    require_once("Rest.inc.php");
     require_once("AdminController.php");
     require_once("ProductController.php");
 
     class Api extends Rest {
-	   
-		public $data = "";
-		
-		public function __construct(){
-			parent::__construct();				// Init parent contructor
-		}
-		
-		/*
-		 * Public method for access api.
-		 * This method dynmically call the method based on the query string
-		 *
-		 */
-		public function processApi(){
+       
+        public $data = "";
+        
+        public function __construct(){
+            parent::__construct();              // Init parent contructor
+        }
+        
+        /*
+         * Public method for access api.
+         * This method dynmically call the method based on the query string
+         *
+         */
+        public function processApi(){
         $func = trim(str_replace("/","",$_REQUEST['rquest']));
-			if((int)method_exists($this,$func) > 0)
+            if((int)method_exists($this,$func) > 0)
                         {
 
                                 /*if($func!='checkToken'&&$func!='login')
                                 {
                                     $this->checkToken();
                                 }*/
-				            $this->$func();
+                            $this->$func();
                         }
-			else
-                            $this->response('',404);				// If the method not exist with in this class, response would be "Page not found".
-		}
-		
+            else
+                            $this->response('',404);                // If the method not exist with in this class, response would be "Page not found".
+        }
+        
 
-		
+        
 
         /*********Books Api Code Starts Here ************/
 
@@ -246,7 +246,7 @@
                             $this->response('',405);
             }
             $productControllerObj = new ProductController();
-            $status = $productControllerObj->setTransactionStatus($this->_request['id_user'],$this->_request['id_subtransaction'],$this->_request['status']);
+            $status = $productControllerObj->setTransactionStatus($this->_request['id_user'],$this->_request['id_subtransaction'],$this->_request['status'],$this->_request['rating'],$this->_request['description'],$this->_request['id_product']);
             $this->response($this->json($status), 200);
 
  
@@ -534,22 +534,31 @@
   
         }
 
+        public function getProductDetail(){
+            if($this->get_request_method() != "POST"){
+                            $this->response('',405);
+            }
+            $productControllerObj=new ProductController();
+            $results = $productControllerObj->getProductDetail($this->_request['id_product']);
+            $this->response($this->json($results), 200);
+        }
+
         /************ END *****************/
 
         
-		/*
-		 *	Encode array into JSON
-		*/
-		private function json($data){
-			if(is_array($data)){
-				return json_encode($data);
-			}
+        /*
+         *  Encode array into JSON
+        */
+        private function json($data){
+            if(is_array($data)){
+                return json_encode($data);
+            }
                         return $data;
-		}
-	}
-	
-	// Initiiate Library
-	
-	$api = new Api;
-	$api->processApi();
+        }
+    }
+    
+    // Initiiate Library
+    
+    $api = new Api;
+    $api->processApi();
 ?>

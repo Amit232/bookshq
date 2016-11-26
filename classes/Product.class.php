@@ -167,7 +167,7 @@ public function getOrders($id_user='')
       {
         if($where!='')
         {
-          $where.=" AND (name LIKE '%$searchString%' OR isbn LIKE '%$searchString%' OR author LIKE '%$searchString%')";
+          $where.=" AND (product.name LIKE '%$searchString%' OR product.isbn LIKE '%$searchString%' OR product.author LIKE '%$searchString%')";
         }
 
       }
@@ -176,9 +176,9 @@ public function getOrders($id_user='')
         
        $categories=implode(',', $categories); 
         if($where!='')
-        $where.=" AND category_id_category IN($categories)";
+        $where.=" AND product.category_id_category IN($categories)";
       }
-      $q_products= "SELECT * FROM product where $where Order BY id_product DESC LIMIT $limitIndex OFFSET $startIndex";
+       $q_products= "SELECT product.*,avg(phur.rating) as rating FROM product left join product_has_user_review as phur ON phur.product_id_product=product.id_product where $where group by product.id_product Order BY product.id_product DESC LIMIT $limitIndex OFFSET $startIndex";
       $products = $db->select($q_products);
 
       $q_total_count =$db->getCount('product',$where);
@@ -236,6 +236,24 @@ public function getOrders($id_user='')
       global $db;
       $res = $db->insert('search_history',$insertInfo);
       return $res;
+    }
+
+    public function getProductDetail($idProduct){
+      global $db;
+      $where="id_product='$idProduct'";
+      $q_products= "SELECT product.*,avg(phur.rating) as rating FROM product left join product_has_user_review as phur ON phur.product_id_product=product.id_product  where $where Order BY product.id_product";
+      $products = $db->select($q_products);
+      $where1="product_id_product='$idProduct'";
+      $qreviews = "SELECT product_has_user_review.*,u.name FROM product_has_user_review left join user as u ON u.id_user=product_has_user_review.user_id_user where $where1 Order BY product_id_product DESC LIMIT 10";
+      $reviews = $db->select($qreviews);
+
+      $qtotalratings = "SELECT count(*) as count FROM product_has_user_review where $where1 AND rating>0 Order BY product_id_product ";
+            $qtotalratings = $db->select($qtotalratings);
+
+      $qtotalrev = "SELECT count(*)  as count FROM product_has_user_review where $where1 AND description!='' Order BY product_id_product ";
+      $qtotalrev = $db->select($qtotalrev);
+      $finalArray=array('product'=>$products[0],'reviews'=>$reviews,'total_ratings'=>$qtotalratings[0]['count'],'total_reviews'=>$qtotalrev[0]['count']);
+      return $finalArray;
     }
     
 }
