@@ -85,10 +85,10 @@ class AdminController
 
       $file_ext=strtolower(end(explode('.',$file['name'])));
       $expensions= array("jpeg","jpg","png");
-       if(in_array($file_ext,$expensions)=== false){
+      if(in_array($file_ext,$expensions)=== false){
            echo $error="extension not allowed, please choose a JPEG or PNG file.";
            exit;
-        }
+      }
       if($file_size > 1000000){
            $errors[]='File size must be less than 1 MB';
         }
@@ -129,6 +129,7 @@ class AdminController
       $insertInfo['updated_at'] = date('Y-m-d H:i:s');
      
       $res = $adminObj->setProduct($insertInfo);
+
       if($res)
       {
         if ($img)
@@ -145,7 +146,7 @@ class AdminController
           $updateCondition=" id_lender_product_notification='$id_lender_notification'";
           $res1= $adminObj->updateLenderStatus($updateArray,$updateCondition);
         }
-        return array('message'=>'Product added successfully.');
+        return array('error'=>200,'message'=>'Product added successfully.');
       }
 
     }

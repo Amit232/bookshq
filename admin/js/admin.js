@@ -390,13 +390,14 @@ $scope.onChange = function ($dataURI) {
                 //alert("Please upload the JPG OR PNG files");
                 return false;
             }
-            var reader = new FileReader();
-            reader.onload = function (evt) {
-                $scope.$apply(function ($scope) {
-                    $scope.imageDataURI = evt.target.result;
-                });
-            };
-            reader.readAsDataURL(files);
+            $scope.files=files;
+            // var reader = new FileReader();
+            // reader.onload = function (evt) {
+            //     $scope.$apply(function ($scope) {
+            //         $scope.imageDataURI = evt.target.result;
+            //     });
+            // };
+            // reader.readAsDataURL(files);
             /*var dialog = $("#crop-image-profile").dialog({
                 autoOpen: false,
                 resizable: false,
@@ -407,12 +408,11 @@ $scope.onChange = function ($dataURI) {
                 }
             });
             dialog.dialog("open");*/
-            $("#button1").trigger('click');
+            //$("#button1").trigger('click');
 
         }
         $('#profilePic').on('change', handleFileSelect);
-         $scope.$watch('resImageDataURI', function () {
-        });
+         
    $scope.changePostition=function(type)
    {
       $scope.type=type;
@@ -470,14 +470,14 @@ $scope.onChange = function ($dataURI) {
     },validateOptions));
 
     if($('#normalProduct').valid()&&product!=''){
-        if(!$scope.resImageDataURI||$scope.resImageDataURI=='')
-        {
-          alert('Please choose image');
-          return false;
-        }
-        else
-        {
-
+        // if(!$scope.resImageDataURI||$scope.resImageDataURI=='')
+        // {
+        //   alert('Please choose image');
+        //   return false;
+        // }
+        // else
+        // {
+            //console.log($scope.files);
             $upload.upload({
                 method: "POST",
                 timeout:60000,                                    
@@ -487,8 +487,9 @@ $scope.onChange = function ($dataURI) {
                 fields: {'product':product,'id_admin':$cookies.id_admin},
                 headers: { 'Content-Type' : 'application/x-www-form-urlencoded' }
             }).success(function (data,status) {
-                if(status==200)
+                if(data.error==200)
                 {
+                    //console.log(data.message);
                     alert(data.message);
                     $scope.product={};
                     $scope.resImageDataURI='';
@@ -496,7 +497,7 @@ $scope.onChange = function ($dataURI) {
                     $timeout(function() {$window.location.reload();}, 1000);
                 }
             });
-        }
+        //}
     }
    }
 

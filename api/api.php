@@ -246,7 +246,7 @@
                             $this->response('',405);
             }
             $productControllerObj = new ProductController();
-            $status = $productControllerObj->setTransactionStatus($this->_request['id_user'],$this->_request['id_subtransaction'],$this->_request['status']);
+            $status = $productControllerObj->setTransactionStatus($this->_request['id_user'],$this->_request['id_subtransaction'],$this->_request['status'],$this->_request['rating'],$this->_request['description'],$this->_request['id_product']);
             $this->response($this->json($status), 200);
 
  
@@ -399,6 +399,7 @@
                 $file = $_FILES;
                 $adminController = new AdminController();
                 $addP = $adminController->addProduct($this->_request['product'],$file,$this->_request['id_admin']);
+               
                 $this->response($this->json($addP), 200);
  
             }
@@ -532,6 +533,15 @@
             $res = $adminController->uploadLenderBook($this->_request['books'],$this->_request['id_user']);
             $this->response($this->json($res), 200);
   
+        }
+
+        public function getProductDetail(){
+            if($this->get_request_method() != "POST"){
+                            $this->response('',405);
+            }
+            $productControllerObj=new ProductController();
+            $results = $productControllerObj->getProductDetail($this->_request['id_product']);
+            $this->response($this->json($results), 200);
         }
 
         /************ END *****************/

@@ -25,3 +25,5 @@ enable-mod-rewrite-2
 Find any additional occurrences of the line “AllowOverride None” and change it to “AllowOverride All”.
 
 Finally, restart apache server and your browser. The .htaccess rewriting should now be working for any local website or WordPress install instead of displaying the page not found error.
+
+https://lipis.github.io/bootstrap-sweetalert/

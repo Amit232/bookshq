@@ -4,12 +4,18 @@
         max-width: 100%;
         height: 184px;
     }
-    .linkDisabled {
+.linkDisabled {
   cursor: not-allowed !important;
   pointer-events: none;
   color: grey;
 }
-
+.linkDisabled1 {
+  cursor: not-allowed !important;
+  pointer-events: none;
+}
+body{
+    background-color: white;
+}
 .prvsBtns{padding: 4px 15px !important;background-color: #4fbfa8; font-size: 10px;
 
   border: 1px solid #ddd; margin-right: 2px; color:#444444;}
@@ -24,22 +30,85 @@
 
 .paginationnmbr{padding: 2px 7px !important; margin-right: 5px;}
 
-.activepagintion{background-color: #1c9ccb !important;text-align:center;border: 1px solid #1c9ccb;cursor: pointer;color: #fff;top: 1px;position: relative;}
+.activepagintion{background-color: black !important;text-align:center;border: 1px solid #1c9ccb;cursor: pointer;color: #fff!important;top: 1px;position: relative;}
 
-.deactivepagintion{background-color: #4fbfa8 !important;text-align:center;border: 1px solid #ddd;
+.deactivepagintion{text-align:center;border: 1px solid #ddd;
 
   cursor: pointer;position: relative;top: 1px;color: #666666;}
 
-.deactivepagintion:hover{background-color: #4fbfa8 !important; color: #fff;border: 1px solid #1c9ccb;}
+.rating { 
+  border: none;
+  float: left;
+}
 
+.rating > input { display: none; } 
+.rating > label:before { 
+  margin: 5px;
+  font-size: 1.25em;
+  font-family: FontAwesome;
+  display: inline-block;
+  content: "\f005";
+}
+
+.rating > .half:before { 
+  content: "\f089";
+  position: absolute;
+}
+
+.rating > label { 
+  color: #ddd; 
+ float: right; 
+}
+
+/***** CSS Magic to Highlight Stars on Hover *****/
+
+.rating > input:checked ~ label, /* show gold star when clicked */
+
+.rating > input:checked + label:hover, /* hover current star when changing rating */
+.rating > input:checked ~ label:hover,
+.rating > label:hover ~ input:checked ~ label, /* lighten current selection */
+.rating > input:checked ~ label:hover ~ label { color: #FFD700;  } 
+.textareaclass{
+    outline: none;
+    border: none;
+    width: 100%;
+    font-size: 14px;
+    font-weight: 400;
+    resize: none;
+}
+label { font-size: 24px; }
+input[type=checkbox] { display:none; } /* to hide the checkbox itself */
+input[type=checkbox] + label:before {
+  font-family: FontAwesome;
+  display: inline-block;
+}
+input[type=checkbox] + label:before { content: "\f096"; } /* unchecked icon */
+input[type=checkbox] + label:before { letter-spacing: 10px; } /* space between checkbox and label */
+
+input[type=checkbox]:checked + label:before { content: "\f046"; } /* checked icon */
+input[type=checkbox]:checked + label:before { letter-spacing: 5px; } /* allow space for check mark */
+.btn-danger1 {
+    color: white !important;
+    background-color: black;
+    border-color: #FFF; /
+}
+.btn-danger1:hover{
+    color: white !important;
+    background-color: black;
+    border-color: #FFF; /
+}
+label {
+    font-size: 14px;
+}
 </style>
+
 <div id="content">
             <div class="container">
                 <div class="col-md-12">
                     <ul class="breadcrumb">
                         <li><a data-ui-sref="home">Home</a>
                         </li>
-                        <li ng-if="backtoProductPage"><a ng-click="backToProductList()">Back to products list</a>
+                        <li ng-if="backtoProductPage" ><a ng-click="backToProductList()">Back to products list</a>
                         </li>
                     </ul>
                 </div>
@@ -49,21 +118,26 @@
 
                     <div class="panel panel-default sidebar-menu">
 
-                        <div class="panel-heading">
-                            <h3 class="panel-title">Categories <a class="btn btn-xs btn-danger pull-right" href="" ng-click="clearAllElemts()"><i class="fa fa-times-circle"></i> Clear</a></h3>
+                        <div class="panel-heading" style="border-color:black;border:2px">
+                            <h3 class="panel-title">Categories <a class="btn btn-xs btn-danger1 pull-right" href="" ng-click="clearAllElemts()"><i class="fa fa-times-circle"></i> Clear</a></h3>
                         </div>
 
                         <div class="panel-body" ng-if="categories.length>0">
 
                             <form>
-                                <div class="form-group">
-                                    <div class="checkbox" ng-repeat="c in categories">
+                               <!--  <div class="form-group">
+                                    <div class="checkbox" >
                                         <label>
 
                                             <input class="ckbox" ng-model="categoriesIds[$index]" ng-true-value="{{c.id_category}}" ng-false-value="" type="checkbox" ng-change="startIndex=0;$limitIndex=6;getAllProducts();">{{c.name}}
                                         </label>
                                     </div>
+                                </div> -->
+                                <div ng-repeat="c in categories">
+                                  <input id="box{{$index}}" type="checkbox" ng-model="categoriesIds[$index]" ng-true-value="{{c.id_category}}" ng-false-value="" type="checkbox" ng-change="startIndex=0;$limitIndex=6;getAllProducts();"/>
+                                  <label for="box{{$index}}">{{c.name}}</label>
                                 </div>
+
 
                                 <!-- <button class="btn btn-default btn-sm btn-primary"><i class="fa fa-pencil"></i> Apply</button> -->
 
@@ -71,368 +145,59 @@
 
                         </div>
                     </div>
-
-                    <!-- <div class="panel panel-default sidebar-menu">
-
-                        <div class="panel-heading">
-                            <h3 class="panel-title">Colours <a class="btn btn-xs btn-danger pull-right" href="#"><i class="fa fa-times-circle"></i> Clear</a></h3>
-                        </div>
-
-                        <div class="panel-body">
-
-                            <form>
-                                <div class="form-group">
-                                    <div class="checkbox">
-                                        <label>
-                                            <input type="checkbox"> <span class="colour white"></span> White (14)
-                                        </label>
-                                    </div>
-                                    <div class="checkbox">
-                                        <label>
-                                            <input type="checkbox"> <span class="colour blue"></span> Blue (10)
-                                        </label>
-                                    </div>
-                                    <div class="checkbox">
-                                        <label>
-                                            <input type="checkbox"> <span class="colour green"></span> Green (20)
-                                        </label>
-                                    </div>
-                                    <div class="checkbox">
-                                        <label>
-                                            <input type="checkbox"> <span class="colour yellow"></span> Yellow (13)
-                                        </label>
-                                    </div>
-                                    <div class="checkbox">
-                                        <label>
-                                            <input type="checkbox"> <span class="colour red"></span> Red (10)
-                                        </label>
-                                    </div>
-                                </div>
-
-                                <button class="btn btn-default btn-sm btn-primary"><i class="fa fa-pencil"></i> Apply</button>
-
-                            </form>
-
-                        </div>
-                    </div> -->
-
                     <!-- *** MENUS AND FILTERS END *** -->
 
-                    <div class="banner">
+                   <!--  <div class="banner">
                         <a href="#">
                             <img src="img/banner.jpg" alt="sales 2014" class="img-responsive">
                         </a>
-                    </div>
+                    </div> -->
                 </div>
 
                 <div class="col-md-9" ng-clock ng-show="!productDetail">
-                    <!-- <div class="box">
-                        <h1>Ladies</h1>
-                        <p>In our Ladies department we offer wide selection of the best products we have found and carefully selected worldwide.</p>
-                    </div> -->
-<!--
-                    <div class="box info-bar" ng-show="products.length>0">
-                        <div class="row">
-                            <div class="col-sm-12 col-md-8  products-number-sort">
-                                <div class="row">
-                                    <form class="form-inline">
-                                         <div class="col-md-6 col-sm-6">
-                                            <div class="products-number">
-                                                <strong>Show</strong>  
-                                                <a href="" class="btn btn-default btn-sm" ng-click="limitIndex=6;changeLimitIndex(limitIndex,'products')" ng-class="{'btn-primary':limitIndex==6}">6</a>
-                                                <a href="" class="btn btn-default btn-sm" ng-click="limitIndex=9;changeLimitIndex(limitIndex,'products')" ng-class="{'btn-primary':limitIndex==9}">9</a>  
-                                                <a href="" class="btn btn-default btn-sm" ng-click="limitIndex=12;changeLimitIndex(limitIndex,'products')"  ng-class="{'btn-primary':limitIndex==12}">12</a>
-                                                <a href="" class="btn btn-default btn-sm" ng-click="limitIndex=24;changeLimitIndex(limitIndex,'products')" ng-class="{'btn-primary':limitIndex==24}">24</a>  
-                                                <a href="" class="btn btn-default btn-sm" ng-class="{'btn-primary':limitIndex==totalItems}" ng-click="limitIndex=totalItems;changeLimitIndex(limitIndex,'products')">All</a> <span>products</span>
-                                            </div>
-                                        </div> 
-                                    </form>
+                    <div class="col-sm-12">
+                        <div class="col-sm-4" ng-repeat="p in products" style="margin-top:10px">
+                             <div class="col-xs-12" >
+                                <div class="col-lg-12 " style="margin:10px">
+                                    <img style="cursor:pointer" ng-src="./uploads/{{p.pic}}" width="128px" height="198px" ng-click="getProductDetail(p.id_product)">
                                 </div>
-                            </div>
-                        </div>
-                    </div>
--->
-                    <div class="">
-
-                        <!-- <div class="col-md-4 col-sm-6">
-                            <div class="product">
-                                <div class="flip-container">
-                                    <div class="flipper">
-                                        <div class="front">
-                                            <a href="detail.html">
-                                                <img src="img/product1.jpg" alt="" class="img-responsive">
-                                            </a>
-                                        </div>
-                                        <div class="back">
-                                            <a href="detail.html">
-                                                <img src="img/product1_2.jpg" alt="" class="img-responsive">
-                                            </a>
-                                        </div>
+                                <div class=" col-lg-12" >
+                                    <div class="col-lg-12">
+                                    <h3><a style="cursor:pointer" ng-click="getProductDetail(p.id_product)">{{p.name}}</a></h3>
                                     </div>
-                                </div>
-                                <a href="detail.html" class="invisible">
-                                    <img src="img/product1.jpg" alt="" class="img-responsive">
-                                </a>
-                                <div class="text">
-                                    <h3><a href="detail.html">Fur coat with very but very very long name</a></h3>
-                                    <p class="price">$143.00</p>
-                                    <p class="buttons">
-                                        <a href="detail.html" class="btn btn-default">View detail</a>
-                                        <a href="basket.html" class="btn btn-primary"><i class="fa fa-shopping-cart"></i>Add to cart</a>
-                                    </p>
-                                </div>
-                            </div>
-                        </div> -->
-
-                        <!-- <div class="col-md-4 col-sm-6">
-                            <div class="product">
-                                <div class="flip-container">
-                                    <div class="flipper">
-                                        <div class="front">
-                                            <a href="detail.html">
-                                                <img src="img/product2.jpg" alt="" class="img-responsive">
-                                            </a>
-                                        </div>
-                                        <div class="back">
-                                            <a href="detail.html">
-                                                <img src="img/product2_2.jpg" alt="" class="img-responsive">
-                                            </a>
-                                        </div>
-                                    </div>
-                                </div>
-                                <a href="detail.html" class="invisible">
-                                    <img src="img/product2.jpg" alt="" class="img-responsive">
-                                </a>
-                                <div class="text">
-                                    <h3><a href="detail.html">White Blouse Armani</a></h3>
-                                    <p class="price"><del>$280</del> $143.00</p>
-                                    <p class="buttons">
-                                        <a href="detail.html" class="btn btn-default">View detail</a>
-                                        <a href="basket.html" class="btn btn-primary"><i class="fa fa-shopping-cart"></i>Add to cart</a>
-                                    </p>
-                                </div>
-
-                                <div class="ribbon sale">
-                                    <div class="theribbon">SALE</div>
-                                    <div class="ribbon-background"></div>
-                                </div>
-
-                                <div class="ribbon new">
-                                    <div class="theribbon">NEW</div>
-                                    <div class="ribbon-background"></div>
-                                </div>
-
-                                <div class="ribbon gift">
-                                    <div class="theribbon">GIFT</div>
-                                    <div class="ribbon-background"></div>
-                                </div>
-                            </div>
-                        </div> -->
-
-                        <!-- <div class="col-md-4 col-sm-6">
-                            <div class="product">
-                                <div class="flip-container">
-                                    <div class="flipper">
-                                        <div class="front">
-                                            <a href="detail.html">
-                                                <img src="img/product3.jpg" alt="" class="img-responsive">
-                                            </a>
-                                        </div>
-                                        <div class="back">
-                                            <a href="detail.html">
-                                                <img src="img/product3_2.jpg" alt="" class="img-responsive">
-                                            </a>
-                                        </div>
-                                    </div>
-                                </div>
-                                <a href="detail.html" class="invisible">
-                                    <img src="img/product3.jpg" alt="" class="img-responsive">
-                                </a>
-                                <div class="text">
-                                    <h3><a href="detail.html">Black Blouse Versace</a></h3>
-                                    <p class="price">$143.00</p>
-                                    <p class="buttons">
-                                        <a href="detail.html" class="btn btn-default">View detail</a>
-                                        <a href="basket.html" class="btn btn-primary"><i class="fa fa-shopping-cart"></i>Add to cart</a>
-                                    </p>
-
-                                </div>
-                            </div>
-                        </div> -->
-
-                       <!--  <div class="col-md-4 col-sm-6">
-                            <div class="product">
-                                <div class="flip-container">
-                                    <div class="flipper">
-                                        <div class="front">
-                                            <a href="detail.html">
-                                                <img src="img/product3.jpg" alt="" class="img-responsive">
-                                            </a>
-                                        </div>
-                                        <div class="back">
-                                            <a href="detail.html">
-                                                <img src="img/product3_2.jpg" alt="" class="img-responsive">
-                                            </a>
-                                        </div>
-                                    </div>
-                                </div>
-                                <a href="detail.html" class="invisible">
-                                    <img src="img/product3.jpg" alt="" class="img-responsive">
-                                </a>
-                                <div class="text">
-                                    <h3><a href="detail.html">Black Blouse Versace</a></h3>
-                                    <p class="price">$143.00</p>
-                                    <p class="buttons">
-                                        <a href="detail.html" class="btn btn-default">View detail</a>
-                                        <a href="basket.html" class="btn btn-primary"><i class="fa fa-shopping-cart"></i>Add to cart</a>
-                                    </p>
-
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="col-md-4 col-sm-6">
-                            <div class="product">
-                                <div class="flip-container">
-                                    <div class="flipper">
-                                        <div class="front">
-                                            <a href="detail.html">
-                                                <img src="img/product2.jpg" alt="" class="img-responsive">
-                                            </a>
-                                        </div>
-                                        <div class="back">
-                                            <a href="detail.html">
-                                                <img src="img/product2_2.jpg" alt="" class="img-responsive">
-                                            </a>
-                                        </div>
-                                    </div>
-                                </div>
-                                <a href="detail.html" class="invisible">
-                                    <img src="img/product2.jpg" alt="" class="img-responsive">
-                                </a>
-                                <div class="text">
-                                    <h3><a href="detail.html">White Blouse Versace</a></h3>
-                                    <p class="price">$143.00</p>
-                                    <p class="buttons">
-                                        <a href="detail.html" class="btn btn-default">View detail</a>
-                                        <a href="basket.html" class="btn btn-primary"><i class="fa fa-shopping-cart"></i>Add to cart</a>
-                                    </p>
-
-                                </div>
-
-                                <div class="ribbon new">
-                                    <div class="theribbon">NEW</div>
-                                    <div class="ribbon-background"></div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="col-md-4 col-sm-6">
-                            <div class="product">
-                                <div class="flip-container">
-                                    <div class="flipper">
-                                        <div class="front">
-                                            <a href="detail.html">
-                                                <img src="img/product1.jpg" alt="" class="img-responsive">
-                                            </a>
-                                        </div>
-                                        <div class="back">
-                                            <a href="detail.html">
-                                                <img src="img/product1_2.jpg" alt="" class="img-responsive">
-                                            </a>
-                                        </div>
-                                    </div>
-                                </div>
-                                <a href="detail.html" class="invisible">
-                                    <img src="img/product1.jpg" alt="" class="img-responsive">
-                                </a>
-                                <div class="text">
-                                    <h3><a href="detail.html">Fur coat</a></h3>
-                                    <p class="price">$143.00</p>
-                                    <p class="buttons">
-                                        <a href="detail.html" class="btn btn-default">View detail</a>
-                                        <a href="basket.html" class="btn btn-primary"><i class="fa fa-shopping-cart"></i>Add to cart</a>
-                                    </p>
-
-                                </div>
-
-                                <div class="ribbon gift">
-                                    <div class="theribbon">GIFT</div>
-                                    <div class="ribbon-background"></div>
-                                </div>
-
-                            </div>
-                        </div>
- -->
-                        <div class="col-md-4 col-sm-6" ng-repeat="p in products">
-                            <div class="product">
-                                <div class="flip-container">
-                                    <div class="flipper">
-                                        <div class="back">
-                                            <a ng-click="getProductDetail(p.id_product)">
-                                                <img ng-src="./uploads/{{p.pic}}" width="253" height="367" alt="" class="img-responsive1">
-                                            </a>
-                                        </div>
-                                        <div class="back">
-                                            <a ng-click="getProductDetail(p.id_product)">
-                                                <img ng-src="./uploads/{{p.pic}}" width="253" height="367" alt="" class="img-responsive1">
-                                            </a>
-                                        </div>
-                                    </div>
-                                </div>
-                                <a ng-click="getProductDetail(p.id_product)" class="invisible">
-                                    <img ng-src="{{p.pic_name}}" width="253" height="367" alt="" class="img-responsive1">
-                                </a>
-                                <div class="text">
-                                    <h3><a ng-click="getProductDetail(p.id_product)">{{p.name}}</a></h3>
-<!--                                     <p class="price">$143.00</p>
- -->                                <p class="buttons" ng-show="p.copies>0">
-                                        <a  class="btn btn-default" ng-click="getProductDetail(p.id_product)">View detail</a>
+                                    <div class="col-xs-12" ng-show="p.copies>0">
                                         <button id="por_{{$index}}" class="btn btn-primary" ng-click="addProductToCart(p)"><i class="fa fa-shopping-cart" ></i>Add to cart</button>
-                                    </p>
-                                    <p class="buttons" ng-show="!p.copies||p.copies<=0">
-                                        <a  class="btn btn-default" ng-click="getProductDetail(p.id_product)">View detail</a>
-                                        <a href="" class="btn btn-primary"><i class="fa fa-shopping-cart"></i>Out of stock</a>
-                                    </p>
-
+                                    </div>
+                                    <div class="col-xs-12" ng-show="!p.copies||p.copies<=0">
+                                        <a ng-show="!p.copies||p.copies<=0" href="" class="btn btn-primary"><i class="fa fa-shopping-cart"></i>Out of stock</a>
+                                    </div>
                                 </div>
-                                <!-- /.text -->
-
-                               <!--  <div class="ribbon gift">
-                                    <div class="theribbon">GIFT</div>
-                                    <div class="ribbon-background"></div>
-                                </div> -->
-                                <!-- /.ribbon -->
-
-                            </div>
-                            <!-- /.product -->
+                             </div> 
                         </div>
 
                     </div>
                     <!-- /.products -->
 
-                    <div class="pages" ng-show="products.length>0">
+                    <div class="" ng-show="products.length>0">
 
-                        <div class="col-sm-12 col-md-4 products-showing">
+                        <div class="col-sm-12 col-md-4 text-left" style="margin:28px">
                                 Showing <strong>{{(startIndex*parseInt(limitIndex))+1}}</strong> to <strong>{{totalItems>(startIndex*parseInt(limitIndex))+parseInt(limitIndex)?(startIndex*parseInt(limitIndex))+parseInt(limitIndex):totalItems}}</strong> of <strong>{{totalItems}}</strong> products
                         </div>
-                        <div>
-                        <span>
-                            <a class="prvsBtns" ng-class="{'linkDisabled':startIndex == 0}" ng-disabled="startIndex == 0" ng-click="startIndex = startIndex - 1; setPage(startIndex, 'products'); loadingBarShow = true;"><i class="fa fa-angle-double-left" aria-hidden="true"></i></a>
-                            <!-- <a href="" ng-class="{'linkDisabled':startIndex==0}" ng-click="startIndex = startIndex - 1; setPage(startIndex, 'manulaUpload'); loadingBarShow = true;">&laquo;</a> -->
-                        </span>
-                        <span>
-                            <a class="paginationnmbr" ng-repeat="item in itemsPaginated()" ng-click="setPage(item - 1, 'products')" ng-class="{'activepagintion':startIndex == item - 1,'deactivepagintion':startIndex != item - 1}">
-                                {{item}}
-                            </a>
-                            <!-- <a href="" ng-repeat="item in itemsPaginated()" ng-click="setPage(item - 1, 'products')" ng-class="{'active':startIndex == item - 1,'deactivepagintion':startIndex != item - 1}">{{item}} </a> -->
-                        </span>
-                        <span>
-                            <a class="nextBtns" ng-class="{'linkDisabled':startIndex >= totalItems / limitIndex - 1}" ng-disabled="startIndex >= totalItems / limitIndex - 1" ng-click="startIndex = startIndex + 1; setPage(startIndex, 'products'); loadingBarShow = true;"><i class="fa fa-angle-double-right" aria-hidden="true"></i></a>
-                            <!-- <a href="" ng-disabled="{'linkDisabled':startIndex >= totalItemsAnalytics / limitIndex - 1}" ng-click="startIndex = startIndex + 1; setPage(startIndex, 'products'); loadingBarShow = true;">&raquo;</a> -->
-                        </span>
+                        <div class="col-lg-6 text-right">
+                        <nav aria-label="Product page navigation">
+                            <ul class = "pagination">
+                               <li><a class="" ng-class="{'linkDisabled':startIndex == 0}" ng-disabled="startIndex == 0" ng-click="startIndex = startIndex - 1; setPage(startIndex, 'products'); loadingBarShow = true;"><i class="fa fa-angle-double-left" aria-hidden="true"></i></a></li>
+                               <li>
+                                    <a class="" ng-repeat="item in itemsPaginated()" ng-click="setPage(item - 1, 'products')" ng-class="{'activepagintion':startIndex == item - 1,'deactivepagintion':startIndex != item - 1}">
+                                    {{item}}
+                                </a>
+                                </li>
+                               <li><a class="" ng-class="{'linkDisabled':startIndex >= totalItems / limitIndex - 1}" ng-disabled="startIndex >= totalItems / limitIndex - 1" ng-click="startIndex = startIndex + 1; setPage(startIndex, 'products'); loadingBarShow = true;"><i class="fa fa-angle-double-right" aria-hidden="true"></i></a></li>
+                            </ul>
+                        </nav>
+                    </div> 
                     </div>
-                    </div>
+                    
                     <div>
                         <p class="text-muted" ng-if="!products||products.length==0">
                         <span ng-if="$root.searchString!=''">No Records Are Avaialble For Your Search.</span>
@@ -444,9 +209,9 @@
                 <!-- /.col-md-9 -->
                 <div class="col-md-9" ng-clock ng-show="productDetail">
                     <div class="row" id="productMain">
-                        <div class="col-sm-6">
-                            <div id="mainImage">
-                                <img  ng-src="./uploads/{{single_product.pic}}" alt="" class="img-responsive">
+                        <div class="col-sm-4" style="    margin-left: 121px;" >
+                            <div >
+                                <img  ng-src="./uploads/{{single_product.pic}}" alt="" class="img-responsive" width="150px" height="220px">
                             </div>
 <!-- 
                             <div class="ribbon sale">
@@ -464,8 +229,6 @@
                         <div class="col-sm-6">
                             <div class="box">
                                 <h1 class="text-center">{{single_product.name}}</h1>
-                                <p class="goToDescription"><a  class="scroll-to">Scroll to product details</a>
-                                </p>
 <!--                                 <p class="price">$124.00</p>
  -->
                                 <p class="text-center buttons" ng-show="single_product.copies>0">
@@ -506,8 +269,8 @@
                         <p>
                             </p><h4>Product details</h4>
                             <p>{{single_product.description}}</p>
-                            <h4>Material &amp; care</h4>
-                           <!--  <ul>
+                            <h4>Ratings</h4>
+                            <!--  <ul>
                                 <li>Polyester</li>
                                 <li>Machine wash</li>
                             </ul>
@@ -516,10 +279,27 @@
                                 <li>Regular fit</li>
                                 <li>The model (height 5'8" and chest 33") is wearing a size S</li>
                             </ul> -->
-
-                            <blockquote>
-                                <p><em>Define style this season with Armani's new range of trendy tops, crafted with intricate details. Create a chic statement look by teaming this lace number with skinny jeans and pumps.</em>
+                             <fieldset class="rating linkDisabled1" >
+                                    <input type="radio" id="star5" name="rating" value="5.00" ng-model="rating"/><label class = "full" for="star5" title="Awesome - 5 stars" ></label>
+                                    <input type="radio" id="star4half" name="rating" ng-model="rating" value="4.50" /><label class="half" for="star4half" title="Pretty good - 4.5 stars"></label>
+                                    <input type="radio" ng-model="rating" id="star4" name="rating" value="4.00" /><label class = "full" for="star4" title="Pretty good - 4 stars"></label>
+                                    <input type="radio" ng-model="rating" id="star3half" name="rating" value="3.50" /><label class="half" for="star3half" title="Meh - 3.5 stars"></label>
+                                    <input type="radio" ng-model="rating" id="star3" name="rating" value="3.00" /><label class = "full" for="star3" title="Meh - 3 stars"></label>
+                                    <input type="radio"  ng-model="rating" id="star2half" name="rating" value="2.50" /><label class="half" for="star2half" title="Kinda bad - 2.5 stars"></label>
+                                    <input type="radio" ng-model="rating" id="star2" name="rating" value="2.00" /><label class = "full" for="star2" title="Kinda bad - 2 stars"></label>
+                                    <input type="radio" ng-model="rating" id="star1half" name="rating" value="1.50" /><label class="half" for="star1half" title="Meh - 1.5 stars"></label>
+                                    <input type="radio" ng-model="rating" id="star1" name="rating" value="1.00" /><label class = "full" for="star1" title="Sucks big time - 1 star"></label>
+                                    <input type="radio" ng-model="rating" id="starhalf" name="rating" value="0.50" /><label class="half" for="starhalf" title="Sucks big time - 0.5 stars"></label>
+                                </fieldset>
+                            <div class="col-lg-12">
+                            </div>
+                            <br> 
+                            <h4>Reviews </h4> 
+                            <blockquote ng-repeat="review in reviews">
+                                <p><em>{{review.description}}.</em>
                                 </p>
+                                by
+                                {{review.name}}
                             </blockquote>
 
                             <hr>

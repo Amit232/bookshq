@@ -1,4 +1,4 @@
-var bookApp = angular.module('bookApp', ['ui.router','ngCookies','ngSanitize','timer']);
+var bookApp = angular.module('bookApp', ['ui.router','ngCookies','ngSanitize','timer','ngAnimate']);
 var interval;
 var validateOptions= {
   errorElement: 'em',
@@ -216,16 +216,11 @@ bookApp.run(function ($location, $rootScope, $state, $stateParams,$http,$cookies
                         if(status==200)
                         {
                             //alert(data.message);
-                            $.toast({
-                              heading: '',
+                            swal({
+                              title: '',
                               text: data.message,
-                              icon: 'success',
-                              showHideTransition: 'slide',
-                              hideAfter: 5000,
-                              loader: true,
-                              allowToastClose: true,
-                              position: 'top-right',
-                            });
+                              timer: 5000
+                            })
                             $("#lenderbooks").modal('hide');
                             $rootScope.tableDatas=[];
                             $rootScope.abc=[];
@@ -315,7 +310,7 @@ $rootScope.registerD=function(newUser)
                     $rootScope.signupisClicked=false;
                     $rootScope.signupbtn=false;
                     $rootScope.signupisClicked1=false;
-                    $.toast({
+                    /*$.toast({
                       heading: '',
                       text: data.message,
                       icon: 'success',
@@ -324,7 +319,12 @@ $rootScope.registerD=function(newUser)
                       loader: true,
                       allowToastClose: true,
                       position: 'top-right',
-                    });
+                    });*/
+                    swal({
+                              title: '',
+                              text: data.message,
+                              timer: 5000
+                            })
                     $rootScope.newUSer={};
                     $rootScope.cartProducts=data.user_cart_details;
                 }
@@ -332,16 +332,13 @@ $rootScope.registerD=function(newUser)
             if(status==403)
                 {
                     //alert(data.message);
-                    $.toast({
-                      heading: '',
+                   
+                    swal({
+                      title: '',
                       text: data.message,
-                      icon: 'error',
-                      showHideTransition: 'slide',
-                      hideAfter: 5000,
-                      loader: true,
-                      allowToastClose: true,
-                      position: 'top-right',
-                    });
+                      timer: 5000
+                    })
+
                    
                 }
         });
@@ -379,7 +376,7 @@ $rootScope.normalLoginD = function(email,password)
     if(angular.isDefined($cookies.id_user)&&$cookies.id_user!='')
     {
         //alert('You are alredy logged in to application');
-        $.toast({
+       /* $.toast({
           heading: '',
           text: 'You are alredy logged in to application',
           icon: 'success',
@@ -388,7 +385,12 @@ $rootScope.normalLoginD = function(email,password)
           loader: true,
           allowToastClose: true,
           position: 'top-right',
-        });
+        });*/
+        swal({
+          title: '',
+          text: 'You are alredy logged in to application',
+          timer: 5000
+        })
         return false;
     }
     else
@@ -409,7 +411,7 @@ $rootScope.normalLoginD = function(email,password)
                     $rootScope.signupisClicked=false;
                     $rootScope.signupbtn=false;
                     $rootScope.signupisClicked1=false;
-                    $.toast({
+                    /*$.toast({
                       heading: '',
                       text: data.message,
                       icon: 'success',
@@ -418,7 +420,12 @@ $rootScope.normalLoginD = function(email,password)
                       loader: true,
                       allowToastClose: true,
                       position: 'top-right',
-                    });
+                    });*/
+                    swal({
+                      title: '',
+                      text: data.message,
+                      timer: 5000
+                    })
                     $rootScope.enableSignIn=false;
                     angular.forEach($cookies, function (cookie, key) {
                         delete $cookies[key];                
@@ -445,16 +452,11 @@ $rootScope.normalLoginD = function(email,password)
                 if(status==403)
                     {
                        // alert(data.message);
-                       $.toast({
-                          heading: '',
+                        swal({
+                          title: '',
                           text: data.message,
-                          icon: 'error',
-                          showHideTransition: 'slide',
-                          hideAfter: 5000,
-                          loader: true,
-                          allowToastClose: true,
-                          position: 'top-right',
-                        });
+                          timer: 5000
+                        })
                     }
             });
         }
@@ -685,13 +687,31 @@ $scope.backToProductList = function(){
 $scope.getProductDetail = function(id_pro)
 {
     $scope.single_product={};
-    angular.forEach($scope.products,function(a){
+   /* angular.forEach($scope.products,function(a){
         if(id_pro==a.id_product)
         {
             $scope.single_product = a;
             $scope.productDetail=true;    
             $scope.backtoProductPage=true;
         }
+    });*/
+    var params={'id_product':id_pro}
+    $http({
+    method: "post",
+    timeout:60000,                                    
+    url: SITE_URL+'getProductDetail',
+    data : $.param(params),
+    headers: {'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'}
+    }).success(function (data,status) {
+        $scope.single_product = data.res.product;
+        $scope.reviews=data.res.reviews;
+        $scope.productDetail=true;    
+        $scope.backtoProductPage=true;
+        $scope.rating=Math.ceil($scope.single_product.rating);
+        $scope.totalReviews= data.res.total_reviews;
+        $scope.totalRatings= data.res.total_ratings;
+    }).error(function(data,stat){
+
     });
 }
 
@@ -700,16 +720,12 @@ $scope.addProductToCart = function(product)
     if(!angular.isDefined($cookies.id_user)||!angular.isDefined($cookies.email))
     {
         //alert('Please login and add product to cart');
-        $.toast({
-          heading: '',
-          text: 'Please login and add product to cart',
-          icon: 'error',
-          showHideTransition: 'slide',
-          hideAfter: 5000,
-          loader: true,
-          allowToastClose: true,
-          position: 'top-right',
-        });
+       
+         swal({
+                      title: '',
+                      text: 'Please login and add product to cart',
+                      timer: 5000
+                    })
         return false;
     }
     if(angular.isDefined($rootScope.cartProducts)&&$rootScope.cartProducts.length>0)
@@ -718,16 +734,13 @@ $scope.addProductToCart = function(product)
             if($rootScope.cartProducts[i].id_product==product.id_product)
             {
                 //alert('Product is already added to cart');
-                $.toast({
-                  heading: '',
-                  text: 'Product is already added to cart',
-                  icon: 'error',
-                  showHideTransition: 'slide',
-                  hideAfter: 5000,
-                  loader: true,
-                  allowToastClose: true,
-                  position: 'top-right',
-                });
+               
+                swal({
+                      title: '',
+                      text: 'Product is already added to cart',
+                      timer: 5000
+                    })
+
                 return false;
             }
         }
@@ -744,16 +757,13 @@ $scope.addProductToCart = function(product)
     headers: {'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'}
     }).success(function (data,status) {
         $rootScope.cartProducts.push(product);
-        $.toast({
-          heading: '',
-          text: 'Product is added to cart',
-          icon: 'success',
-          showHideTransition: 'slide',
-          hideAfter: 5000,
-          loader: true,
-          allowToastClose: true,
-          position: 'top-right',
-        });
+      
+        swal({
+                      title: '',
+                      text: 'Product is added to cart',
+                      timer: 5000
+                    })
+
     });
 
 }
@@ -842,16 +852,12 @@ $scope.buyProducts= function(){
         headers: {'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'}
         }).success(function (data,status) {
             if(status==200)
-                $.toast({
-                  heading: '',
-                  text: data.meessage,
-                  icon: 'success',
-                  showHideTransition: 'slide',
-                  hideAfter: 5000,
-                  loader: true,
-                  allowToastClose: true,
-                  position: 'top-right',
-                });
+               
+                swal({
+                      title: '',
+                      text: data.meessage,
+                      timer: 5000
+                    })
             //alert(data.meessage);
 
             $scope.showBasket=false;
@@ -865,16 +871,13 @@ $scope.buyProducts= function(){
             if(status==403)
             {
                 //alert(data.meessage);
-                $.toast({
-                  heading: '',
-                  text: data.meessage,
-                  icon: 'error',
-                  showHideTransition: 'slide',
-                  hideAfter: 5000,
-                  loader: true,
-                  allowToastClose: true,
-                  position: 'top-right',
-                });
+                
+                swal({
+                      title: '',
+                      text: data.meessage,
+                      timer: 5000
+                    })
+
                 $scope.message=data.meessage;
                 $("#login-modal1").modal('hide');
                 $rootScope.cartProducts=data.user_cart_details;
@@ -923,16 +926,13 @@ $scope.sendOrganizationReq =function()
             if(status==200)
             {
                 //alert('Organization addedd successfully.You will be nofified once it is verified.');
-                $.toast({
-                  heading: '',
-                  text: 'Organization addedd successfully.You will be nofified once it is verified.',
-                  icon: 'success',
-                  showHideTransition: 'slide',
-                  hideAfter: 5000,
-                  loader: true,
-                  allowToastClose: true,
-                  position: 'top-right',
-                });
+               
+                swal({
+                      title: '',
+                      text: 'Organization addedd successfully.You will be nofified once it is verified.',
+                      timer: 5000
+                    })
+
                 $("#login-modal1").modal('hide');
             }
         });    
@@ -950,7 +950,8 @@ if(interval!=null||interval==null)
     $interval.cancel(interval);
     interval=null
 }
-
+$scope.rating;
+$scope.description="";
 $scope.getOrders= function(){
         $http({
             method: "POST",
@@ -968,33 +969,57 @@ $scope.getOrders= function(){
 }
 if(angular.isDefined($cookies.id_user)&&$cookies.id_user!='')
     $scope.getOrders();
+
+$scope.changeTransaction=function(id_subtransaction,status,id_product){
+    $scope.id_subtransaction=id_subtransaction;
+    $scope.status=status;
+    $scope.id_product=id_product;
+}
 $scope.changeTransactionStatus = function(id_subtransaction,status){
+
+    if(angular.isDefined($scope.id_subtransaction)&&angular.isDefined($scope.status)){
+        if(angular.isDefined($scope.rating)){
+
+        }
+        else
+        {
+            $scope.rating="";
+        }
+        if(angular.isDefined($scope.description)){
+
+        }
+        else
+        {
+            $scope.description="";
+        }
+
 
     $http({
             method: "POST",
             timeout:60000,                                    
             url: SITE_URL+'setTransactionStatus',
-            data : $.param({'id_user':$cookies.id_user,'id_subtransaction':id_subtransaction,'status':status}),
+            data : $.param({'id_user':$cookies.id_user,'id_subtransaction':$scope.id_subtransaction,'status':$scope.status,rating:$scope.rating,'description':$scope.description,'id_product':$scope.id_product}),
             headers: {'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'}
             }).success(function (data,status) {
                 if(status==200)
                 {
                     //alert(data.message);
-                    $.toast({
-                      heading: '',
+                    $("#returnreview").modal('hide');
+                     swal({
+                      title: '',
                       text: data.message,
-                      icon: 'success',
-                      showHideTransition: 'slide',
-                      hideAfter: 5000,
-                      loader: true,
-                      allowToastClose: true,
-                      position: 'top-right',
-                    });
+                      timer: 5000
+                    })
+                    $scope.id_subtransaction="";
+                        $scope.status="";
+                        $scope.id_product="";
+                    $scope.rating="";
+                    $scope.description="";
                     $scope.orders = data.orders;
                     $scope.lenderedProducts =data.lenderedProducts;
-
                 }
         });
+    }
 }
 
 });

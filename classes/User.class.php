@@ -133,4 +133,10 @@ class User{
       return $res;
     }
 
+    public function setProductReview($inserInf){
+       global $db;
+      $q_usr = $db->insert('product_has_user_review',$inserInf);
+      return $q_usr;
+    }
+
 }

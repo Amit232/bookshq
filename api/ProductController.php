@@ -226,7 +226,7 @@ class ProductController
 
     }
 
-    public function setTransactionStatus($id_user,$id_transaction,$status)
+    public function setTransactionStatus($id_user,$id_transaction,$status,$rating,$description,$id_product)
     {
 
       $productObj = new Product();
@@ -249,6 +249,22 @@ class ProductController
       }
       $orders =$userObj->getOrders($id_user);
       $lenderedProducts = $userObj->getYourLenderedProducts($id_user);
+
+      if($rating&&$rating!=''){
+        $insertInfo =array();
+        $insertInfo['user_id_user']=$id_user;
+        $insertInfo['product_id_product']=$id_product;
+        $insertInfo['rating']=$rating;
+        $insertInfo['description']=$description;
+        $insertInfo['created_at']=date('Y-m-d H:i:s');
+        $insertInfo['updated_at']=date('Y-m-d H:i:s');
+        $userObj = new User();
+        $res = $userObj->setProductReview($insertInfo);
+        if($res){
+          return array('message'=>'Order is '.$status.' successfully','orders'=>$orders,'lenderedProducts'=>$lenderedProducts);
+        }
+      }
+      else
       return array('message'=>'Order is '.$status.' successfully','orders'=>$orders,'lenderedProducts'=>$lenderedProducts);
       
 
@@ -340,6 +356,15 @@ class ProductController
       else
       {
         return array('error'=>403,'message'=>'Email id or password is invalid.');
+      }
+    }
+
+    public function getProductDetail($id_product){
+      $productObj = new Product();
+      $res= $productObj->getProductDetail($id_product);
+      if($res){
+        return array('error'=>200,'res'=>$res);
+
       }
     }
 }
