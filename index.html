@@ -111,22 +111,22 @@
             </div>
             <div class="col-md-8" style="margin-top: 16px;">
                 <ul class="menu">
-                   <!--  <li ng-if="$root.enableSignIn"><a href="#" data-toggle="modal" data-target="#login-modal">Login</a>
+                   <!--  <li ng-cloak ng-if="$root.enableSignIn"><a href="#" data-toggle="modal" data-target="#login-modal">Login</a>
                     </li> -->
                     
-                    <li ng-if="$root.enableSignIn"><a data-toggle="modal" data-target=".bs-example-modal-lg" ng-click="$root.registerorloginClick();">Register/Login</a>
+                    <li ng-cloak ng-if="$root.enableSignIn"><a href="" data-toggle="modal" data-target=".bs-example-modal-lg" ng-click="$root.registerorloginClick();">Register/Login</a>
                     </li>
-                    <li ng-if="!$root.enableSignIn&&$root.loggedUserDetails.name!=''">
+                    <li ng-cloak ng-if="!$root.enableSignIn&&$root.loggedUserDetails.name!=''">
                          <a>Welcome {{$root.loggedUserDetails.name}}</a>
                     </li>
                     <li><a href="contact.html">Contact</a>
                     </li>
-                    <li><a data-ui-sref="orders">Orders</a>
+                    <li ng-cloak ng-if="!$root.enableSignIn"><a data-ui-sref="orders">Orders</a>
                     </li>
-                    <li ng-if="!$root.enableSignIn">
+                    <li ng-cloak ng-if="!$root.enableSignIn">
                         <a href="" data-toggle="modal" data-target="#lenderbooks" ng-click="$root.tableDatas=[];$root.abc=[];">Add Lender Book</a>
                     </li>
-                    <li ng-if="!$root.enableSignIn">    
+                    <li ng-cloak ng-if="!$root.enableSignIn">    
                         <a href="" title="Logout" ng-click="$root.logout();">Logout</a>
                     </li>
                 </ul>
@@ -153,7 +153,7 @@
                                     <span>Sign In</span>
                             </div>
                             <div class="col-xs-12 margin">
-                                <a  ng-if="$root.enableSignIn" class="btn btn-block g-signin2" data-longtitle="true" data-onsuccess="Google_signIn"  data-longtitle="true" data-onsuccess="Google_signIn" data-theme="light" data-width="204" style="width: 204px;height: 38px;font-size: xx-small;background-color:#fff;color:red"></a>
+                                <a  ng-cloak ng-if="$root.enableSignIn" class="btn btn-block g-signin2" data-longtitle="true" data-onsuccess="Google_signIn"  data-longtitle="true" data-onsuccess="Google_signIn" data-theme="light" data-width="204" style="width: 204px;height: 38px;font-size: xx-small;background-color:#fff;color:red"></a>
 
                             </div>
                             <div class="font205 col-xs-12 margin text-center" >
@@ -170,7 +170,7 @@
                                 
                             </div>
                         </div> 
-                        <div class="col-xs-6" ng-show="signupisClicked1">
+                        <div class="col-xs-6" ng-cloak ng-show="signupisClicked1">
                             <div class="col-xs-12 signin-header">
                                 <span>Sign Up</span>
                             </div>
@@ -189,7 +189,7 @@
                             </div>
                         </form>
                         </div>
-                        <div class="col-xs-6" ng-show="signupbtn">
+                        <div class="col-xs-6" ng-cloak ng-show="signupbtn">
                             <div class="col-xs-12 signin-header">
                                 <span>Sign In</span>
                             </div>
@@ -254,7 +254,7 @@
                     <img src="img/logo.png" alt="Obaju logo" class="hidden-xs">
                     <img src="img/logo-small.png" alt="Obaju logo" class="visible-xs"><span class="sr-only">Obaju - go to homepage</span>
                 </a> -->
-                <div class="navbar-buttons">
+                <!-- <div class="navbar-buttons">
                     <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navigation">
                         <span class="sr-only">Toggle navigation</span>
                         <i class="fa fa-align-justify"></i>
@@ -264,9 +264,11 @@
                         <i class="fa fa-search" ></i>
                     </button>
                     <a class="btn btn-default navbar-toggle" data-ui-sref="basket" >
-                        <i class="fa fa-shopping-cart"></i>  <span class="hidden-xs">{{$root.cartProducts.length}} </span>
+                        <i class="fa fa-shopping-cart"></i>  
+                        <span ng-if="$root.cartProducts&&$root.cartProducts.length>0" class="hidden-xs" >{{$root.cartProducts.length}} </span>
+                        <span ng-if="$root.cartProducts.length.length==0">0</span>
                     </a>
-                </div>
+                </div> -->
             </div>
             <!--/.navbar-header -->
 
@@ -279,14 +281,14 @@
                     <li class="active" data-ui-sref="products" ng-click="applyActiveColor('sneakin','')">
                     <a id="sneakin"  class="btn btn-primary navbar-btn" style="    margin-right: 11px;">Sneak In</a>
                     </li>
-                    <li class="active" ng-repeat="c in categories"  ng-click="applyActiveColor('category',$index);redirectToProducts(c)" >
+                    <li ng-cloak ng-if="categories.length>0" class="active" ng-repeat="c in categories"  ng-click="applyActiveColor('category',$index);redirectToProducts(c)" >
                         <a id="category_{{$index}}" href="" class="btn btn-primary navbar-btn" style="margin-right: 11px;" >{{c.name}}
                         </a>
                     </li>
                     <li style=" margin-left: 32px;">
                     <form class="navbar-form" role="search">
                     <div class="input-group"  class="" style="z-index:0!important">
-                        <input type="text" class="form-control" style="width: 500px;height: 41px;" ng-model="$root.searchString" placeholder="Search" ng-enter="$root.seachProducts();" >
+                        <input type="text" class="form-control" style="width: 500px;height: 41px;" ng-model="$root.searchString" placeholder="Search" ng-enter="$root.seachProducts();" ng-change="$root.seachProducts();">
                         <span class="input-group-btn">
 
                             <button type="button" ng-click="$root.seachProducts();"  class="btn btn-primary"><i class="fa fa-search"></i></button>
@@ -304,7 +306,10 @@
             <div class="navbar-buttons">
 
                 <div class="navbar-collapse collapse right" id="basket-overview">
-                    <a data-ui-sref="basket" class="btn btn-primary navbar-btn"><i class="fa fa-shopping-cart"></i><span class="hidden-sm">{{$root.cartProducts.length}}</span></a>
+                    <a data-ui-sref="basket" class="btn btn-primary navbar-btn"><i class="fa fa-shopping-cart"></i>
+                    <span ng-cloak ng-if="$root.cartProducts&&$root.cartProducts.length>0" class="hidden-xs" >{{$root.cartProducts.length}} </span>
+                    <span ng-cloak ng-if="$root.cartProducts.length.length==0">0</span>
+                    </a>
                 </div>
                 <!--/.nav-collapse -->
 
@@ -396,7 +401,7 @@
                                 <input type="text" name="lender_book" class="form-control" id="email-modal_{{$index}}" placeholder="Enter Book Name" ng-model="$root.abc[$index]">
                             </div>
                            
-                            <div class="form-group text-center" ng-if="$root.tableDatas.length>0">
+                            <div class="form-group text-center" ng-cloak ng-if="$root.tableDatas.length>0">
                                <button class="btn btn-primary" ng-click="$root.submitLenderProduct($root.abc)"><i class="fa fa-book"></i> Submit </button>
                             </div>
                         </form>

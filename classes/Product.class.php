@@ -262,6 +262,17 @@ public function getOrders($id_user='')
       $select =$db->select($q_select);
       return $select;
     }
+
+    public function checkProductAddedtocart($product,$id_user){
+      global $db;
+      $q_select="SELECT cart.* FROM cart LEFT JOIN product ON product.id_product=cart.product_id_product WHERE product.id_product='$product' AND cart.user_id_user='$id_user'";
+      $select =$db->select($q_select);
+      return $select;
+    }
+
+    public function addBulkProductToCart($id_user,$products){
+      
+    }
     
 }
 

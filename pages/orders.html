@@ -100,10 +100,17 @@ h1 { font-size: 1.5em; margin: 10px; }
                                             </td> 
                                             <td>{{order.ordered_date}}</td>
                                             <td>{{order.date_issued}}</td>
-                                             <td ng-show="order.transaction_status=='Pending'"><button type="button" class="btn btn-info btn-sm" ng-click='changeTransactionStatus(order.id_sub_transaction,"cancelled")'>Cancel Order</button>
+                                             <td>
+                                             <span  ng-show="order.transaction_status=='Pending'">
+                                                <button type="button" class="btn btn-info btn-sm" ng-click='changeTransactionStatus(order.id_sub_transaction,"cancelled")'>Cancel Order</button>
+                                                 
+                                             </span>
                                              </td>
-                                            <td ng-show="order.transaction_status=='delivered'">
+                                            <td >
+                                                <span ng-show="order.transaction_status=='delivered'">
+                                                    
                                                 <button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#returnreview" ng-click='changeTransaction(order.id_sub_transaction,"in_progress",order.id_product)'>Return Order</button>
+                                                </span>
                                             </td>
                                         </tr>
                                     </tbody>

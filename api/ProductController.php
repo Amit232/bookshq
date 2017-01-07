@@ -85,6 +85,10 @@ class ProductController
       $productObj = new Product();
       $insertInfo = [];
       $insertInfo=array('user_id_user'=>$id_user,'product_id_product'=>$productDetails['id_product']);
+      $checkProructAddedtocart = $productObj->checkProductAddedtocart($productDetails['id_product'],$id_user);
+      if($checkProructAddedtocart){
+        return array('error'=>true,'message'=>'Product already added to cart.');
+      }
       $addtoCartRes = $productObj->addProductToCart($insertInfo);
       if($addtoCartRes)
       {
@@ -105,9 +109,15 @@ class ProductController
 
     public function deleteProductFromCart($idUser,$product)
     {
+      if(isset($product['id_product'])){
+        $id_product = $product['id_product'];
+      }
+      if(isset($product['product_id_product'])){
+        $id_product = $product['product_id_product'];
+      }
       $productObj = new Product();
       $userObj = new User();
-      $deleteP = $productObj->deleteProductFromCart($idUser,$product['id_product']);
+      $deleteP = $productObj->deleteProductFromCart($idUser,$id_product);
       $userCartDetails=$userObj->getUserProducts($idUser);
       return array('user_cart_details'=>$userCartDetails,'message'=>'Product deleted from cart');  
 
@@ -369,5 +379,26 @@ class ProductController
         return array('error'=>200,'res'=>$res);
 
       }
+    }
+
+
+    public function addBulkProductToCart($id_user,$products){
+      $productObj = new Product();
+      if($products&&count($products)>0){
+        foreach ($products as $key => $value) {
+            $insertInfo=array('user_id_user'=>$id_user,'product_id_product'=>$value['id_product']);
+            $checkProructAddedtocart = $productObj->checkProductAddedtocart($value['id_product'],$id_user);
+            if($checkProructAddedtocart){
+              //return array('error'=>true,'message'=>'Product already added to cart.');
+            }else{
+
+              $addtoCartRes = $productObj->addProductToCart($insertInfo);
+            }
+        }
+      }
+      $userObj = new User();
+      $userCartDetails=$userObj->getUserProducts($id_user);
+      return array('error'=>200,'user_cart_details'=>$userCartDetails,'message'=>'Products added to cart successfully.');
+
     }
 }

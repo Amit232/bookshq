@@ -106,7 +106,7 @@ label {
             <div class="container">
                 <div class="col-md-12">
                     <ul class="breadcrumb">
-                        <li><a data-ui-sref="home" style="color:black">Home</a>
+                        <li><a data-ui-sref="home" style="color:black">Home > Products</a>
                         </li>
                         <li ng-if="backtoProductPage" ><a ng-click="backToProductList()" style="color:black">Back to products list</a>
                         </li>
@@ -210,13 +210,13 @@ label {
                         <div class="col-lg-6 text-right">
                         <nav aria-label="Product page navigation">
                             <ul class = "pagination">
-                               <li><a class="" ng-class="{'linkDisabled':startIndex == 0}" ng-disabled="startIndex == 0" ng-click="startIndex = startIndex - 1; setPage(startIndex, 'products'); loadingBarShow = true;"><i class="fa fa-angle-double-left" aria-hidden="true"></i></a></li>
+                               <li><a class="" ng-class="{'linkDisabled':startIndex == 0}" ng-disabled="startIndex == 0" ng-click="startIndex = startIndex - 1; setPage(startIndex, 'products'); loadingBarShow = true;"><i class="fa fa-angle-double-left" aria-hidden="true" style="margin: 0!important"></i></a></li>
                                <li>
                                     <a class="" ng-repeat="item in itemsPaginated()" ng-click="setPage(item - 1, 'products')" ng-class="{'activepagintion':startIndex == item - 1,'deactivepagintion':startIndex != item - 1}">
                                     {{item}}
                                 </a>
                                 </li>
-                               <li><a class="" ng-class="{'linkDisabled':startIndex >= totalItems / limitIndex - 1}" ng-disabled="startIndex >= totalItems / limitIndex - 1" ng-click="startIndex = startIndex + 1; setPage(startIndex, 'products'); loadingBarShow = true;"><i class="fa fa-angle-double-right" aria-hidden="true"></i></a></li>
+                               <li><a class="" ng-class="{'linkDisabled':startIndex >= totalItems / limitIndex - 1}" ng-disabled="startIndex >= totalItems / limitIndex - 1" ng-click="startIndex = startIndex + 1; setPage(startIndex, 'products'); loadingBarShow = true;"><i class="fa fa-angle-double-right" aria-hidden="true" style="margin: 0!important"></i></a></li>
                             </ul>
                         </nav>
                     </div> 

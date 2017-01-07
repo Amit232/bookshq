@@ -147,6 +147,32 @@
             }
         }
 
+        public function addBulkProductToCart(){
+            $accessToken = $this->getHeader('Csrf-Token');
+            if(!$accessToken)
+            {
+                $error = array("message" => "Please login to add product to cart");
+                $this->response($this->json($error), 401);
+            }
+            else
+            {
+
+                $productControllerObj = new ProductController();
+                $productDetails = $productControllerObj->addBulkProductToCart($this->_request['id_user'],$this->_request['product']);
+
+                if($productDetails['error']==200)
+                {
+                    $this->response($this->json($productDetails), 200); 
+                }
+                else
+                {
+                   $error = array("message" =>  $productDetails['message']);
+                    $this->response($this->json($error), 401); 
+ 
+                }
+            }
+        }
+
         public function getUserProducts()
         {
 
