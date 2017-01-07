@@ -1,0 +1,129 @@
+<style type="text/css">
+    img-crop {
+    width:100%;
+    height:100%;
+    display:block;
+    position:relative;
+    overflow:hidden;
+}
+img-crop canvas {
+    display:block;
+    position:absolute;
+    top:50%;
+    left:50%;
+    outline:none;
+    -webkit-tap-highlight-color:rgba(255,255,255,0);
+    /* mobile webkit */
+}
+.cropArea {
+    background:#E4E4E4;
+    margin:auto;
+    overflow:hidden;
+}
+.cropArea.small {
+    width:300px;
+    height:300px;
+}
+.editPic {
+   position: absolute;
+    top: 63px;
+    width: 95px;
+    left: 27px;
+    cursor: pointer;
+}
+</style>
+<div class="container">
+
+    <form id="normalProduct" name="normalProduct" enctype="multipart/form-data" class="col-xs-6" style="text-align:center"> 
+        <div class="form-group">
+            <input type="text" class="form-control" id="name" name="name" ng-model="product.name"  placeholder="Product Name" autosuggest="off">
+        </div>
+        <!-- <div class="form-group">
+            <input type="text" id="description" name="description" class="form-control" id="password2"  ng-model="product.description"  placeholder="Product description">
+        </div> -->
+        <div class="form-group">
+        <span style="margin-left:-414px">Product Description</span>   
+            <!-- <textarea col="2" rows="2" name="isbn"   id="isbn"  class="form-control"   ng-model="product.description" > </textarea> -->
+            <h4>airmode</h4>
+            <div class="example">
+               <summernote config="options" ng-model="product.description"></summernote>s
+            </div>
+            {{product.description}}
+           <!--  <input type="text" placeholder="Product ISBN"> -->
+        </div>
+        <div class="form-group">
+            <input type="text" id="isbn" name="isbn" class="form-control" id="password2"  ng-model="product.isbn"  placeholder="Product ISBN">
+        </div>
+        <div class="form-group">
+            <input type="text" id="author" name="author" class="form-control" id="password2"  ng-model="product.author"  placeholder="Product Author">
+        </div>
+        <div class="form-group">
+            <input type="text" id="copies" name="copies"  id="copies" class="form-control" ng-model="product.copies"  placeholder="Product Copies">
+        </div>
+        <div class="form-group">
+            <select id="categories" name="categories" ng-init="product.category=''" ng-model="product.category" class="form-control"> 
+              <option selected="selected" value="">Select Category</option>
+              <option ng-repeat="c in categories" value="{{c.id_category}}">{{c.name}} 
+
+              </option>
+            </select>
+        </div>
+         <div class="form-group">
+            <label for="file" class="input input-file">
+                <span  class="button proImg left-30">
+                    <input type="file" id="profilePic" class="profilePicpage" >
+                </span>
+            </label>
+        </div>
+        <div class="text-center">
+            <button ng-click="addnewproduct(product)" class="btn btn-primary"><i class="fa fa-sign-in"></i> Add Product</button>
+        </div>
+    </form>
+
+</div>
+
+<div id="crop-image-profile" title="Crop Your Image"  style="display:none;">                
+   
+
+</div>
+<button class="hidden" id="button1" data-toggle="modal" data-target='#myModal'></button>
+<div id="myModal" class="modal fade">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <!-- dialog body -->
+      <div class="modal-body">
+         <div ng-cloak ng-if="enableCrop" class="cropArea small" ng-class="{'big':size == 'big', 'medium':size == 'medium', 'small':size == 'small'}">
+        <img-crop image="imageDataURI"
+                  area-coords="myAreaCoords"
+                  area-min-size="100"
+                  result-image="$parent.resImageDataURI"
+                  change-on-fly="changeOnFly"
+                  area-type="{{type}}"
+                  area-min-size="selMinSize"
+                  result-image-format="{{resImgFormat}}"
+                  result-image-quality="resImgQuality"
+                  result-image-size="resImgSize"
+                  on-change="onChange($dataURI)"
+                  on-load-begin="onLoadBegin()"
+                  on-load-done="onLoadDone()"
+                  on-load-error="onLoadError()"
+                  >
+        </img-crop>
+          </div>
+            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 text-center margin">
+             
+               <button class="btn-eyard-blue" ng-click="changePostition('square');" title="Square">Square</button>
+                <button class="btn-eyard-blue" ng-click="changePostition('rectangle');" title="Rectangle">Rectangle</button>
+            </div>
+           <!--  <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 text-center">
+                <button tabindex="-1" class="btn btn-primary commonBtn" ng-click="cropAndUploadProfile();" title="Upload Cropped Image">Upload Cropped Image</button>
+            </div> -->
+            <div ng-show="resImageDataURI">Croped Imgage
+            <img ng-src="{{resImageDataURI}}" ></img>
+            </div>
+      </div>
+      <!-- dialog buttons -->
+      <div class="modal-footer"><button type="button" class="btn btn-primary" data-dismiss="modal" aria-hidden="true">close</button></div>
+    </div>
+  </div>
+</div>

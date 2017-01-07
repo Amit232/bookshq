@@ -1,0 +1,381 @@
+<style type="text/css">
+.img-responsive1{
+    display: block;
+    max-width: 100%;
+    height: 184px;
+}
+.linkDisabled {
+  cursor: not-allowed !important;
+  pointer-events: none;
+  color: grey;
+}
+.linkDisabled1 {
+  cursor: not-allowed !important;
+  pointer-events: none;
+}
+body{
+    background-color: white;
+}
+.prvsBtns{padding: 4px 15px !important;background-color: #4fbfa8; font-size: 10px;
+
+  border: 1px solid #ddd; margin-right: 2px; color:#444444;}
+
+.prvsBtns:hover{background-color: #4fbfa8 !important; color: #fff;border: 1px solid #1c9ccb;}
+
+.nextBtns{padding: 4px 15px !important;background-color: #4fbfa8; font-size: 10px;
+
+  border: 1px solid #ddd; margin-left: 5px; color:#444444;}
+
+.nextBtns:hover{background-color: #4fbfa8 !important; color: #fff;border: 1px solid #1c9ccb;}
+
+.paginationnmbr{padding: 2px 7px !important; margin-right: 5px;}
+
+.activepagintion{background-color: black !important;text-align:center;border: 1px solid #1c9ccb;cursor: pointer;color: #fff!important;top: 1px;position: relative;}
+
+.deactivepagintion{text-align:center;border: 1px solid #ddd;
+
+  cursor: pointer;position: relative;top: 1px;color: #666666;}
+
+.rating { 
+  border: none;
+  float: left;
+}
+
+.rating > input { display: none; } 
+.rating > label:before { 
+  margin: 5px;
+  font-size: 1.25em;
+  font-family: FontAwesome;
+  display: inline-block;
+  content: "\f005";
+}
+
+.rating > .half:before { 
+  content: "\f089";
+  position: absolute;
+}
+
+.rating > label { 
+  color: #ddd; 
+ float: right; 
+}
+
+/***** CSS Magic to Highlight Stars on Hover *****/
+
+.rating > input:checked ~ label, /* show gold star when clicked */
+
+.rating > input:checked + label:hover, /* hover current star when changing rating */
+.rating > input:checked ~ label:hover,
+.rating > label:hover ~ input:checked ~ label, /* lighten current selection */
+.rating > input:checked ~ label:hover ~ label { color: #FFD700;  } 
+.textareaclass{
+    outline: none;
+    border: none;
+    width: 100%;
+    font-size: 14px;
+    font-weight: 400;
+    resize: none;
+}
+label { font-size: 24px; }
+input[type=checkbox] { display:none; } /* to hide the checkbox itself */
+input[type=checkbox] + label:before {
+  font-family: FontAwesome;
+  display: inline-block;
+}
+input[type=checkbox] + label:before { content: "\f096"; } /* unchecked icon */
+input[type=checkbox] + label:before { letter-spacing: 10px; } /* space between checkbox and label */
+
+input[type=checkbox]:checked + label:before { content: "\f046"; } /* checked icon */
+input[type=checkbox]:checked + label:before { letter-spacing: 5px; } /* allow space for check mark */
+.btn-danger1 {
+    color: white !important;
+    background-color: black;
+    border-color: #FFF; /
+}
+.btn-danger1:hover{
+    color: white !important;
+    background-color: black;
+    border-color: #FFF; /
+}
+label {
+    font-size: 14px;
+}
+</style>
+<div class="content">
+    <div class="container">
+        <div class="col-md-12" >
+                    <div class="row" id="productMain">
+                        <div class="col-sm-3" style="margin-bottom:10px;">
+                            <div >
+                                <img  ng-src="./uploads/{{single_product.pic}}" alt="" class="img-responsive" width="150px" height="220px">
+                            </div>
+<!-- 
+                            <div class="ribbon sale">
+                                <div class="theribbon">SALE</div>
+                                <div class="ribbon-background"></div>
+                            </div>
+
+                            <div class="ribbon new">
+                                <div class="theribbon">NEW</div>
+                                <div class="ribbon-background"></div>
+                            </div> -->
+                            <!-- /.ribbon -->
+
+                        </div>
+                        <div class="col-sm-8">
+                            <div class="box">
+                                <h2 class="text-center">{{single_product.name}}</h2>
+<!--                                 <p class="price">$124.00</p>
+ -->                            <h3 class="text-center">{{single_product.author}}</h3>
+                                <p class="text-center buttons" ng-show="single_product.copies>0">
+                                    <a href="" class="btn btn-primary" ng-click="addProductToCart(single_product)"><i class="fa fa-shopping-cart" ></i> Add to cart</a> 
+                                    <!-- <a href="" class="btn btn-default"><i class="fa fa-heart"></i> Add to wishlist</a> -->
+                                </p>
+                                 <p class="text-center buttons" ng-show="!single_product.copies||single_product.copies<=0">
+                                    <a href="" class="btn btn-primary"><i class="fa fa-shopping-cart"></i>Out of stock</a>
+                                    <!-- <a href="" class="btn btn-default"><i class="fa fa-heart"></i> Add to wishlist</a> -->
+                                </p>
+                                
+
+                            </div>
+
+                             <div class="box" id="details">
+                        <p>
+                            </p><h4>About the book</h4>
+                            <p><span ng-bind-html="to_trusted(single_product.description)" >
+                            </p>
+                            <hr>
+
+                            <h4>Ratings</h4>
+                            <!--  <ul>
+                                <li>Polyester</li>
+                                <li>Machine wash</li>
+                            </ul>
+                            <h4>Size &amp; Fit</h4>
+                            <ul>
+                                <li>Regular fit</li>
+                                <li>The model (height 5'8" and chest 33") is wearing a size S</li>
+                            </ul> -->
+                             <fieldset class="rating linkDisabled1" >
+                                    <input type="radio" id="star5" name="rating" value="5.00" ng-model="rating"/><label class = "full" for="star5" title="Awesome - 5 stars" ></label>
+                                    <input type="radio" id="star4half" name="rating" ng-model="rating" value="4.50" /><label class="half" for="star4half" title="Pretty good - 4.5 stars"></label>
+                                    <input type="radio" ng-model="rating" id="star4" name="rating" value="4.00" /><label class = "full" for="star4" title="Pretty good - 4 stars"></label>
+                                    <input type="radio" ng-model="rating" id="star3half" name="rating" value="3.50" /><label class="half" for="star3half" title="Meh - 3.5 stars"></label>
+                                    <input type="radio" ng-model="rating" id="star3" name="rating" value="3.00" /><label class = "full" for="star3" title="Meh - 3 stars"></label>
+                                    <input type="radio"  ng-model="rating" id="star2half" name="rating" value="2.50" /><label class="half" for="star2half" title="Kinda bad - 2.5 stars"></label>
+                                    <input type="radio" ng-model="rating" id="star2" name="rating" value="2.00" /><label class = "full" for="star2" title="Kinda bad - 2 stars"></label>
+                                    <input type="radio" ng-model="rating" id="star1half" name="rating" value="1.50" /><label class="half" for="star1half" title="Meh - 1.5 stars"></label>
+                                    <input type="radio" ng-model="rating" id="star1" name="rating" value="1.00" /><label class = "full" for="star1" title="Sucks big time - 1 star"></label>
+                                    <input type="radio" ng-model="rating" id="starhalf" name="rating" value="0.50" /><label class="half" for="starhalf" title="Sucks big time - 0.5 stars"></label>
+                                </fieldset>
+                            <div class="col-lg-12">
+                            </div>
+                            <br> 
+                            <h4>Reviews </h4> 
+                            <blockquote ng-repeat="review in reviews">
+                                <p><em>{{review.description}}.</em>
+                                </p>
+                                by
+                                {{review.name}}
+                            </blockquote>
+
+                           <!--  <div class="social">
+                                <h4>Show it to your friends</h4>
+                                <p>
+                                    <a href="#" class="external facebook" data-animate-hover="pulse"><i class="fa fa-facebook"></i></a>
+                                    <a href="#" class="external gplus" data-animate-hover="pulse"><i class="fa fa-google-plus"></i></a>
+                                    <a href="#" class="external twitter" data-animate-hover="pulse"><i class="fa fa-twitter"></i></a>
+                                    <a href="#" class="email" data-animate-hover="pulse"><i class="fa fa-envelope"></i></a>
+                                </p>
+                            </div> -->
+                    </div>
+                        </div>
+
+                    </div>
+
+
+                   
+
+                   <!--  <div class="row same-height-row">
+                        <div class="col-md-3 col-sm-6">
+                            <div class="box same-height" style="height: 379px;">
+                                <h3>You may also like these products</h3>
+                            </div>
+                        </div>
+
+                        <div class="col-md-3 col-sm-6">
+                            <div class="product same-height" style="height: 379px;">
+                                <div class="flip-container">
+                                    <div class="flipper">
+                                        <div class="front">
+                                            <a href="detail.html">
+                                                <img src="img/product2.jpg" alt="" class="img-responsive">
+                                            </a>
+                                        </div>
+                                        <div class="back">
+                                            <a href="detail.html">
+                                                <img src="img/product2_2.jpg" alt="" class="img-responsive">
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <a href="detail.html" class="invisible">
+                                    <img src="img/product2.jpg" alt="" class="img-responsive">
+                                </a>
+                                <div class="text">
+                                    <h3>Fur coat</h3>
+                                    <p class="price">$143</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-3 col-sm-6">
+                            <div class="product same-height" style="height: 379px;">
+                                <div class="flip-container">
+                                    <div class="flipper">
+                                        <div class="front">
+                                            <a href="detail.html">
+                                                <img src="img/product1.jpg" alt="" class="img-responsive">
+                                            </a>
+                                        </div>
+                                        <div class="back">
+                                            <a href="detail.html">
+                                                <img src="img/product1_2.jpg" alt="" class="img-responsive">
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <a href="detail.html" class="invisible">
+                                    <img src="img/product1.jpg" alt="" class="img-responsive">
+                                </a>
+                                <div class="text">
+                                    <h3>Fur coat</h3>
+                                    <p class="price">$143</p>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div class="col-md-3 col-sm-6">
+                            <div class="product same-height" style="height: 379px;">
+                                <div class="flip-container">
+                                    <div class="flipper">
+                                        <div class="front">
+                                            <a href="detail.html">
+                                                <img src="img/product3.jpg" alt="" class="img-responsive">
+                                            </a>
+                                        </div>
+                                        <div class="back">
+                                            <a href="detail.html">
+                                                <img src="img/product3_2.jpg" alt="" class="img-responsive">
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <a href="detail.html" class="invisible">
+                                    <img src="img/product3.jpg" alt="" class="img-responsive">
+                                </a>
+                                <div class="text">
+                                    <h3>Fur coat</h3>
+                                    <p class="price">$143</p>
+
+                                </div>
+                            </div>
+                        </div>
+
+                    </div> -->
+
+                   <!--  <div class="row same-height-row">
+                        <div class="col-md-3 col-sm-6">
+                            <div class="box same-height" style="height: 379px;">
+                                <h3>Products viewed recently</h3>
+                            </div>
+                        </div>
+
+
+                        <div class="col-md-3 col-sm-6">
+                            <div class="product same-height" style="height: 379px;">
+                                <div class="flip-container">
+                                    <div class="flipper">
+                                        <div class="front">
+                                            <a href="detail.html">
+                                                <img src="img/product2.jpg" alt="" class="img-responsive">
+                                            </a>
+                                        </div>
+                                        <div class="back">
+                                            <a href="detail.html">
+                                                <img src="img/product2_2.jpg" alt="" class="img-responsive">
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <a href="detail.html" class="invisible">
+                                    <img src="img/product2.jpg" alt="" class="img-responsive">
+                                </a>
+                                <div class="text">
+                                    <h3>Fur coat</h3>
+                                    <p class="price">$143</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-3 col-sm-6">
+                            <div class="product same-height" style="height: 379px;">
+                                <div class="flip-container">
+                                    <div class="flipper">
+                                        <div class="front">
+                                            <a href="detail.html">
+                                                <img src="img/product1.jpg" alt="" class="img-responsive">
+                                            </a>
+                                        </div>
+                                        <div class="back">
+                                            <a href="detail.html">
+                                                <img src="img/product1_2.jpg" alt="" class="img-responsive">
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <a href="detail.html" class="invisible">
+                                    <img src="img/product1.jpg" alt="" class="img-responsive">
+                                </a>
+                                <div class="text">
+                                    <h3>Fur coat</h3>
+                                    <p class="price">$143</p>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div class="col-md-3 col-sm-6">
+                            <div class="product same-height" style="height: 379px;">
+                                <div class="flip-container">
+                                    <div class="flipper">
+                                        <div class="front">
+                                            <a href="detail.html">
+                                                <img src="img/product3.jpg" alt="" class="img-responsive">
+                                            </a>
+                                        </div>
+                                        <div class="back">
+                                            <a href="detail.html">
+                                                <img src="img/product3_2.jpg" alt="" class="img-responsive">
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <a href="detail.html" class="invisible">
+                                    <img src="img/product3.jpg" alt="" class="img-responsive">
+                                </a>
+                                <div class="text">
+                                    <h3>Fur coat</h3>
+                                    <p class="price">$143</p>
+
+                                </div>
+                            </div>
+                        </div>
+
+                    </div> -->
+
+                </div>
+            </div>
+            <!-- /.container -->
+        </div>
