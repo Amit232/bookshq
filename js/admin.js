@@ -320,7 +320,7 @@ $rootScope.applyActiveColor=function(id,index){
     }
 
 }
-$rootScope.applyActiveColor('','')
+//$rootScope.applyActiveColor('','')
 $rootScope.registerorloginClick=function(){
     $rootScope.signupisClicked=false;
                     $rootScope.signupbtn=false;
@@ -572,10 +572,12 @@ $rootScope.normalLoginD = function(email,password)
 bookApp.controller('homeCtrl', function ($scope,$rootScope,$interval,$timeout, $http,$cookies,$location,$stateParams,$window){
     if(interval!=null||interval==null)
     {
-        $interval.cancel(interval);
-        interval=null
+        if(angular.isDefined($cookies.id_user)&&$cookies.id_user!=''){
+            $interval.cancel(interval);
+            interval=null;
+        }
     }
-    interval=$interval($rootScope.getCookiesValues, 2000);
+    //interval=$interval($rootScope.getCookiesValues, 2000);
     $scope.credentials={email:'',password:'',proc_id:''};
     $rootScope.searchString="";
     $scope.redirectToProduct=function(id_product){
@@ -599,10 +601,10 @@ bookApp.controller('homeCtrl', function ($scope,$rootScope,$interval,$timeout, $
                     $rootScope.loggedUserDetails.name = data.user_detail.name;
                     $scope.user_cart_details = data.user_cart_details;
                     $rootScope.enableSignIn=false;
-                    
+                    console.log(interval);    
                     if(interval!=null||interval==null)
                     {
-                        if(angular.isDefined($cookies.id_user)&&$cookies.id_user!=''){
+                       if(angular.isDefined($cookies.id_user)&&$cookies.id_user!=''){
                             $interval.cancel(interval);
                             interval=null;
                         }
@@ -631,7 +633,7 @@ bookApp.controller('homeCtrl', function ($scope,$rootScope,$interval,$timeout, $
                         {
                             $rootScope.cartProducts=[];
                         }
-                        $timeout(function() {$window.location.reload();}, 100);
+                        //$timeout(function() {$window.location.reload();}, 100);
 
                         
                     //console.log($rootScope.cartProducts);
@@ -661,6 +663,13 @@ bookApp.controller('homeCtrl', function ($scope,$rootScope,$interval,$timeout, $
                 //$http.defaults.headers.common['Google_Id']   = $cookies.id_google;
                 $scope.login();
                 $rootScope.enableSignIn=false;
+                if(interval!=null||interval==null)
+                {
+                    if(angular.isDefined($cookies.id_user)&&$cookies.id_user!=''){
+                        $interval.cancel(interval);
+                        interval=null
+                    }
+                }
                
             }
             else
