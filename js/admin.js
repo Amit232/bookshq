@@ -137,7 +137,7 @@ bookApp.factory('authHttpResponseInterceptor',['$q','$location','$rootScope',fun
     //Http Intercpetor to check auth failures for xhr requests
     $httpProvider.interceptors.push('authHttpResponseInterceptor');
 }]);
-bookApp.run(function ($location, $rootScope, $state, $stateParams,$http,$cookies,$templateCache,$interval,$window,$sce) {
+bookApp.run(function ($location, $rootScope, $state, $stateParams,$http,$cookies,$templateCache,$interval,$window,$sce,$timeout) {
         $rootScope.$state = $state;
         $rootScope.$on('$stateChangeStart', function(event, toState, toParams, fromState, fromParams){
             // console.log('$rootScope.user_role',$rootScope.user_role);
@@ -513,7 +513,41 @@ $rootScope.normalLoginD = function(email,password)
                     $http.defaults.headers.common['Csrf-Token']   = $cookies.csrf_token;
                     $http.defaults.headers.common['id_user']=$cookies.id_user;
                     $rootScope.loggedUserDetails =$cookies;
-                    $window.location.href=BASE_URL_NEW+'#/';
+                    if(interval!=null||interval==null)
+                    {
+                        if(angular.isDefined($cookies.id_user)&&$cookies.id_user!=''){
+                            $interval.cancel(interval);
+                            interval=null;
+                        }
+                    }
+                    
+                    if(angular.isDefined($rootScope.cartProducts)&&$rootScope.cartProducts.length>0)
+                    {
+                        $http({
+                                method: "post",
+                                timeout:60000,                                    
+                                url: SITE_URL+'addBulkProductToCart',
+                                data : $.param({'product':$rootScope.cartProducts,'id_user':$cookies.id_user}),
+                                headers: {'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'}
+                                }).success(function (data,status) {
+                                   // console.log(data.user_cart_details);
+                                   $rootScope.cartProducts = angular.copy(data.user_cart_details);
+                                     //$rootScope.cartProducts.push(data.user_cart_details);
+                                  
+                                    /*swal({
+                                                  title: '',
+                                                  text: 'Product is added to cart',
+                                                  timer: 5000
+                                                })*/
+
+                                });
+                    }
+                    else
+                    {
+                        $rootScope.cartProducts=[];
+                    }
+                    $timeout(function() {$window.location.reload();}, 100);
+                    //$window.location.href=BASE_URL_NEW+'#/';
 
  
                 }
