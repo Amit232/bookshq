@@ -601,7 +601,6 @@ bookApp.controller('homeCtrl', function ($scope,$rootScope,$interval,$timeout, $
                     $rootScope.loggedUserDetails.name = data.user_detail.name;
                     $scope.user_cart_details = data.user_cart_details;
                     $rootScope.enableSignIn=false;
-                    console.log(interval);    
                     if(interval!=null||interval==null)
                     {
                        if(angular.isDefined($cookies.id_user)&&$cookies.id_user!=''){
@@ -619,7 +618,8 @@ bookApp.controller('homeCtrl', function ($scope,$rootScope,$interval,$timeout, $
                                     data : $.param({'product':$rootScope.cartProducts,'id_user':$cookies.id_user}),
                                     headers: {'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'}
                                     }).success(function (data,status) {
-                                         $rootScope.cartProducts.push(data.user_cart_details);
+                                         $rootScope.cartProducts=[];
+                                         $rootScope.cartProducts=data.user_cart_details;
                                       
                                         /*swal({
                                                       title: '',
@@ -633,7 +633,7 @@ bookApp.controller('homeCtrl', function ($scope,$rootScope,$interval,$timeout, $
                         {
                             $rootScope.cartProducts=[];
                         }
-                        //$timeout(function() {$window.location.reload();}, 100);
+                        $timeout(function() {$window.location.reload();}, 100);
 
                         
                     //console.log($rootScope.cartProducts);
@@ -661,13 +661,16 @@ bookApp.controller('homeCtrl', function ($scope,$rootScope,$interval,$timeout, $
                 $http.defaults.headers.common['Csrf-Token']   = $cookies.csrf_token;
                 $http.defaults.headers.common['Google_Id']=$cookies.id_user;
                 //$http.defaults.headers.common['Google_Id']   = $cookies.id_google;
-                $scope.login();
+                
                 $rootScope.enableSignIn=false;
                 if(interval!=null||interval==null)
                 {
                     if(angular.isDefined($cookies.id_user)&&$cookies.id_user!=''){
                         $interval.cancel(interval);
                         interval=null
+                    }
+                    else{
+                        $scope.login();
                     }
                 }
                
