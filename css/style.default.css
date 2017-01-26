@@ -1758,6 +1758,8 @@ a{
     padding:20px 110px;
     border-bottom: 2px solid #d3d4d5;
 }
+.txt-center {text-align: center !important;}
+
 .text-center {text-align: left !important;}
 .font205{font-size: 20.5px !important}
 .signup-btn:hover {

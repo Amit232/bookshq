@@ -33,7 +33,8 @@ class ProductController
         $res = $userObj->updateUserDetails($idUser,$updateArray);
         $userCartDetails=$userObj->getUserProducts($idUser);
         $userDetails = $userObj->getUser($idUser);
-        return array('user_cart_details'=>$userCartDetails,'id_user'=>$idUser,'user_detail'=>$userDetails[0]);  
+        $notifications = $userObj->getNotifications($idUser);
+        return array('user_cart_details'=>$userCartDetails,'id_user'=>$idUser,'user_detail'=>$userDetails[0],'notifications'=>$notifications);  
       }
       else
       {
@@ -43,7 +44,8 @@ class ProductController
         {
           $userCartDetails=$userObj->getUserProducts($res);
           $userDetails = $userObj->getUser($res);
-          return array('user_cart_details'=>$userCartDetails,'id_user'=>$res,'user_detail'=>$userDetails[0]);
+          $notifications = $userObj->getNotifications($res);
+          return array('user_cart_details'=>$userCartDetails,'id_user'=>$res,'user_detail'=>$userDetails[0],'notifications'=>$notifications);
 
         }
       }
@@ -353,7 +355,9 @@ class ProductController
             $res = $userObj->updateUserDetails($idUser,$updateArray);
 
             $userCartDetails=$userObj->getUserProducts($userDetails[0]['id_user']);
-            return array('error'=>200,'user_cart_details'=>$userCartDetails,'id_user'=>$userDetails[0]['id_user'],'name'=>$userDetails[0]['name'],'email'=>$userDetails[0]['email'],'pic'=>$userDetails[0]['pic'],'csrf_token'=>$csrf_token,'message'=>'Successfully logged into the application.');  
+            $notifications = $userObj->getNotifications($idUser);
+
+            return array('error'=>200,'user_cart_details'=>$userCartDetails,'id_user'=>$userDetails[0]['id_user'],'name'=>$userDetails[0]['name'],'email'=>$userDetails[0]['email'],'pic'=>$userDetails[0]['pic'],'csrf_token'=>$csrf_token,'message'=>'Successfully logged into the application.','notifications'=>$notifications);  
  
           }
           else

@@ -141,4 +141,42 @@ class User{
       return $q_usr;
     }
 
+    public function getNotifications($idUser){
+      global $db;
+      $where='';
+      if($idUser!='')
+      {
+        $where="st.user_id_user='$idUser' and st.status='delivered'";
+      }
+    $q_select ="SELECT st.id_sub_transaction,st.transaction_id_transaction,st.ordered_date,u.name as buyer_name,p.*,p.name as productname,p.id_product as prod_id,st.date_issued,st.due_date,u1.name as seller_name,st.status as transaction_status,CONCAT('') as message FROM sub_transaction as st LEFT JOIN product as p ON st.product_id_product=p.id_product LEFT JOIN user as u ON st.user_id_user=u.id_user LEFT JOIN product_label as pl ON p.id_product=pl.product_id_product LEFT JOIN user as u1 ON pl.user_id_user=u1.id_user where $where Order By st.ordered_date DESC";
+      $res = $db->select($q_select);
+      $finalArray=array();
+      if($res&&count($res)>0){
+        foreach ($res as $key => $value) {
+          $message= "";
+          $curdate = date('Y-m-d H:i:s');
+
+          if($value['due_date']!=''){
+            if(strtotime($curdate)>strtotime($value['due_date']))
+            {
+              $value['message']= "Due date is exceeded.You will be changed more.";
+              $value['message']=$message;
+            }else{
+              $time1 = strtotime($curdate);
+              $time2 = strtotime($value['due_date']);
+              $days =floor( ($time2-$time1) /(60*60*24));
+              if($days<=5){
+                $value['message']=$days."days remaining for subscribed book";
+
+              }else{
+              }
+            } 
+          }else{
+          }
+          array_push($finalArray, $value);
+        }
+      }
+      return $finalArray;
+    }
+
 }

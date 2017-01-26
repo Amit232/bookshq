@@ -101,14 +101,24 @@ label {
     font-size: 14px;
 }
 </style>
-<div class="content" style="margin-top:10px">
+<div class="content" style="margin-top:20px">
     <div class="container">
         <div class="col-md-12" >
                     <div class="row" id="productMain">
-                        <div class="col-sm-3" style="margin-bottom:10px;">
-                            <div >
+                        <div class="col-sm-3" style="margin-bottom:10px;padding: 20px;margin:0 0 25px">
+                            <div  class="txt-center" style="margin-top:11px">
                                 <img  ng-src="./uploads/{{single_product.pic}}" alt="" class="img-responsive" width="150px" height="220px">
                             </div>
+                            <p style="margin-top:20px" class="text-left buttons" ng-show="single_product.copies>0">
+                                    <a href="" class="btn btn-primary" ng-click="addProductToCart(single_product)"><i class="fa fa-shopping-cart" ></i> Add to cart</a> 
+                                    <!-- <a href="" class="btn btn-default"><i class="fa fa-heart"></i> Add to wishlist</a> -->
+                                </p>
+                                 <p style="margin-top:20px"  class="txt-center buttons" ng-show="!single_product.copies||single_product.copies<=0">
+                                    <button class="btn btn-primary disabled">
+                                        Out of stock
+                                    </button>
+                                    <!-- <a href="" class="btn btn-default"><i class="fa fa-heart"></i> Add to wishlist</a> -->
+                                </p>
 <!-- 
                             <div class="ribbon sale">
                                 <div class="theribbon">SALE</div>
@@ -126,39 +136,10 @@ label {
                             <div class="box">
                                 <h2 class="text-center">{{single_product.name}}</h2>
 <!--                                 <p class="price">$124.00</p>
- -->                            <h3 class="text-center">{{single_product.author}}</h3>
-                                <p class="text-center buttons" ng-show="single_product.copies>0">
-                                    <a href="" class="btn btn-primary" ng-click="addProductToCart(single_product)"><i class="fa fa-shopping-cart" ></i> Add to cart</a> 
-                                    <!-- <a href="" class="btn btn-default"><i class="fa fa-heart"></i> Add to wishlist</a> -->
-                                </p>
-                                 <p class="text-center buttons" ng-show="!single_product.copies||single_product.copies<=0">
-                                    <button class="btn btn-primary disabled">
-                                        Out of stock
-                                    </button>
-                                    <!-- <a href="" class="btn btn-default"><i class="fa fa-heart"></i> Add to wishlist</a> -->
-                                </p>
-                                
-
-                            </div>
-
-                             <div class="box" id="details">
-                        <p>
-                            </p><h4>About the book</h4>
-                            <p><span ng-bind-html="to_trusted(single_product.description)" >
-                            </p>
-                            <hr>
-
-                            <h4>Ratings</h4>
-                            <!--  <ul>
-                                <li>Polyester</li>
-                                <li>Machine wash</li>
-                            </ul>
-                            <h4>Size &amp; Fit</h4>
-                            <ul>
-                                <li>Regular fit</li>
-                                <li>The model (height 5'8" and chest 33") is wearing a size S</li>
-                            </ul> -->
-                             <fieldset class="rating linkDisabled1" >
+ -->                            <span class="text-center">
+                                <h4><span style="font-style:italic;color:grey;margin: 0px 10px;">by </span>{{single_product.author}}</h4>
+                                <div class="col-sm-12">
+                                <fieldset class="rating linkDisabled1" style="    margin: -7px -27px;" >
                                     <input type="radio" id="star5" name="rating" value="5.00" ng-model="rating"/><label class = "full" for="star5" title="Awesome - 5 stars" ></label>
                                     <input type="radio" id="star4half" name="rating" ng-model="rating" value="4.50" /><label class="half" for="star4half" title="Pretty good - 4.5 stars"></label>
                                     <input type="radio" ng-model="rating" id="star4" name="rating" value="4.00" /><label class = "full" for="star4" title="Pretty good - 4 stars"></label>
@@ -170,27 +151,29 @@ label {
                                     <input type="radio" ng-model="rating" id="star1" name="rating" value="1.00" /><label class = "full" for="star1" title="Sucks big time - 1 star"></label>
                                     <input type="radio" ng-model="rating" id="starhalf" name="rating" value="0.50" /><label class="half" for="starhalf" title="Sucks big time - 0.5 stars"></label>
                                 </fieldset>
-                            <div class="col-lg-12">
-                            </div>
-                            <br> 
-                            <h4>Reviews </h4> 
-                            <blockquote ng-repeat="review in reviews">
-                                <p><em>{{review.description}}.</em>
+                                </div>
+                                </span>
+                                
+                                <span style="text-align:left">
+                                <h4>About the book</h4>
+                                <p><span ng-bind-html="to_trusted(single_product.description)" >
                                 </p>
-                                by
-                                {{review.name}}
-                            </blockquote>
+                                <hr>
+                                <div class="col-lg-12">
+                                </div>
+                                <h4><span ng-if="reviews.length>0">Reviews</span> </h4> 
+                                <blockquote ng-repeat="review in reviews">
+                                    <p><em>{{review.description}}.</em>
+                                    </p>
+                                    by
+                                    {{review.name}}
+                                </blockquote>
+                                </span>
 
-                           <!--  <div class="social">
-                                <h4>Show it to your friends</h4>
-                                <p>
-                                    <a href="#" class="external facebook" data-animate-hover="pulse"><i class="fa fa-facebook"></i></a>
-                                    <a href="#" class="external gplus" data-animate-hover="pulse"><i class="fa fa-google-plus"></i></a>
-                                    <a href="#" class="external twitter" data-animate-hover="pulse"><i class="fa fa-twitter"></i></a>
-                                    <a href="#" class="email" data-animate-hover="pulse"><i class="fa fa-envelope"></i></a>
-                                </p>
-                            </div> -->
-                    </div>
+
+
+                            </div>
+
                         </div>
 
                     </div>

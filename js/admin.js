@@ -152,7 +152,11 @@ bookApp.run(function ($location, $rootScope, $state, $stateParams,$http,$cookies
             $http.defaults.headers.common['id_user']   = $cookies.id_user;
             $rootScope.enableSignIn=false;
             $rootScope.loggedUserDetails = $cookies;
-            //console.log($rootScope.loggedUserDetails);
+            $rootScope.notifications=[];
+            
+            $rootScope.notifications=JSON.parse($cookies.notifications);
+
+             console.log($rootScope.notifications);
            
             
         }
@@ -522,6 +526,18 @@ $rootScope.normalLoginD = function(email,password)
                     $http.defaults.headers.common['Csrf-Token']   = $cookies.csrf_token;
                     $http.defaults.headers.common['id_user']=$cookies.id_user;
                     $rootScope.loggedUserDetails =$cookies;
+                    if(angular.isDefined(data.notifications)){
+                        angular.forEach(data.notifications,function(m){
+                            if(m.message!=''){
+                                var obj={};
+                                obj.message= m.message;
+                                obj.name=m.name;
+                                obj.id_product = m.prod_id;
+                                $rootScope.notifications.push(obj);
+                            }
+                        })
+                    }
+                    $cookies.notifications=JSON.stringify($rootScope.notifications);
                     if(interval!=null||interval==null)
                     {
                         if(angular.isDefined($cookies.id_user)&&$cookies.id_user!=''){
@@ -555,7 +571,7 @@ $rootScope.normalLoginD = function(email,password)
                     {
                         $rootScope.cartProducts=[];
                     }
-                    $timeout(function() {$window.location.reload();}, 100);
+                   // $timeout(function() {$window.location.reload();}, 100);
                     //$window.location.href=BASE_URL_NEW+'#/';
 
  
@@ -593,9 +609,8 @@ bookApp.controller('homeCtrl', function ($scope,$rootScope,$interval,$timeout, $
     $scope.redirectToProduct=function(id_product){
         $location.path('/product/'+id_product);
     }
-    $scope.login = function()
+    $rootScope.login = function(param)
     {
-        console.log('gg');
         $http({
             method: "post",
             timeout:60000,                                    
@@ -612,6 +627,21 @@ bookApp.controller('homeCtrl', function ($scope,$rootScope,$interval,$timeout, $
                     $rootScope.loggedUserDetails.name = data.user_detail.name;
                     $scope.user_cart_details = data.user_cart_details;
                     $rootScope.enableSignIn=false;
+                    //console.log(data.notifications);
+                    $rootScope.notifications=[];
+                    if(angular.isDefined(data.notifications)){
+                        angular.forEach(data.notifications,function(m){
+                            if(m.message!=''){
+                                var obj={};
+                                obj.message= m.message;
+                                obj.name=m.name;
+                                obj.id_product = m.id_project;
+                                $rootScope.notifications.push(obj);
+                            }
+                        })
+                    }
+                    $cookies.notifications=JSON.stringify($rootScope.notifications);
+                    
                     if(interval!=null||interval==null)
                     {
                        if(angular.isDefined($cookies.id_user)&&$cookies.id_user!=''){
@@ -644,6 +674,7 @@ bookApp.controller('homeCtrl', function ($scope,$rootScope,$interval,$timeout, $
                         {
                             $rootScope.cartProducts=[];
                         }
+                        if(angular.isDefined(param)&&param=='getcookiefunctin')
                         $timeout(function() {$window.location.reload();}, 100);
 
                         
@@ -663,7 +694,6 @@ bookApp.controller('homeCtrl', function ($scope,$rootScope,$interval,$timeout, $
     
 
      $rootScope.getCookiesValues=function() {
-        console.log('gg');
         if($cookies)
         {
             if(angular.isDefined($cookies.email)&&$cookies.email)
@@ -682,7 +712,7 @@ bookApp.controller('homeCtrl', function ($scope,$rootScope,$interval,$timeout, $
                         interval=null
                     }
                     else{
-                        $scope.login();
+                        $rootScope.login('getcookiefunctin');
                     }
                 }
                

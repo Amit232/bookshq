@@ -295,7 +295,24 @@
                         
                       </ul>
                       <div style="color:white;text-align:right" ng-cloak ng-if="!$root.enableSignIn&&$root.loggedUserDetails.name!=''">
-                         <a style="color:white;"">Welcome {{$root.loggedUserDetails.name}}</a>
+                         <a style="color:white;    margin: 12px 63px 11px -4px;" >Welcome {{$root.loggedUserDetails.name}}</a>
+                         <div class="dropdown" style="margin: -22px 10px">
+                            <a id="dLabel" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <i class="fa fa-bell"></i> <span class="label label-primary">{{$root.notifications.length}}</span>
+                            </a>
+
+                            <div class="dropdown-menu" aria-labelledby="dLabel" style="margin: 7px 0 0 850px;">
+                                <li ng-repeat="n in $root.notifications" ng-if="n.message!=''">
+                                    <a >
+                                        <div>
+                                            <i class="fa fa-envelope fa-fw"></i>{{n.message}}
+                                            <span class="pull-right text-muted small">{{n.name}}</span>
+                                        </div>
+                                    </a>
+                                    <div class="divider"></div>
+                                </li>
+                            </div>
+                         </div>
                       </div>
                      
                     </div><!-- /.navbar-collapse -->
@@ -465,5 +482,5 @@
     //pass information to server to insert or update the user record
     //update_user_data(profile);
   } 
-
+$('.dropdown-toggle').dropdown()
 </script>
