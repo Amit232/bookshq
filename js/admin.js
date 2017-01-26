@@ -144,13 +144,12 @@ bookApp.run(function ($location, $rootScope, $state, $stateParams,$http,$cookies
             
         })
         $rootScope.enableSignIn=true;
-        if(angular.isDefined($cookies.email)&&$cookies.email)
+        if(angular.isDefined($cookies.email)&&$cookies.email&&$cookies.id_user)
         {
             var randomSting= makeid(40);
             $cookies.csrf_token=randomSting;
             $http.defaults.headers.common['Csrf-Token']   = $cookies.csrf_token;
             $http.defaults.headers.common['id_user']   = $cookies.id_user;
-            //$http.defaults.headers.common['Google_Id']   = $cookies.id_google;
             $rootScope.enableSignIn=false;
             $rootScope.loggedUserDetails = $cookies;
             //console.log($rootScope.loggedUserDetails);
@@ -275,12 +274,22 @@ bookApp.run(function ($location, $rootScope, $state, $stateParams,$http,$cookies
         var nav = $('.navbar');
     
         $(window).scroll(function () {
-            var scroll = $(this).scrollTop();
+            /*var scroll = $(this).scrollTop();
             var topDist = $("#navbar").position();
             if (scroll > topDist.top) {
                 $('#navbar').css({"position":"fixed","top":"0","z-index": "9999","width":"100%"});
+                
             } else {
                 $('#navbar').css({"position":"static","top":"auto"});
+            }*/
+
+            var scroll = $(this).scrollTop();
+            var topDist = $("#container1").position();
+            if (scroll > topDist.top) {
+                $('#container1').css({"position":"fixed","top":"0","z-index": "9999","width":"100%","background-color":"#222"});
+                
+            } else {
+                $('#container1').css({"position":"static","top":"auto"});
             }
         });
 
@@ -570,6 +579,7 @@ $rootScope.normalLoginD = function(email,password)
         
 });
 bookApp.controller('homeCtrl', function ($scope,$rootScope,$interval,$timeout, $http,$cookies,$location,$stateParams,$window){
+    console.log('gggg');
     if(interval!=null||interval==null)
     {
         if(angular.isDefined($cookies.id_user)&&$cookies.id_user!=''){
@@ -577,7 +587,7 @@ bookApp.controller('homeCtrl', function ($scope,$rootScope,$interval,$timeout, $
             interval=null;
         }
     }
-    //interval=$interval($rootScope.getCookiesValues, 2000);
+    interval=null;
     $scope.credentials={email:'',password:'',proc_id:''};
     $rootScope.searchString="";
     $scope.redirectToProduct=function(id_product){
@@ -585,6 +595,7 @@ bookApp.controller('homeCtrl', function ($scope,$rootScope,$interval,$timeout, $
     }
     $scope.login = function()
     {
+        console.log('gg');
         $http({
             method: "post",
             timeout:60000,                                    
@@ -652,6 +663,7 @@ bookApp.controller('homeCtrl', function ($scope,$rootScope,$interval,$timeout, $
     
 
      $rootScope.getCookiesValues=function() {
+        console.log('gg');
         if($cookies)
         {
             if(angular.isDefined($cookies.email)&&$cookies.email)
@@ -683,7 +695,10 @@ bookApp.controller('homeCtrl', function ($scope,$rootScope,$interval,$timeout, $
         //pass information to server to insert or update the user record
         //update_user_data(profile);
       }
-    interval=$interval($rootScope.getCookiesValues, 2000);
+
+    $rootScope.enableCookies=function(){
+        interval=$interval($rootScope.getCookiesValues, 2000);
+    }  
 
     $rootScope.logout = function(){
         $rootScope.enableSignIn=true;
@@ -715,7 +730,7 @@ bookApp.controller('homeCtrl', function ($scope,$rootScope,$interval,$timeout, $
 
 
 });
-bookApp.controller('productCtrl', function ($scope,$rootScope,$interval, $http,$cookies,$location,$stateParams,$window){
+bookApp.controller('productCtrl', function ($scope,$rootScope,$interval, $http,$cookies,$location,$stateParams,$window,$timeout){
 if(interval!=null||interval==null)
 {
     if(angular.isDefined($cookies.id_user)&&$cookies.id_user!=''){
@@ -739,14 +754,23 @@ $scope.getCategories =function () {
             headers: {'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'}
             }).success(function (data,status) {
                 $scope.categories = data.categories;
+                $scope.categoriesIds=[];
                 if(angular.isDefined($stateParams.id_category)&&$stateParams.id_category!=''){
                     $scope.id_category = $stateParams.id_category;
+                    var keyos ='';
                     angular.forEach($scope.categories,function(val,key){
-                        if($stateParams.id_category==val.id_category)
-                        $scope.categoriesIds[key]=val.id_category;
+                        if($stateParams.id_category==val.id_category){
+                            $scope.categoriesIds[key.toString()]="1";
+                            keyos = key.toString()
+                            
+                        }
                     });
+                    $timeout(function() {$scope.getAllProducts(keyos);}, 10);
+
                 }else{
                     $scope.id_category ='';
+                    $timeout(function() {$scope.getAllProducts();}, 10);
+
                 }
             });
 }
@@ -757,28 +781,49 @@ $scope.limitIndex=15;
 $scope.noOfPages=0;
 $scope.totalItems=0;
 $scope.parseInt = parseInt;
-$scope.categoriesIds=[];
 
 
-$scope.getAllProducts = function()
+$scope.getAllProducts = function(categoryAddedIndex)
 {
     $scope.productDetail=false;    
     var startIndex = $scope.limitIndex*$scope.startIndex;
 
     var limitIndex = $scope.limitIndex;
     var categories = [];
+    //console.log($scope.categoriesIds);
+    /*if(angular.isDefined($scope.id_category)&&$scope.id_category!=''){
+                categories.push($scope.id_category);
+            }*/
+
     if(angular.isDefined($scope.categoriesIds)&&$scope.categoriesIds.length>0)
     {
-        angular.forEach($scope.categoriesIds,function(a){
-            if(angular.isDefined(a)&&a!=''&&a!=null&&a)
-                categories.push(a);
+        angular.forEach($scope.categoriesIds,function(a,key){
+            if(angular.isDefined(a)&&a!=''&&a!=null&&a==1){
+                angular.forEach($scope.categories,function(val1,key1){
+                    if(key==key1){
+                        console.log(key,"==",categoryAddedIndex)
+                        if(key==categoryAddedIndex)
+                        categories.push(val1.id_category);
+                    }
+                })
+            }
             
         });
-    }
-    if(angular.isDefined($scope.id_category)&&$scope.id_category!=''){
-                categories.push($scope.id_category);
+
+        angular.forEach($scope.categoriesIds,function(a,key){
+            if(angular.isDefined(a)&&a!=''&&a!=null&&a==1){
+                angular.forEach($scope.categories,function(val3,key4){
+                    if(key==key4&&categories.indexOf(val3.id_category)==-1){
+                        categories.push(val3.id_category);
+                    }
+                })
             }
+            
+        });
+                
+    }
     
+    //console.log(categories)
     var searchString='';
     searchString = $rootScope.searchString;
     var id_user='';
@@ -801,7 +846,7 @@ $scope.getAllProducts = function()
         $scope.products =[];
     });
 }
-$scope.getAllProducts();
+
 $rootScope.getAllProducts=function(){
     $scope.getAllProducts();
 }
@@ -945,6 +990,7 @@ $scope.clearAllElemts=function(){
 
 
 bookApp.controller('singleProductCtrl', function ($scope,$rootScope,$interval, $http,$cookies,$location,$stateParams,$window){
+$("#return-to-top").trigger('click');
 if(interval!=null||interval==null)
     {
         if(angular.isDefined($cookies.id_user)&&$cookies.id_user!=''){

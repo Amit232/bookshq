@@ -178,7 +178,16 @@ public function getOrders($id_user='')
         if($where!='')
         $where.=" AND product.category_id_category IN($categories)";
       }
-       $q_products= "SELECT product.*,avg(phur.rating) as rating FROM product left join product_has_user_review as phur ON phur.product_id_product=product.id_product where $where group by product.id_product Order BY product.id_product DESC LIMIT $limitIndex OFFSET $startIndex";
+     /* if($categories&&count($categories)>0) 
+      {
+        $orderByQ = "Order BY $categories ASC" ;
+      }
+      else{
+        $orderByQ ="Order BY product.updated_at";
+      }*/
+       $orderByQ="";
+
+       $q_products= "SELECT product.*,avg(phur.rating) as rating FROM product left join product_has_user_review as phur ON phur.product_id_product=product.id_product where $where group by product.id_product $orderByQ LIMIT $limitIndex OFFSET $startIndex";
       $products = $db->select($q_products);
 
       $q_total_count =$db->getCount('product',$where);

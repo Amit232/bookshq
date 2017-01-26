@@ -394,8 +394,8 @@ h1 {
   background: yellow;
 }
 #content .panel.sidebar-menu .panel-body label {
-  color: #999999;
-  font-size: 12px;
+  color: #333333;
+  font-size: 18px;
 }
 #content .panel.sidebar-menu .panel-body label:hover {
   color: #555555;
@@ -463,12 +463,12 @@ h1 {
   }
 }
 #content .product {
-  background: #fff;
+ /* background: #fff;
   border: solid 1px #e6e6e6;
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
   box-sizing: border-box;
-  margin-bottom: 30px;
+  margin-bottom: 30px;*/
   /* entire container, keeps perspective */
   /* flip speed goes here */
   /* hide back of pane during swap */
@@ -1826,4 +1826,7 @@ a{
 .navbar-btn {
     margin-top: -13px!important;
     margin-bottom: -9px!important;
+}
+body{
+    background-color: #FFF !important;
 }

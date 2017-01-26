@@ -1,0 +1,2 @@
+curl -X POST -F 'numbers=917892026750' -F 'sender=917892026750' -F 'message=first' -F 'username=chiruoct.13@gmail.com' -F 'hash=UQfldE5qFOk-BEbrbvCoXLVSjDt2vsZt8cMa432YsS' http://api.textlocal.in/send/
+http://api.textlocal.in/docs/sendsms

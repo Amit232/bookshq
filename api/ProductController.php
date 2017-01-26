@@ -69,6 +69,7 @@ class ProductController
 
     public function getAllProducts($startIndex,$limitIndex,$searchString,$categories,$idUser='')
     {
+      //$sms = sendSms('917892026750','hi first mess','917892026750');
       $productObj = new Product();
       $products = $productObj->getAllProducts($startIndex,$limitIndex,$searchString,$categories);
       if(isset($searchString)&&$searchString!=''){

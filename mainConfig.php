@@ -72,5 +72,40 @@ $redirect_uri = 'http://127.0.0.1/s/index.php';
 $config['due_days']=20;
 $config['per_date_rs']=5;
 
+
+function sendSms($number,$message,$sender){
+    require_once 'classes/textlocal.class.php';
+    $textlocal = new textlocal('chiruoct.13@gmail.com', 'UQfldE5qFOk-BEbrbvCoXLVSjDt2vsZt8cMa432YsS');
+    /*$numbers = array($number);
+    $sender = $sender;
+    $message = $message;
+    
+    $response = $textlocal->sendSms($numbers, $message, $sender);
+*/
+    $username = "chiruoct.13@gmail.com";
+    $hash = "6d29f96db9ec2f321c672639357312efcce7f5de";
+
+    // Config variables. Consult http://api.textlocal.in/docs for more info.
+    $test = "0";
+
+    // Data for text message. This is the text message data.
+    $sender = "TXTLCL"; // This is who the message appears to be from.
+    $numbers = "917892026750"; // A single number or a comma-seperated list of numbers
+    $message = "This is a test message from the PHP API script.";
+    // 612 chars or less
+    // A single number or a comma-seperated list of numbers
+    $message = urlencode($message);
+    $data = "username=".$username."&hash=".$hash."&message=".$message."&sender=".$sender."&numbers=".$numbers."&test=".$test;
+    $ch = curl_init('http://api.textlocal.in/send/?');
+    curl_setopt($ch, CURLOPT_POST, true);
+    curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    $result = curl_exec($ch); // This is the result from the API
+    curl_close($ch);
+    
+    // Process your response here
+    print_r($result);
+
+}
 ?>
 
