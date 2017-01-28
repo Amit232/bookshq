@@ -1,4 +1,4 @@
-<div id="content">
+<div id="content" >
             <div class="container">
 
                 <div class="col-md-12">
@@ -21,11 +21,12 @@
                                 <table class="table">
                                     <thead>
                                         <tr>
-                                            <th colspan="2">Product</th>
+                                            <th >Books</th>
+                                             <th >Title</th>
                                             <!-- <th>Quantity</th> -->
-                                            <th>Price per data</th>
+                                            <th>Price per book</th>
                                             <!-- <th>Discount</th> -->
-                                            <th colspan="2">Total</th>
+                                            <th colspan="2">Action</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -224,17 +225,17 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                        <h4 class="modal-title" id="Avialability">Check the availability</h4>
+                        <h4 class="modal-title" id="Avialability">Provide Following Information</h4>
                     </div>
                     <div class="modal-body">
 
                         <form  id="buy_products" name="buy_products">
-                            <div class="form-group">
+                            <!-- <div class="form-group">
                                 <select ng-model="selecttechpark" name="selectedtechpark" id="selectedtechpark" class="form-control"> 
                                     <option selected="selected" value="">Please select techpark?</option>
                                     <option ng-repeat="o in oraganizations" value="{{o.id_organization}}">{{o.name}}</option>
                                 </select>
-                            </div>
+                            </div> -->
                             <div class="form-group">
                                 <input type="text" name="mobile" ng-model="mobile" class="form-control" id="number-modal" placeholder="Mobile Number">
                             </div>

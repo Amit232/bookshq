@@ -109,7 +109,7 @@ label {
                             <div  class="txt-center" style="margin-top:11px">
                                 <img  ng-src="./uploads/{{single_product.pic}}" alt="" class="img-responsive" width="150px" height="220px">
                             </div>
-                            <p style="margin-top:20px" class="text-left buttons" ng-show="single_product.copies>0">
+                                <p style="margin-top:20px" class="text-left buttons" ng-show="single_product.copies>0">
                                     <a href="" class="btn btn-primary" ng-click="addProductToCart(single_product)"><i class="fa fa-shopping-cart" ></i> Add to cart</a> 
                                     <!-- <a href="" class="btn btn-default"><i class="fa fa-heart"></i> Add to wishlist</a> -->
                                 </p>
@@ -119,6 +119,27 @@ label {
                                     </button>
                                     <!-- <a href="" class="btn btn-default"><i class="fa fa-heart"></i> Add to wishlist</a> -->
                                 </p>
+                                <div class="form-group">
+                                    <h4 class="text-center">Select your techpark?</h4>
+                                     <div class="radio" ng-repeat="o in oraganizations">
+                                      <label ><input id="radio_{{$index}}" type="radio" name="optradio" ng-model="$parent.selecttechpark" ng-value="{{o.id_organization}}">{{o.name}}</label>
+                                     </div>  
+                                     <div class="radio" data-toggle="collapse" data-target="#demo">
+                                      <label><input type="radio" name="optradio" ng-model="selecttechpark" value="not_avaiable">Not Available</label>
+                                     </div>  
+                                     
+                                    <div id="demo" class="collapse">
+                                        <span>Please drop the techpark name so that we can reach out for your service soon.</span>
+                                        <form id="sendReq" name="sendReq">
+                                        <div class="form-group">
+                                            <input type="text"  name="techpark1" id="techpark1" ng-model="techpark" class="form-control" placeholder="Techpark name">
+                                        </div>
+                                        <!-- <div class="form-group">
+                                            <input type="text" class="form-control" id="number-modal" placeholder="Contact Details">
+                                        </div> -->
+                                        <button class="btn btn-primary" ng-click="sendOrganizationReq()"><i class="fa fa-sign-in"></i> Send Request</button>
+                                    </div> 
+                                </div>
 <!-- 
                             <div class="ribbon sale">
                                 <div class="theribbon">SALE</div>
@@ -133,7 +154,8 @@ label {
 
                         </div>
                         <div class="col-sm-8">
-                            <div class="box">
+                            <div class="box courses_years">
+                                
                                 <h2 class="text-center">{{single_product.name}}</h2>
 <!--                                 <p class="price">$124.00</p>
  -->                            <span class="text-center">
@@ -363,4 +385,52 @@ label {
                 </div>
             </div>
             <!-- /.container -->
+        </div>
+<div class="modal fade" id="techpark" tabindex="0" role="dialog" aria-labelledby="Login" aria-hidden="true">
+
+            <div class="modal-dialog">
+ 
+                <div class="modal-content">
+                    <div class="modal-body">
+
+                        <!-- <p class="text-center btn btn-default btn-sm btn-primary"  >Not available?</p>
+                        <p class="text-center text-muted" id="demo" class="collapse">
+                            <div class="form-group">
+                                <input type="text" class="form-control" id="email-modal" placeholder="TechPartk Name">
+                            </div>
+                            <div class="form-group">
+                                <textarea col='2' rows="2" class="form-control" id="email-modal"  placeholder="TechPartk Address">
+                                    
+                                </textarea>
+                            </div>
+                            <div class="form-group">
+                                <input type="text" class="form-control" id="number-modal" placeholder="Contact Details">
+                            </div>
+
+                              <button class="btn btn-primary"><i class="fa fa-sign-in"></i> Send Request</button>
+                        </p>
+                        -->
+                        <h3>If your techpark is not available in list?Fill the following details.></h3>
+                          
+                            <div id="demo">
+                            <form id="sendReq" name="sendReq">
+                                <div class="form-group">
+                                    <input type="text"  name="techpark1" id="techpark1" ng-model="techpark" class="form-control" placeholder="Techpark name">
+                                </div>
+                                <div class="form-group">
+                                    <textarea col='2' rows="2" class="form-control" name="techparkaddress" id="email-modal" ng-model="techparkaddress">
+                                        
+                                    </textarea>
+                                </div>
+                                <!-- <div class="form-group">
+                                    <input type="text" class="form-control" id="number-modal" placeholder="Contact Details">
+                                </div> -->
+                                <button class="btn btn-primary" ng-click="sendOrganizationReq()"><i class="fa fa-sign-in"></i> Send Request</button>
+                            </div>
+                          </form>
+                    </div>
+
+
+                </div>
+            </div>
         </div>

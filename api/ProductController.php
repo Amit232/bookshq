@@ -92,7 +92,7 @@ class ProductController
     {
       $productObj = new Product();
       $insertInfo = [];
-      $insertInfo=array('user_id_user'=>$id_user,'product_id_product'=>$productDetails['id_product']);
+      $insertInfo=array('user_id_user'=>$id_user,'product_id_product'=>$productDetails['id_product'],'organization_id_organization'=>$productDetails['organization_id_organization']);
       $checkProructAddedtocart = $productObj->checkProductAddedtocart($productDetails['id_product'],$id_user);
       if($checkProructAddedtocart){
         return array('error'=>true,'message'=>'Product already added to cart.');
@@ -190,7 +190,7 @@ class ProductController
             $insertInfo1['ordered_date']=$date;
             $insertInfo1['status']='Pending';
             $insertInfo1['transaction_id_transaction']=$res; 
-            $insertInfo1['oraganization_id_organization']=$organizationId;
+            $insertInfo1['oraganization_id_organization']=$product['organization_id_organization'];
 
             $res1 = $productObj->setSubTransaction($insertInfo1);
             if($res1)
@@ -343,7 +343,7 @@ class ProductController
         if($res)
         {
           $userCartDetails=$userObj->getUserProducts($res);
-          return array('error'=>200,'user_cart_details'=>$userCartDetails,'id_user'=>$res,'message'=>'User registered successfully.');
+          return array('error'=>200,'user_cart_details'=>$userCartDetails,'id_user'=>$res,'message'=>'User registered successfully.Activation link has been sent to your email.');
 
         }
       }

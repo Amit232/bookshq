@@ -74,61 +74,62 @@ $config['per_date_rs']=5;
 
 $config['custom_sms_message']='We have received your order for order number';
 $config['custom_sms_message1']=' and it is being processed. You can expect delivery within 3 days';
-
+$config['sendSMS'] =false;
 function sendSms($number,$message,$sender){
    //Your authentication key
-    $authKey = "138855A8d0029bMfN588c4339";
+    if($config['sendSMS']){
+        $authKey = "138855A8d0029bMfN588c4339";
 
-    //Multiple mobiles numbers separated by comma
-    $mobileNumber = $number;
+        //Multiple mobiles numbers separated by comma
+        $mobileNumber = $number;
 
-    //Sender ID,While using route4 sender id should be 6 characters long.
-    $senderId = "123456";
+        //Sender ID,While using route4 sender id should be 6 characters long.
+        $senderId = "123456";
 
-    //Your message to send, Add URL encoding here.
-    $message = urlencode($message);
+        //Your message to send, Add URL encoding here.
+        $message = urlencode($message);
 
-    //Define route 
-    $route = "default";
-    //Prepare you post parameters
-    $postData = array(
-        'authkey' => $authKey,
-        'mobiles' => $mobileNumber,
-        'message' => $message,
-        'sender' => $senderId,
-        'route' => $route
-    );
+        //Define route 
+        $route = "default";
+        //Prepare you post parameters
+        $postData = array(
+            'authkey' => $authKey,
+            'mobiles' => $mobileNumber,
+            'message' => $message,
+            'sender' => $senderId,
+            'route' => $route
+        );
 
-    //API URL
-    $url="http://api.msg91.com/api/sendhttp.php";
+        //API URL
+        $url="http://api.msg91.com/api/sendhttp.php";
 
-    // init the resource
-    $ch = curl_init();
-    curl_setopt_array($ch, array(
-        CURLOPT_URL => $url,
-        CURLOPT_RETURNTRANSFER => true,
-        CURLOPT_POST => true,
-        CURLOPT_POSTFIELDS => $postData
-        //,CURLOPT_FOLLOWLOCATION => true
-    ));
-
-
-    //Ignore SSL certificate verification
-    curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
-    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
+        // init the resource
+        $ch = curl_init();
+        curl_setopt_array($ch, array(
+            CURLOPT_URL => $url,
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_POST => true,
+            CURLOPT_POSTFIELDS => $postData
+            //,CURLOPT_FOLLOWLOCATION => true
+        ));
 
 
-    //get response
-    $output = curl_exec($ch);
+        //Ignore SSL certificate verification
+        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
 
-    //Print error if any
-    if(curl_errno($ch))
-    {
-        echo 'error:' . curl_error($ch);
+
+        //get response
+        $output = curl_exec($ch);
+
+        //Print error if any
+        if(curl_errno($ch))
+        {
+            echo 'error:' . curl_error($ch);
+        }
+
+curl_close($ch);
     }
-
-    curl_close($ch);
-
 }
 ?>
 

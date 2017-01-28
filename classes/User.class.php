@@ -155,20 +155,20 @@ class User{
         foreach ($res as $key => $value) {
           $message= "";
           $curdate = date('Y-m-d H:i:s');
-
           if($value['due_date']!=''){
-            if(strtotime($curdate)>strtotime($value['due_date']))
+            if($curdate===$value['due_date'])
             {
-              $value['message']= "Due date is exceeded.You will be changed more.";
-              $value['message']=$message;
+              $value['message']= "Due date is going to exceed.You will be charged additionally after that.";
             }else{
               $time1 = strtotime($curdate);
               $time2 = strtotime($value['due_date']);
               $days =floor( ($time2-$time1) /(60*60*24));
-              if($days<=5){
+              if($days<=5&&$days>0){
                 $value['message']=$days."days remaining for subscribed book";
 
               }else{
+                if($days<0)
+                $value['message']="Due date is exceeded.You will be charged additionally.";
               }
             } 
           }else{

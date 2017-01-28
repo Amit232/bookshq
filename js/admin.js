@@ -153,12 +153,9 @@ bookApp.run(function ($location, $rootScope, $state, $stateParams,$http,$cookies
             $rootScope.enableSignIn=false;
             $rootScope.loggedUserDetails = $cookies;
             $rootScope.notifications=[];
-            
+            if(angular.isDefined($cookies.notifications)&&$cookies.notifications!='')
             $rootScope.notifications=JSON.parse($cookies.notifications);
 
-             console.log($rootScope.notifications);
-           
-            
         }
         $rootScope.cartProducts=[];
               
@@ -202,6 +199,12 @@ bookApp.run(function ($location, $rootScope, $state, $stateParams,$http,$cookies
         $rootScope.addTableData=function(data)
         {
             $rootScope.tableDatas.push(data);
+        }
+        $rootScope.removeTableData=function(index){
+            $timeout(function() {
+                $rootScope.tableDatas.splice(index,1);
+                $rootScope.abc.splice(index,1);
+            }, 1);
         }
         $rootScope.to_trusted = function (html_code) {
             return $sce.trustAsHtml(html_code);
@@ -249,13 +252,14 @@ bookApp.run(function ($location, $rootScope, $state, $stateParams,$http,$cookies
                         }).success(function (data,status) {
                         if(status==200)
                         {
+                            $('body').removeClass('modal-open');
                             //alert(data.message);
                             swal({
                               title: '',
                               text: data.message,
                               timer: 5000
                             })
-                            $("#lenderbooks").modal('hide');
+                            $(".close").trigger('click');
                             $rootScope.tableDatas=[];
                             $rootScope.abc=[];
                         }
@@ -334,7 +338,8 @@ $rootScope.applyActiveColor=function(id,index){
 
 }
 //$rootScope.applyActiveColor('','')
-$rootScope.registerorloginClick=function(){
+$rootScope.registerorloginClick=function(type){
+    $rootScope.registerLinkType=type;
     $rootScope.signupisClicked=false;
                     $rootScope.signupbtn=false;
                     $rootScope.signupisClicked1=false;
@@ -388,6 +393,7 @@ $rootScope.registerD=function(newUser)
                 if(status==200)
                 {
                     //alert(data.message);
+                    $('body').removeClass('modal-open');
                     $("#modalsignup").modal('hide');
                     $rootScope.signupisClicked=false;
                     $rootScope.signupbtn=false;
@@ -489,6 +495,7 @@ $rootScope.normalLoginD = function(email,password)
                 if(status==200)
                 {
                     //alert(data.message);
+                    $('body').removeClass('modal-open');
                     $("#modalsignup").modal('hide');
                     $rootScope.signupisClicked=false;
                     $rootScope.signupbtn=false;
@@ -591,25 +598,7 @@ $rootScope.normalLoginD = function(email,password)
     }
 }
 
-
-        
-});
-bookApp.controller('homeCtrl', function ($scope,$rootScope,$interval,$timeout, $http,$cookies,$location,$stateParams,$window){
-    console.log('gggg');
-    if(interval!=null||interval==null)
-    {
-        if(angular.isDefined($cookies.id_user)&&$cookies.id_user!=''){
-            $interval.cancel(interval);
-            interval=null;
-        }
-    }
-    interval=null;
-    $scope.credentials={email:'',password:'',proc_id:''};
-    $rootScope.searchString="";
-    $scope.redirectToProduct=function(id_product){
-        $location.path('/product/'+id_product);
-    }
-    $rootScope.login = function(param)
+$rootScope.login = function(param)
     {
         $http({
             method: "post",
@@ -620,12 +609,13 @@ bookApp.controller('homeCtrl', function ($scope,$rootScope,$interval,$timeout, $
             }).success(function (data,status) {
                 if(status==200)
                 {
+                    $('body').removeClass('modal-open');
                      $("#modalsignup").modal('hide');
                     $cookies.id_user = data.id_user;
                     $cookies.name = data.user_detail.name;
                     $rootScope.loggedUserDetails={};
                     $rootScope.loggedUserDetails.name = data.user_detail.name;
-                    $scope.user_cart_details = data.user_cart_details;
+                    $rootScope.user_cart_details = data.user_cart_details;
                     $rootScope.enableSignIn=false;
                     //console.log(data.notifications);
                     $rootScope.notifications=[];
@@ -689,10 +679,7 @@ bookApp.controller('homeCtrl', function ($scope,$rootScope,$interval,$timeout, $
                     }*/
                 }
         }); 
-    }  
-        
-    
-
+    } 
      $rootScope.getCookiesValues=function() {
         if($cookies)
         {
@@ -728,7 +715,25 @@ bookApp.controller('homeCtrl', function ($scope,$rootScope,$interval,$timeout, $
 
     $rootScope.enableCookies=function(){
         interval=$interval($rootScope.getCookiesValues, 2000);
-    }  
+    } 
+        
+});
+bookApp.controller('homeCtrl', function ($scope,$rootScope,$interval,$timeout, $http,$cookies,$location,$stateParams,$window){
+    console.log('gggg');
+    if(interval!=null||interval==null)
+    {
+        if(angular.isDefined($cookies.id_user)&&$cookies.id_user!=''){
+            $interval.cancel(interval);
+            interval=null;
+        }
+    }
+    interval=null;
+    $scope.credentials={email:'',password:'',proc_id:''};
+    $rootScope.searchString="";
+    $scope.redirectToProduct=function(id_product){
+        $location.path('/product/'+id_product);
+    }
+
 
     $rootScope.logout = function(){
         $rootScope.enableSignIn=true;
@@ -1029,6 +1034,71 @@ if(interval!=null||interval==null)
             
         }
     }
+    $scope.getOrganizations= function(){
+    $http({
+    method: "get",
+    timeout:60000,                                    
+    url: SITE_URL+'getOrganizations',
+    headers: {'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'}
+    }).success(function (data,status) {
+        $rootScope.oraganizations=data.oraganizations;
+    });
+    }
+    $scope.getOrganizations();
+
+
+$scope.techpark='';
+$scope.techparkaddress='';
+$scope.sendOrganizationReq =function()
+{
+    var form1=$('#sendReq').validate(angular.extend({
+            // Rules for form validation
+            rules: {
+                techpark1: {
+                    required: true,
+                    maxlength:64,
+                },
+                techparkaddress: {
+                  required: true,
+                  maxlength:1024,
+                }
+            },
+            // Messages for form validation
+            messages: {
+                techpark1 : {
+                        required : '<center><i style="color:red">Techpark name cannot be blank</i></center>',
+                },
+                techparkaddress : {
+                        required : '<center><i style="color:red">Please enter tech park address</i></center>'
+                }
+            }
+
+        },validateOptions));
+    if(form1.valid()&&$scope.techpark!='')
+    {
+        //alert('gg');
+        $http({
+        method: "POST",
+        timeout:60000,                                    
+        url: SITE_URL+'addOrganization',
+        data : $.param({'id_user':$cookies.id_user,'techpark':$scope.techpark,'techparkaddress':$scope.techparkaddress}),
+        headers: {'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'}
+        }).success(function (data,status) {
+            if(status==200)
+            {
+                //alert('Organization addedd successfully.You will be nofified once it is verified.');
+               
+                swal({
+                      title: '',
+                      text: 'Organization addedd successfully.You will be notified once it is verified.',
+                      timer: 5000
+                    })
+                $('body').removeClass('modal-open');
+                $("#login-modal1").modal('hide');
+            }
+        });    
+    }
+}
 
     $scope.id_product = $stateParams.id_product;
     var params={'id_product':$scope.id_product}
@@ -1052,7 +1122,6 @@ if(interval!=null||interval==null)
 
     $scope.addProductToCart = function(product)
     {
-    console.log($rootScope.cartProducts);
     if(angular.isDefined($rootScope.cartProducts)&&$rootScope.cartProducts.length>0)
     {
         for (var i = 0; i < $rootScope.cartProducts.length; i++) {
@@ -1070,6 +1139,25 @@ if(interval!=null||interval==null)
             }
         }
     }
+    if(angular.isDefined($scope.selecttechpark)&&$scope.selecttechpark!=''){
+        if($scope.selecttechpark=='not_avaiable'){
+            swal({
+                      title: '',
+                      text: 'Please select the valid techpark availability',
+                      timer: 5000
+            })
+
+            return false;
+        }
+    }else{
+        swal({
+                      title: '',
+                      text: 'Please select the techpark availability',
+                      timer: 5000
+            })
+
+        return false;
+    }
     /*else
     {
         $rootScope.cartProducts=[];
@@ -1084,6 +1172,7 @@ if(interval!=null||interval==null)
                       timer: 5000
                     })
         return false;*/
+        product.organization_id_organization =$scope.selecttechpark; 
          $http({
             method: "post",
             timeout:60000,                                    
@@ -1216,7 +1305,7 @@ $scope.buyProducts= function(){
 
         },validateOptions));
 
-    if($('#buy_products').valid()&&$scope.selecttechpark!=''&&$scope.mobile!='')
+    if($('#buy_products').valid()&&$scope.mobile!='')
     {
 
        $http({
@@ -1241,6 +1330,7 @@ $scope.buyProducts= function(){
 
             $rootScope.cartProducts=[];
             $rootScope.cartProducts=data.user_cart_details;
+            $('body').removeClass('modal-open');
             $("#login-modal1").modal('hide');
         }).error(function(data,status){
             if(status==403)
@@ -1254,6 +1344,7 @@ $scope.buyProducts= function(){
                     })
 
                 $scope.message=data.meessage;
+                $('body').removeClass('modal-open');
                 $("#login-modal1").modal('hide');
                 $rootScope.cartProducts=data.user_cart_details;
 
@@ -1307,7 +1398,7 @@ $scope.sendOrganizationReq =function()
                       text: 'Organization addedd successfully.You will be nofified once it is verified.',
                       timer: 5000
                     })
-
+                $('body').removeClass('modal-open');
                 $("#login-modal1").modal('hide');
             }
         });    
@@ -1382,6 +1473,7 @@ $scope.changeTransactionStatus = function(id_subtransaction,order_status){
                 if(status==200)
                 {
                     //alert(data.message);
+                    $('body').removeClass('modal-open');
                     $("#returnreview").modal('hide');
                      swal({
                       title: '',

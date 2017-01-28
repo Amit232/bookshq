@@ -1832,3 +1832,4 @@ a{
 body{
     background-color: #FFF !important;
 }
+.courses_years{padding:20px;min-height:28px !important;max-height:auto !important;height: auto !important;overflow: auto;}
