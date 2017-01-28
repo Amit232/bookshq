@@ -123,16 +123,16 @@
 			$clean_input = array();
 			if(is_array($data)){
 				foreach($data as $k => $v){
-					$clean_input[$k] = $this->cleanInputs($v);
-				}
-			}else{
-				if(get_magic_quotes_gpc()){
-					$data = trim(stripslashes($data));
-				}
-				$data = strip_tags($data);
-				$clean_input = trim($data);
-			}
-			return $clean_input;
+          $clean_input[$k] = $this->cleanInputs($v);
+        }
+      }else{
+        if(get_magic_quotes_gpc()){
+          $data = trim(stripslashes($data));
+        }
+        //$data = strip_tags($data);
+        $clean_input = trim($data);
+      }
+      return $clean_input;
 		}		
 		
 		private function set_headers(){

@@ -477,7 +477,7 @@ $scope.onChange = function ($dataURI) {
         }
 
     },validateOptions));
-
+console.log(product);
     if($('#normalProduct').valid()&&product!=''){
         // if(!$scope.resImageDataURI||$scope.resImageDataURI=='')
         // {
@@ -503,7 +503,7 @@ $scope.onChange = function ($dataURI) {
                     $scope.product={};
                     $scope.resImageDataURI='';
                    
-                    $timeout(function() {$window.location.reload();}, 1000);
+                  //  $timeout(function() {$window.location.reload();}, 1000);
                 }
             });
         //}

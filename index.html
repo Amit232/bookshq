@@ -103,40 +103,94 @@
       <!-- *** TOPBAR ***
  _________________________________________________________ -->
     <div id="top">
-        <div class="container">
-            <div class="col-md-4 offer" >
-                                    <img src="img/logo.png" alt="Obaju logo" class="hidden-xs">
+        <div class="container" id="container1">
+            <div class="col-md-2 offer" > 
+                    <img data-ui-sref="home" style="background:#FFF;cursor:pointer" src="img/logo.png" alt="Obaju logo" class="hidden-xs" >
                     <img src="img/logo-small.png" alt="Obaju logo" class="visible-xs"><span class="sr-only">Obaju - go to homepage</span>
             
+            </div>
+            <div class="col-lg-2">
+                <div class="col-lg-8">
+                    <form class="navbar-form" role="search">
+                        <div class="input-group"  class="" style="z-index:0!important">
+                            <input type="text" class="form-control" style="width: 500px;height: 41px;" ng-model="$root.searchString" placeholder="Search" ng-enter="$root.seachProducts();" ng-change="$root.seachProducts();">
+                            <span class="input-group-btn">
+
+                                <button type="button" ng-click="$root.seachProducts();"  class="btn btn-primary"><i class="fa fa-search"></i></button>
+
+                            </span>
+                        </div>
+                    </form>
+                </div>
+                
             </div>
             <div class="col-md-8" style="margin-top: 16px;">
                 <ul class="menu">
                    <!--  <li ng-cloak ng-if="$root.enableSignIn"><a href="#" data-toggle="modal" data-target="#login-modal">Login</a>
                     </li> -->
-                    
-                    <li ng-cloak ng-if="$root.enableSignIn"><a href="" data-toggle="modal" data-target=".bs-example-modal-lg" ng-click="$root.registerorloginClick();">Register/Login</a>
+                    <li>
+                    <a style="color:white;text-align:right" data-ui-sref="basket" class="btn btn-primary navbar-btn"><i class="fa fa-shopping-cart"></i>
+                        <span ng-cloak ng-if="$root.cartProducts&&$root.cartProducts.length>0" class="hidden-xs" >{{$root.cartProducts.length}} </span>
+                        <span ng-cloak ng-if="$root.cartProducts.length.length==0">0</span>
+                    </a>
                     </li>
-                    <li ng-cloak ng-if="!$root.enableSignIn&&$root.loggedUserDetails.name!=''">
-                         <a>Welcome {{$root.loggedUserDetails.name}}</a>
+                    <li style="color:white;text-align:right" ng-cloak ng-if="$root.enableSignIn"><a href="" data-toggle="modal" data-target=".bs-example-modal-lg" ng-click="$root.registerorloginClick();">Register</a>
                     </li>
-                    <li><a href="contact.html">Contact</a>
+                    <li style="color:white;text-align:right" ng-cloak ng-if="$root.enableSignIn"><a href="" data-toggle="modal" data-target=".bs-example-modal-lg" ng-click="$root.registerorloginClick();">Login</a>
                     </li>
-                    <li ng-cloak ng-if="!$root.enableSignIn"><a data-ui-sref="orders">Orders</a>
+                    <!-- <li><a href="contact.html">Contact</a>
+                    </li> -->
+                    <li style="color:white;text-align:right" ng-cloak ng-if="!$root.enableSignIn"><a data-ui-sref="orders">Orders</a>
                     </li>
-                    <li ng-cloak ng-if="!$root.enableSignIn">
+                    <li style="color:white;text-align:right" ng-cloak ng-if="!$root.enableSignIn">
                         <a href="" data-toggle="modal" data-target="#lenderbooks" ng-click="$root.tableDatas=[];$root.abc=[];">Add Lender Book</a>
                     </li>
-                    <li ng-cloak ng-if="!$root.enableSignIn">    
+                    <li style="color:white;text-align:right" ng-cloak ng-if="!$root.enableSignIn">    
                         <a href="" title="Logout" ng-click="$root.logout();">Logout</a>
                     </li>
                 </ul>
             </div>
         </div>
-            <style>
 
-</style>
-        </style>
-        <div id="modalsignup" class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+        
+       <!--  <div class="modal fade" id="login-modal" tabindex="-1" role="dialog" aria-labelledby="Login" aria-hidden="true">
+            <div class="modal-dialog modal-sm">
+
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        <h4 class="modal-title" id="Login">Customer login</h4>
+                    </div>
+                    <div class="modal-body">
+                        <form action="customer-orders.html" method="post">
+                            <div class="form-group">
+                                <input type="text" class="form-control" id="email-modal" placeholder="email">
+                            </div>
+                            <div class="form-group">
+                                <input type="password" class="form-control" id="password-modal" placeholder="password">
+                            </div>
+
+                            <p class="text-center">
+                                <button class="btn btn-primary"><i class="fa fa-sign-in"></i> Log in</button>
+                            </p>
+
+                        </form>
+
+                        <p class="text-center text-muted">Not registered yet?</p>
+                        <p class="text-center text-muted"><a href="register.html"><strong>Register now</strong></a>! It is easy and done in 1&nbsp;minute and gives you access to special discounts and much more!</p>
+
+                    </div>
+                </div>
+            </div>
+        </div> -->
+
+    </div>
+
+    <!-- *** TOP BAR END *** -->
+    <!-- *** NAVBAR ***
+ _________________________________________________________ -->
+
+<div id="modalsignup" class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-lg">
                 <div class="modal-content " style="height:400px;">
                     <div class="col-lg-12 margin" style="text-align:right;float:right;">
@@ -153,7 +207,7 @@
                                     <span>Sign In</span>
                             </div>
                             <div class="col-xs-12 margin">
-                                <a  ng-cloak ng-if="$root.enableSignIn" class="btn btn-block g-signin2" data-longtitle="true" data-onsuccess="Google_signIn"  data-longtitle="true" data-onsuccess="Google_signIn" data-theme="light" data-width="204" style="width: 204px;height: 38px;font-size: xx-small;background-color:#fff;color:red"></a>
+                                <a  ng-cloak ng-if="$root.enableSignIn" class="btn btn-block g-signin2" data-longtitle="true" data-onsuccess="Google_signIn"  data-longtitle="true" data-onsuccess="Google_signIn" data-theme="light" data-width="204" style="width: 204px;height: 38px;font-size: xx-small;background-color:#fff;color:red" ng-click="$root.enableCookies()"></a>
 
                             </div>
                             <div class="font205 col-xs-12 margin text-center" >
@@ -210,45 +264,60 @@
               </div>
             </div>
         </div>
-       <!--  <div class="modal fade" id="login-modal" tabindex="-1" role="dialog" aria-labelledby="Login" aria-hidden="true">
-            <div class="modal-dialog modal-sm">
-
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                        <h4 class="modal-title" id="Login">Customer login</h4>
-                    </div>
-                    <div class="modal-body">
-                        <form action="customer-orders.html" method="post">
-                            <div class="form-group">
-                                <input type="text" class="form-control" id="email-modal" placeholder="email">
-                            </div>
-                            <div class="form-group">
-                                <input type="password" class="form-control" id="password-modal" placeholder="password">
-                            </div>
-
-                            <p class="text-center">
-                                <button class="btn btn-primary"><i class="fa fa-sign-in"></i> Log in</button>
-                            </p>
-
-                        </form>
-
-                        <p class="text-center text-muted">Not registered yet?</p>
-                        <p class="text-center text-muted"><a href="register.html"><strong>Register now</strong></a>! It is easy and done in 1&nbsp;minute and gives you access to special discounts and much more!</p>
-
-                    </div>
-                </div>
-            </div>
-        </div> -->
-
-    </div>
-
-    <!-- *** TOP BAR END *** -->
-    <!-- *** NAVBAR ***
- _________________________________________________________ -->
-    <div class="navbar navbar-inverse yamm" role="navigation" id="navbar" >
+    <div class="navbar navbar-inverse" role="navigation" id="navbar" >
         <div class="container ">
-            <div class="navbar-header">
+            <nav class="navbar navbar-inverse">
+                  <div class="container">
+                    <!-- Brand and toggle get grouped for better mobile display -->
+                    <!-- <div class="navbar-header">
+                      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse-3">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                      </button>
+                     
+                    </div> -->
+                
+                    <!-- Collect the nav links, forms, and other content for toggling -->
+                    <div class="collapse navbar-collapse" id="navbar-collapse-3">
+                      <ul class="nav navbar-nav navbar-left">
+                        <!-- <li><a data-ui-sref="home" href="" id="home"  >Home</a></li>
+                        <li><a data-ui-sref="products" href="" id="sneakin"  style="margin-right: 11px;">Sneak In</a></li> -->
+                        <li>
+                            <a id="category_1" href="#/products/6" style="margin-right: 11px;" >Fiction
+                            </a>
+                        </li>
+                        <li><a id="category_2" href="#/products/7" style="margin-right: 11px;" >History
+                            </a></li>
+                        <li><a id="category_3" href="#/products/8" style="margin-right: 11px;" >Self-Help
+                            </a></li>
+                        
+                      </ul>
+                      <div style="color:white;text-align:right" ng-cloak ng-if="!$root.enableSignIn&&$root.loggedUserDetails.name!=''">
+                         <a style="color:white;    margin: 12px 63px 11px -4px;" >Welcome {{$root.loggedUserDetails.name}}</a>
+                         <div class="dropdown" style="margin: -22px 10px">
+                            <a id="dLabel" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <i class="fa fa-bell"></i> <span class="label label-primary">{{$root.notifications.length}}</span>
+                            </a>
+
+                            <div class="dropdown-menu" aria-labelledby="dLabel" style="margin: 7px 0 0 850px;">
+                                <li ng-repeat="n in $root.notifications" ng-if="n.message!=''">
+                                    <a >
+                                        <div>
+                                            <i class="fa fa-envelope fa-fw"></i>{{n.message}}
+                                            <span class="pull-right text-muted small">{{n.name}}</span>
+                                        </div>
+                                    </a>
+                                    <div class="divider"></div>
+                                </li>
+                            </div>
+                         </div>
+                      </div>
+                     
+                    </div><!-- /.navbar-collapse -->
+                  </div><!-- /.container -->
+            </nav><!-- /.navbar -->
 
                <!--  <a class="navbar-brand home" data-ui-sref="home" data-animate-hover="bounce">
                     <img src="img/logo.png" alt="Obaju logo" class="hidden-xs">
@@ -269,10 +338,9 @@
                         <span ng-if="$root.cartProducts.length.length==0">0</span>
                     </a>
                 </div> -->
-            </div>
             <!--/.navbar-header -->
 
-            <div class="navbar-collapse collapse" id="navigation">
+           <!--  <div class="navbar-collapse collapse" id="navigation">
 
                 <ul class="nav navbar-nav navbar-left">
                     <li class="active" data-ui-sref="home" ng-click="applyActiveColor('home','')">
@@ -300,10 +368,10 @@
 
                 </ul>
 
-            </div>
+            </div> -->
             <!--/.nav-collapse -->
 
-            <div class="navbar-buttons">
+           <!--  <div class="navbar-buttons">
 
                 <div class="navbar-collapse collapse right" id="basket-overview">
                     <a data-ui-sref="basket" class="btn btn-primary navbar-btn"><i class="fa fa-shopping-cart"></i>
@@ -311,29 +379,11 @@
                     <span ng-cloak ng-if="$root.cartProducts.length.length==0">0</span>
                     </a>
                 </div>
-                <!--/.nav-collapse -->
+              
 
-               <!--  <div class="navbar-collapse collapse right" id="search-not-mobile">
-                   
-                    <form class="navbar-form" role="search">
-                    <div class="input-group"  class="" style="z-index:0!important">
-                        <input type="text" class="form-control" ng-model="$root.searchString" placeholder="Search" ng-enter="$root.seachProducts();" >
-                        <span class="input-group-btn">
+            </div> -->
 
-                            <button type="button" ng-click="$root.seachProducts();"  class="btn btn-primary"><i class="fa fa-search"></i></button>
-
-                        </span>
-                    </div>
-                </form>
-                </div> -->
-
-            </div>
-
-            <div class="collapse clearfix" id="search">
-
-                
-
-            </div>
+            
             <!--/.nav-collapse -->
 
         </div>
@@ -432,5 +482,5 @@
     //pass information to server to insert or update the user record
     //update_user_data(profile);
   } 
-
+$('.dropdown-toggle').dropdown()
 </script>

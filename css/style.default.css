@@ -19,10 +19,10 @@ h1 {
   font-size: 40px;
 }
 #top {
-  background: #fff;
+  background: #222;
 }
 #top .offer {
-  color: #fff;
+  color: #222;
 }
 #top .offer .btn {
   text-transform: uppercase;
@@ -58,7 +58,7 @@ h1 {
   display: inline-block;
 }
 #top ul.menu > li a {
-  color: black;
+  color: #FFF;
   font-size: 14px!important;
 }
 #top ul.menu > li + li:before {
@@ -82,18 +82,18 @@ h1 {
   font-weight: 300;
   margin-bottom: 20px;
 }
-.navbar .yamm-content h5 {
+/*.navbar .yamm-content h5 {
   font-size: 18px;
   font-weight: 400;
   text-transform: uppercase;
   padding-bottom: 10px;
   border-bottom: dotted 1px #555555;
-}
-@media (max-width: 767px) {
+}*/
+/*@media (max-width: 767px) {
   .navbar .yamm-content h5 {
     font-size: 14px;
   }
-}
+}*/
 
 /*.navbar .yamm-content ul {
   margin: 0;
@@ -121,7 +121,7 @@ h1 {
   text-transform: uppercase;
   font-weight: bold;
 }*/
-.navbar #search {
+/*.navbar #search {
   clear: both;
   border-top: solid 1px #9adacd;
   text-align: right;
@@ -148,7 +148,7 @@ h1 {
 }
 .navbar #basket-overview {
   padding: 0;
-}
+}*/
 #hot h2 {
   text-transform: uppercase;
   font-size: 36px;
@@ -394,8 +394,8 @@ h1 {
   background: yellow;
 }
 #content .panel.sidebar-menu .panel-body label {
-  color: #999999;
-  font-size: 12px;
+  color: #333333;
+  font-size: 18px;
 }
 #content .panel.sidebar-menu .panel-body label:hover {
   color: #555555;
@@ -463,12 +463,12 @@ h1 {
   }
 }
 #content .product {
-  background: #fff;
+ /* background: #fff;
   border: solid 1px #e6e6e6;
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
   box-sizing: border-box;
-  margin-bottom: 30px;
+  margin-bottom: 30px;*/
   /* entire container, keeps perspective */
   /* flip speed goes here */
   /* hide back of pane during swap */
@@ -985,7 +985,7 @@ h1 {
  * 
  * http://geedmo.github.com/yamm3
  */
-.yamm .nav,
+/*.yamm .nav,
 .yamm .collapse,
 .yamm .dropup,
 .yamm .dropdown {
@@ -1003,19 +1003,19 @@ h1 {
 }
 .yamm .yamm-content {
   padding: 20px 30px;
-}
-@media (max-width: 767px) {
+}*/
+/*@media (max-width: 767px) {
   .yamm .yamm-content {
     padding: 10px 20px;
   }
-}
-.yamm .dropdown.yamm-fw .dropdown-menu {
+}*/
+/*.yamm .dropdown.yamm-fw .dropdown-menu {
   left: 0;
   right: 0;
-}
+}*/
 /* Original Boostrap template overwrite */
 /* nav */
-.nav {
+/*.nav {
   margin-bottom: 0;
   padding-left: 0;
   list-style: none;
@@ -1086,7 +1086,7 @@ h1 {
   }
 }
 /* navbar */
-.navbar {
+/*.navbar {
   font-family: "Roboto", Helvetica, Arial, sans-serif;
   min-height: 70px;
   margin-bottom: 30px;
@@ -1211,7 +1211,7 @@ h1 {
     padding-top: 25px;
     padding-bottom: 25px;
   }*/
-  .navbar-nav.navbar-right:last-child {
+ /* .navbar-nav.navbar-right:last-child {
     margin-right: -15px;
   }
 }
@@ -1268,7 +1268,7 @@ h1 {
 }
 .navbar-default .navbar-text {
   color: #777777;
-}
+}*.
 /*.navbar-default .navbar-nav > li > a {
   color: #777777;
 }*/
@@ -1277,7 +1277,7 @@ h1 {
   color: #333333;
   background-color: transparent;
 }*/
-.navbar-default .navbar-nav > .active > a,
+/*.navbar-default .navbar-nav > .active > a,
 .navbar-default .navbar-nav > .active > a:hover,
 .navbar-default .navbar-nav > .active > a:focus {
   color: #555555;
@@ -1307,8 +1307,8 @@ h1 {
 .navbar-default .navbar-nav > .open > a:focus {
   background-color: #4fbfa8;
   color: #555555;
-}
-@media (max-width: 767px) {
+}*/
+/*@media (max-width: 767px) {
   .navbar-default .navbar-nav .open .dropdown-menu > li > a {
     color: #777777;
   }
@@ -1329,13 +1329,13 @@ h1 {
     color: #cccccc;
     background-color: transparent;
   }
-}
-.navbar-default .navbar-link {
+}*/
+/*.navbar-default .navbar-link {
   color: #777777;
 }
 .navbar-default .navbar-link:hover {
   color: #333333;
-}
+}*/
 /* scaffolding */
 body {
   font-family: "Roboto", Helvetica, Arial, sans-serif;
@@ -1695,10 +1695,10 @@ address {
     background-color: #dd4b39!important;
     box-shadow: none!important;
 }
-.navbar-inverse {
+/*.navbar-inverse {
     background-color: #FFF;
     border-color: #080808;
-}
+}*/
 .btn-primary {
   color: #ffffff;
   background-color: #080808!important;
@@ -1758,6 +1758,8 @@ a{
     padding:20px 110px;
     border-bottom: 2px solid #d3d4d5;
 }
+.txt-center {text-align: center !important;}
+
 .text-center {text-align: left !important;}
 .font205{font-size: 20.5px !important}
 .signup-btn:hover {
@@ -1793,4 +1795,40 @@ a{
 }
 .navbar navbar-inverse yamm{
     padding: 0!important;
+}
+.navbar-brand { position: relative!important; z-index: 2!important; }
+
+.navbar-nav.navbar-right .btn { position: relative!important; z-index: 2!important; padding: 4px 20px!important; margin: 10px auto;!important }
+
+.navbar .navbar-collapse { position: relative!important; }
+.navbar .navbar-collapse .navbar-right > li:last-child { padding-left: 22px!important; }
+
+.navbar .nav-collapse { position: absolute!important; z-index: 1!important; top: 0!important; left: 0!important; right: 0!important; bottom: 0!important; margin: 0!important; padding-right: 120px!important; padding-left: 80px!important; width: 100%!important; }
+.navbar.navbar-default .nav-collapse { background-color: #f8f8f8!important; }
+.navbar.navbar-inverse .nav-collapse { background-color: #222!important; }
+.navbar .nav-collapse .navbar-form { border-width: 0; box-shadow: none!important; }
+.nav-collapse>li { float: right!important; }
+
+.btn.btn-circle { border-radius: 50px!important; }
+.btn.btn-outline { background-color: transparent!important; }
+
+@media screen and (max-width: 767px) {
+    .navbar .navbar-collapse .navbar-right > li:last-child { padding-left: 15px!important; padding-right: 15px!important; } 
+    
+    .navbar .nav-collapse { margin: 7.5px auto!important; padding: 0!important; }
+    .navbar .nav-collapse .navbar-form { margin: 0!important; }
+    .nav-collapse>li { float: none!important; }
+}
+.navbar {
+    position: relative;
+    min-height: 0px!important;
+     margin-bottom: 0px!important; 
+    border: 1px solid transparent;
+}
+.navbar-btn {
+    margin-top: -13px!important;
+    margin-bottom: -9px!important;
+}
+body{
+    background-color: #FFF !important;
 }
