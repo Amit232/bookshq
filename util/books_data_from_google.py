@@ -1,6 +1,7 @@
+#!/usr/bin/env python2
 import urllib, json, cStringIO
 from openpyxl import Workbook
-from PIL import Image
+# from PIL import Image
 from openpyxl import load_workbook
 import sys
 import time
@@ -38,6 +39,9 @@ def get_book_metadata():
         # time.sleep(1)
         "Reading json data after sleep"
         data = response
+        print type(data)
+        with open("json_data_from_ggogle.txt", "w") as json_file_handler:
+            json_file_handler.write(str(data))
         # print(data)
         print "JSON data loaded"
         try:
@@ -50,6 +54,9 @@ def get_book_metadata():
             books_metadata_dictionary[book_title]["category"] = data["items"][0]["volumeInfo"]["categories"][0]
             books_metadata_dictionary[book_title]["image_url"] = data["items"][0]["volumeInfo"]["imageLinks"][
                 "thumbnail"]
+            books_metadata_dictionary[book_title]["average_rating"] = data["items"][0]["volumeInfo"]["averageRating"]
+            books_metadata_dictionary[book_title]["pageCount"] = data["items"][0]["volumeInfo"]["pageCount"]
+
         except Exception as e:
             print "Exception occured ", e
             print "Failed to get metadata for " + book_title
@@ -68,6 +75,8 @@ def dump_metadata_to_excel_file():
     sheet["D1"] = "Category"
     sheet["E1"] = "ISBN"
     sheet["F1"] = "Image Link"
+    sheet["G1"] = "Average Rating"
+    sheet["H1"] = "Page Count"
 
     final_dictionary = get_book_metadata()
     print final_dictionary.keys()
@@ -79,5 +88,8 @@ def dump_metadata_to_excel_file():
         sheet["D" + str(row)] = final_dictionary[key]["category"]
         sheet["E" + str(row)] = final_dictionary[key]["isbn"]
         sheet["F" + str(row)] = final_dictionary[key]["image_url"]
+        sheet["G" + str(row)] = final_dictionary[key]["average_rating"]
+        sheet["H" + str(row)] = final_dictionary[key]["pageCount"]
+
     wb.save("Metadata_134_1.xlsx")
 dump_metadata_to_excel_file()
