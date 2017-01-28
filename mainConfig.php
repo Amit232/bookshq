@@ -72,39 +72,62 @@ $redirect_uri = 'http://127.0.0.1/s/index.php';
 $config['due_days']=20;
 $config['per_date_rs']=5;
 
+$config['custom_sms_message']='We have received your order for order number';
+$config['custom_sms_message1']=' and it is being processed. You can expect delivery within 3 days';
 
 function sendSms($number,$message,$sender){
-    require_once 'classes/textlocal.class.php';
-    $textlocal = new textlocal('chiruoct.13@gmail.com', 'UQfldE5qFOk-BEbrbvCoXLVSjDt2vsZt8cMa432YsS');
-    /*$numbers = array($number);
-    $sender = $sender;
-    $message = $message;
-    
-    $response = $textlocal->sendSms($numbers, $message, $sender);
-*/
-    $username = "chiruoct.13@gmail.com";
-    $hash = "6d29f96db9ec2f321c672639357312efcce7f5de";
+   //Your authentication key
+    $authKey = "138855A8d0029bMfN588c4339";
 
-    // Config variables. Consult http://api.textlocal.in/docs for more info.
-    $test = "0";
+    //Multiple mobiles numbers separated by comma
+    $mobileNumber = $number;
 
-    // Data for text message. This is the text message data.
-    $sender = "TXTLCL"; // This is who the message appears to be from.
-    $numbers = "917892026750"; // A single number or a comma-seperated list of numbers
-    $message = "This is a test message from the PHP API script.";
-    // 612 chars or less
-    // A single number or a comma-seperated list of numbers
+    //Sender ID,While using route4 sender id should be 6 characters long.
+    $senderId = "123456";
+
+    //Your message to send, Add URL encoding here.
     $message = urlencode($message);
-    $data = "username=".$username."&hash=".$hash."&message=".$message."&sender=".$sender."&numbers=".$numbers."&test=".$test;
-    $ch = curl_init('http://api.textlocal.in/send/?');
-    curl_setopt($ch, CURLOPT_POST, true);
-    curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
-    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-    $result = curl_exec($ch); // This is the result from the API
+
+    //Define route 
+    $route = "default";
+    //Prepare you post parameters
+    $postData = array(
+        'authkey' => $authKey,
+        'mobiles' => $mobileNumber,
+        'message' => $message,
+        'sender' => $senderId,
+        'route' => $route
+    );
+
+    //API URL
+    $url="http://api.msg91.com/api/sendhttp.php";
+
+    // init the resource
+    $ch = curl_init();
+    curl_setopt_array($ch, array(
+        CURLOPT_URL => $url,
+        CURLOPT_RETURNTRANSFER => true,
+        CURLOPT_POST => true,
+        CURLOPT_POSTFIELDS => $postData
+        //,CURLOPT_FOLLOWLOCATION => true
+    ));
+
+
+    //Ignore SSL certificate verification
+    curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
+    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
+
+
+    //get response
+    $output = curl_exec($ch);
+
+    //Print error if any
+    if(curl_errno($ch))
+    {
+        echo 'error:' . curl_error($ch);
+    }
+
     curl_close($ch);
-    
-    // Process your response here
-    print_r($result);
 
 }
 ?>

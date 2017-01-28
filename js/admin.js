@@ -853,7 +853,7 @@ $scope.getAllProducts = function(categoryAddedIndex)
                 
     }
     
-    //console.log(categories)
+   console.log(categories)
     var searchString='';
     searchString = $rootScope.searchString;
     var id_user='';

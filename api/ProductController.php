@@ -9,6 +9,11 @@
 class ProductController  
 {
     public function __construct() {
+      $this->custom_sms_message='We have received your order for order number';
+      $this->custom_sms_message1=' and it is being processed. You can expect delivery within 3 days';
+      $this->custom_sms_message2='We have received your return request for order #';
+      $this->custom_sms_message3=' .You can expect our pickup within 3 days';
+
     }
     public function __destruct() {
     }
@@ -78,7 +83,7 @@ class ProductController
         $insertInfo=array('user_id_user'=>$idUser,'search_text'=>$searchString,'created_at'=>date('Y-m-d H:i:s'));
         $storeSearching = $productObj->storeSearchedFields($insertInfo);
       }
-
+     
       return array('error'=>false,'products'=>$products);
     }   
 
@@ -203,9 +208,13 @@ class ProductController
 
         }
         $updateArray['mobile']=$mobile;
+        $orderNo = $res;
         $res = $userObj->updateUserDetails($idUser,$updateArray);
 
         $userCartDetails=$userObj->getUserProducts($idUser);
+        $smsMessage="";
+        $smsMessage.=$this->custom_sms_message.$orderNo.$this->custom_sms_message1;
+        $sendSms = sendSms($mobile,$smsMessage,'123456');
         $message='Products are successfully brought by you and Your ordered will be delivered in 2 days';
         return array('error'=>false,'meessage'=>$message,'user_cart_details'=>$userCartDetails);
 
@@ -260,6 +269,7 @@ class ProductController
       {
         $status='updated';
       }
+      $userDetails = $userObj->getUser($id_user);
       $orders =$userObj->getOrders($id_user);
       $lenderedProducts = $userObj->getYourLenderedProducts($id_user);
 
@@ -274,6 +284,11 @@ class ProductController
         $userObj = new User();
         $res = $userObj->setProductReview($insertInfo);
         if($res){
+          $smsMessage="";
+          $smsMessage.=$this->custom_sms_message2.$transaction.$this->custom_sms_message3;
+          $sendSms = sendSms($userDetails[0]['mobile'],$smsMessage,'123456');
+
+
           return array('message'=>'Order is '.$status.' successfully','orders'=>$orders,'lenderedProducts'=>$lenderedProducts);
         }
       }

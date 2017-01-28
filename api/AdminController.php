@@ -10,6 +10,9 @@ class AdminController
 {
 
     public function __construct() {
+      $this->custom_sms_message='Your order #';
+      $this->custom_sms_message1=' has been delivered. Your due date is ';
+      $this->custom_sms_message2='.There after you will be charged addition 20Rs/Day for each book';
     }
     public function __destruct() {
     }
@@ -63,7 +66,13 @@ class AdminController
         $adminObj = new Admin();
         $updateCondition=" id_sub_transaction ='$trandId'";
         $res = $adminObj->updateTransaction($updateInfo,$updateCondition);
-        if($res){
+        if($res||!$res){
+          if($status=='delivered'){
+            $productsDetails  =$adminObj->getSubTrasactionDetails($trandId);
+            $smsMessage="";
+            $smsMessage.=$this->custom_sms_message.$productsDetails[0]['transaction_id_transaction'].$this->custom_sms_message1.$dueDate.$this->custom_sms_message2;
+            $sendSms = sendSms($productsDetails[0]['mobile'],$smsMessage,'123456');
+          }
           if($status=='finished'){
             $productObj = new Product();
             $productsDetails  =$productObj->getTrasctionObject($trandId);
