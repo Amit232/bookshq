@@ -820,6 +820,7 @@ $scope.parseInt = parseInt;
 
 $scope.getAllProducts = function(categoryAddedIndex)
 {
+    $scope.loadingBarShow=true;
     $scope.productDetail=false;    
     var startIndex = $scope.limitIndex*$scope.startIndex;
 
@@ -874,6 +875,7 @@ $scope.getAllProducts = function(categoryAddedIndex)
     headers: {'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'}
     }).success(function (data,status) {
         $scope.products = data.products.products;
+        $scope.loadingBarShow=false;
         $scope.totalItems = parseInt(data.products.total_count);
         $scope.noOfPages=Math.ceil($scope.totalItems/$scope.limitIndex);
 
@@ -1116,6 +1118,16 @@ $scope.sendOrganizationReq =function()
         $scope.rating=Math.ceil($scope.single_product.rating);
         $scope.totalReviews= data.res.total_reviews;
         $scope.totalRatings= data.res.total_ratings;
+        $scope.showGoToCart=false;
+        if(angular.isDefined($rootScope.cartProducts)&&$rootScope.cartProducts!=''){
+            angular.forEach($rootScope.cartProducts,function(c){
+                if(c.id_product==$scope.single_product.id_product){
+                    $scope.showGoToCart=true;
+                }
+            })
+            
+        }
+
     }).error(function(data,stat){
 
     });
@@ -1187,6 +1199,15 @@ $scope.sendOrganizationReq =function()
                               text: 'Product is added to cart',
                               timer: 5000
                             })
+                $scope.showGoToCart=false;
+                if(angular.isDefined($rootScope.cartProducts)&&$rootScope.cartProducts!=''){
+                    angular.forEach($rootScope.cartProducts,function(c){
+                        if(c.id_product==$scope.single_product.id_product){
+                            $scope.showGoToCart=true;
+                        }
+                    })
+                    
+                }
 
             });
     }else{

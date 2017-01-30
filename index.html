@@ -104,15 +104,16 @@
  _________________________________________________________ -->
     <div id="top">
         <div class="container" id="container1">
-            <div class="col-md-2 offer" > 
-                    <img data-ui-sref="home" style="background:#FFF;cursor:pointer" src="img/logo.png" alt="Obaju logo" class="hidden-xs" >
+            <div class="col-md-2 offer" style="
+    margin-top: 6px;"> 
+                    <img  data-ui-sref="home" style="background:#FFF;cursor:pointer" src="img/logo.png" alt="Obaju logo" class="hidden-xs" >
                     <img src="img/logo-small.png" alt="Obaju logo" class="visible-xs"><span class="sr-only">Obaju - go to homepage</span>
             
             </div>
             <div class="col-lg-2">
                 <div class="col-lg-8">
                     <form class="navbar-form" role="search">
-                        <div class="input-group"  class="" style="z-index:0!important">
+                        <div class="input-group"  class="" >
                             <input type="text" class="form-control" style="width: 500px;height: 41px;" ng-model="$root.searchString" placeholder="Search with book name, author, isbn" ng-enter="$root.seachProducts();" ng-change="$root.seachProducts();">
                             <span class="input-group-btn">
 
@@ -287,13 +288,13 @@
                       <ul class="nav navbar-nav navbar-left">
                         <!-- <li><a data-ui-sref="home" href="" id="home"  >Home</a></li>
                         <li><a data-ui-sref="products" href="" id="sneakin"  style="margin-right: 11px;">Sneak In</a></li> -->
-                        <li>
+                        <li style="cursor:pointer">
                             <a id="category_1" href="#/products/6" style="margin-right: 11px;" >Fiction
                             </a>
                         </li>
-                        <li><a id="category_2" href="#/products/7" style="margin-right: 11px;" >History
+                        <li style="cursor:pointer"><a id="category_2" href="#/products/7" style="margin-right: 11px;" >History
                             </a></li>
-                        <li><a id="category_3" href="#/products/8" style="margin-right: 11px;" >Self-Help
+                        <li style="cursor:pointer"><a id="category_3" href="#/products/8" style="margin-right: 11px;" >Self-Help
                             </a></li>
                         
                       </ul>
