@@ -748,6 +748,8 @@ bookApp.controller('homeCtrl', function ($scope,$rootScope,$interval,$timeout, $
         $http.defaults.headers.common['Csrf-Token']='';
         $http.defaults.headers.common['Google_Id']='';
         $http.defaults.headers.common['id_user']='';
+        $rootScope.cartProducts = [];
+        localStorage.removeItem('carts');
         //$location.path('/');
         $window.location.href=BASE_URL_NEW+'#/';
     }   
@@ -977,7 +979,9 @@ $scope.getProductDetail = function(id_pro)
 
 $scope.addProductToCart = function(product)
 {
-   
+    if($rootScope.cartProducts==undefined||$rootScope.cartProducts==null){
+        $rootScope.cartProducts=[];
+    }
     if(angular.isDefined($rootScope.cartProducts)&&$rootScope.cartProducts.length>0)
     {
         for (var i = 0; i < $rootScope.cartProducts.length; i++) {
@@ -1007,7 +1011,9 @@ $scope.addProductToCart = function(product)
     headers: {'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'}
     }).success(function (data,status) {
         $rootScope.cartProducts.push(product);
-      
+        localStorage.removeItem('carts');
+        var carts = $rootScope.cartProducts;
+        localStorage.setItem('carts',JSON.stringify(carts));
         swal({
                       title: '',
                       text: 'Product is added to cart',
