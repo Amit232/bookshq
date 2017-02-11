@@ -164,6 +164,11 @@ bookApp.run(function ($location, $rootScope, $state, $stateParams,$http,$cookies
         $http.defaults.headers.common['X-Id-Exam-Has-Student']   = $cookies.id_exam_has_student;
       
         var loc=$location.path();*/
+        var carts = localStorage.getItem('carts');
+        if(angular.isDefined(carts)&&carts!=''){
+            carts = JSON.parse(carts);
+            $rootScope.cartProducts = carts;
+        }
         $rootScope.getUserCart=function(){
             $http({
             method: "get",
@@ -1134,6 +1139,9 @@ $scope.sendOrganizationReq =function()
 
     $scope.addProductToCart = function(product)
     {
+    if($rootScope.cartProducts==null){
+        $rootScope.cartProducts=[];
+    }  
     if(angular.isDefined($rootScope.cartProducts)&&$rootScope.cartProducts.length>0)
     {
         for (var i = 0; i < $rootScope.cartProducts.length; i++) {
@@ -1193,7 +1201,9 @@ $scope.sendOrganizationReq =function()
             headers: {'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'}
             }).success(function (data,status) {
                 $rootScope.cartProducts.push(product);
-              
+                localStorage.removeItem('carts');
+                var carts = $rootScope.cartProducts;
+                localStorage.setItem('carts',JSON.stringify(carts));
                 swal({
                               title: '',
                               text: 'Product is added to cart',
@@ -1212,6 +1222,9 @@ $scope.sendOrganizationReq =function()
             });
     }else{
         $rootScope.cartProducts.push(product);
+        localStorage.removeItem('carts');
+        var carts = $rootScope.cartProducts;
+        localStorage.setItem('carts',JSON.stringify(carts));
     }
    
 
@@ -1253,6 +1266,9 @@ $scope.deleteProductFromCart = function (product) {
         headers: {'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'}
         }).success(function (data,status) {
             $rootScope.cartProducts=data.user_cart_details;
+            var carts = $rootScope.cartProducts;
+                    localStorage.removeItem('carts');
+                    localStorage.setItem('carts',JSON.stringify(carts));
         });
    }else{
         var pId= '';
@@ -1280,6 +1296,9 @@ $scope.deleteProductFromCart = function (product) {
                 if(id_pro&&id_pro!=''){
                     if(id_pro==pId)
                     $rootScope.cartProducts.splice(i);
+                    var carts = $rootScope.cartProducts;
+                    localStorage.removeItem('carts');
+                    localStorage.setItem('carts',JSON.stringify(carts));
                 }
             }
         }
@@ -1292,13 +1311,18 @@ $scope.mobile='';
 $scope.buyProducts= function(){
     if(angular.isUndefined($cookies.id_user))
     {
-        //alert('Please login and add product to cart');
        
-        swal({
-                      title: '',
-                      text: 'Please login and add product to cart',
-                      timer: 5000
-        })
+        $("#closeBtnOrder").trigger('click');
+        swal({ 
+              title: '',
+              text: 'Please login and add product to cart',
+              timer: 5000
+          },
+          function(){
+                    $(".bs-example-modal-lg").modal("show");
+                    $rootScope.registerorloginClick('login');
+        });
+        
         return false;
     }
    $('#buy_products').validate(angular.extend({
@@ -1351,6 +1375,8 @@ $scope.buyProducts= function(){
 
             $rootScope.cartProducts=[];
             $rootScope.cartProducts=data.user_cart_details;
+            var carts = $rootScope.cartProducts;
+            localStorage.setItem('carts',JSON.stringify(carts));
             $('body').removeClass('modal-open');
             $("#login-modal1").modal('hide');
         }).error(function(data,status){
@@ -1368,6 +1394,8 @@ $scope.buyProducts= function(){
                 $('body').removeClass('modal-open');
                 $("#login-modal1").modal('hide');
                 $rootScope.cartProducts=data.user_cart_details;
+                var carts = $rootScope.cartProducts;
+                localStorage.setItem('carts',JSON.stringify(carts));
 
             }
         }); 

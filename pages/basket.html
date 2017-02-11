@@ -139,8 +139,8 @@
 
                         <form method="post" action="checkout1.html">
 
-                            <h1>Recent Orders</h1>
-                            <p class="text-muted" >{{message}}</p>
+                            <h1>Thank you for your order!</h1>
+                            <p class="text-muted" >Your order has been placed and is being processed.When the items(s) are shipped, you will receive an notification with the details.You can track this order through <a href="#/orders" title="Orders">My Orders</a> page.</p>
                             <div class="table-responsive" ng-if="$root.recentOrders.length>0">
                                 <table class="table">
                                     <thead>
@@ -224,7 +224,7 @@
  
                 <div class="modal-content">
                     <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        <button id="closeBtnOrder" type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                         <h4 class="modal-title" id="Avialability">Provide Following Information</h4>
                     </div>
                     <div class="modal-body">
