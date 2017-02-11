@@ -140,7 +140,7 @@ bookApp.factory('authHttpResponseInterceptor',['$q','$location','$rootScope',fun
 bookApp.run(function ($location, $rootScope, $state, $stateParams,$http,$cookies,$templateCache,$interval,$window,$sce,$timeout) {
         $rootScope.$state = $state;
         $rootScope.$on('$stateChangeStart', function(event, toState, toParams, fromState, fromParams){
-            // console.log('$rootScope.user_role',$rootScope.user_role);
+            // //console.log('$rootScope.user_role',$rootScope.user_role);
             
         })
         $rootScope.enableSignIn=true;
@@ -215,7 +215,7 @@ bookApp.run(function ($location, $rootScope, $state, $stateParams,$http,$cookies
             return $sce.trustAsHtml(html_code);
         }
         $rootScope.redirectToProducts=function(c){
-            console.log(c);
+            //console.log(c);
             $location.path('products/'+c.id_category)
         }
         $rootScope.getCategories =function () {
@@ -567,7 +567,7 @@ $rootScope.normalLoginD = function(email,password)
                                 data : $.param({'product':$rootScope.cartProducts,'id_user':$cookies.id_user}),
                                 headers: {'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'}
                                 }).success(function (data,status) {
-                                   // console.log(data.user_cart_details);
+                                   // //console.log(data.user_cart_details);
                                    $rootScope.cartProducts = angular.copy(data.user_cart_details);
                                      //$rootScope.cartProducts.push(data.user_cart_details);
                                   
@@ -622,7 +622,7 @@ $rootScope.login = function(param)
                     $rootScope.loggedUserDetails.name = data.user_detail.name;
                     $rootScope.user_cart_details = data.user_cart_details;
                     $rootScope.enableSignIn=false;
-                    //console.log(data.notifications);
+                    ////console.log(data.notifications);
                     $rootScope.notifications=[];
                     if(angular.isDefined(data.notifications)){
                         angular.forEach(data.notifications,function(m){
@@ -673,7 +673,7 @@ $rootScope.login = function(param)
                         $timeout(function() {$window.location.reload();}, 100);
 
                         
-                    //console.log($rootScope.cartProducts);
+                    ////console.log($rootScope.cartProducts);
                     /*if(angular.isDefined(data.user_cart_details))
                     {
                         $cookies.products = data.user_cart_details;
@@ -724,7 +724,7 @@ $rootScope.login = function(param)
         
 });
 bookApp.controller('homeCtrl', function ($scope,$rootScope,$interval,$timeout, $http,$cookies,$location,$stateParams,$window){
-    console.log('gggg');
+    //console.log('gggg');
     if(interval!=null||interval==null)
     {
         if(angular.isDefined($cookies.id_user)&&$cookies.id_user!=''){
@@ -833,7 +833,7 @@ $scope.getAllProducts = function(categoryAddedIndex)
 
     var limitIndex = $scope.limitIndex;
     var categories = [];
-    //console.log($scope.categoriesIds);
+    ////console.log($scope.categoriesIds);
     /*if(angular.isDefined($scope.id_category)&&$scope.id_category!=''){
                 categories.push($scope.id_category);
             }*/
@@ -844,7 +844,7 @@ $scope.getAllProducts = function(categoryAddedIndex)
             if(angular.isDefined(a)&&a!=''&&a!=null&&a==1){
                 angular.forEach($scope.categories,function(val1,key1){
                     if(key==key1){
-                        console.log(key,"==",categoryAddedIndex)
+                        //console.log(key,"==",categoryAddedIndex)
                         if(key==categoryAddedIndex)
                         categories.push(val1.id_category);
                     }
@@ -866,7 +866,7 @@ $scope.getAllProducts = function(categoryAddedIndex)
                 
     }
     
-   console.log(categories)
+   //console.log(categories)
     var searchString='';
     searchString = $rootScope.searchString;
     var id_user='';
@@ -1287,7 +1287,7 @@ $scope.deleteProductFromCart = function (product) {
             }
         }
 
-        console.log(product,$rootScope.cartProducts.length);
+        //console.log(product,$rootScope.cartProducts.length);
         if(angular.isDefined($rootScope.cartProducts)&&$rootScope.cartProducts.length>0){
             for (var i = 0; i < $rootScope.cartProducts.length; i++) {
                 var id_pro = '';
@@ -1298,7 +1298,7 @@ $scope.deleteProductFromCart = function (product) {
                     id_pro = $rootScope.cartProducts[i].product_id_product;
                     }
                 }
-                console.log(pId,"f",id_pro)
+                //console.log(pId,"f",id_pro)
                 if(id_pro&&id_pro!=''){
                     if(id_pro==pId)
                     $rootScope.cartProducts.splice(i);
@@ -1500,7 +1500,7 @@ $scope.changeTransaction=function(id_subtransaction,status,id_product){
     $scope.id_product=id_product;
 }
 $scope.changeTransactionStatus = function(id_subtransaction,order_status){
-    console.log(id_subtransaction,order_status,$scope.id_product,'fff');
+    //console.log(id_subtransaction,order_status,$scope.id_product,'fff');
     if(angular.isDefined(id_subtransaction)&&angular.isDefined(order_status)){
         if(angular.isDefined($scope.rating)){
 
