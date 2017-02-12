@@ -179,6 +179,9 @@ bookApp.run(function ($location, $rootScope, $state, $stateParams,$http,$cookies
             }).success(function (data,status) {
                 if(status==200)
                     $rootScope.cartProducts = data;
+                    var carts = $rootScope.cartProducts;
+                    localStorage.removeItem('carts');
+                    localStorage.setItem('carts',JSON.stringify(carts));   
             }); 
         }
         if($cookies.id_user != undefined)
@@ -420,6 +423,9 @@ $rootScope.registerD=function(newUser)
                             })
                     $rootScope.newUSer={};
                     $rootScope.cartProducts=data.user_cart_details;
+                    var carts = $rootScope.cartProducts;
+                    localStorage.removeItem('carts');
+                    localStorage.setItem('carts',JSON.stringify(carts));   
                 }
         }).error(function(data,status){
             if(status==403)
@@ -557,7 +563,9 @@ $rootScope.normalLoginD = function(email,password)
                             interval=null;
                         }
                     }
-                    
+                    if($rootScope.cartProducts==undefined||$rootScope.cartProducts==null){
+                        $rootScope.cartProducts=[];
+                    }
                     if(angular.isDefined($rootScope.cartProducts)&&$rootScope.cartProducts.length>0)
                     {
                         $http({
@@ -569,6 +577,9 @@ $rootScope.normalLoginD = function(email,password)
                                 }).success(function (data,status) {
                                    // //console.log(data.user_cart_details);
                                    $rootScope.cartProducts = angular.copy(data.user_cart_details);
+                                   var carts = $rootScope.cartProducts;
+                                        localStorage.removeItem('carts');
+                                        localStorage.setItem('carts',JSON.stringify(carts));   
                                      //$rootScope.cartProducts.push(data.user_cart_details);
                                   
                                     /*swal({
@@ -644,7 +655,9 @@ $rootScope.login = function(param)
                             interval=null;
                         }
                     }
-                    
+                    if($rootScope.cartProducts==undefined||$rootScope.cartProducts==null){
+                        $rootScope.cartProducts=[];
+                    }
                     if(angular.isDefined($rootScope.cartProducts)&&$rootScope.cartProducts.length>0)
                         {
                             $http({
@@ -656,7 +669,9 @@ $rootScope.login = function(param)
                                     }).success(function (data,status) {
                                          $rootScope.cartProducts=[];
                                          $rootScope.cartProducts=data.user_cart_details;
-                                      
+                                         var carts = $rootScope.cartProducts;
+                                        localStorage.removeItem('carts');
+                                        localStorage.setItem('carts',JSON.stringify(carts));   
                                         /*swal({
                                                       title: '',
                                                       text: 'Product is added to cart',
@@ -1130,6 +1145,10 @@ $scope.sendOrganizationReq =function()
         $scope.totalReviews= data.res.total_reviews;
         $scope.totalRatings= data.res.total_ratings;
         $scope.showGoToCart=false;
+        
+        if($rootScope.cartProducts==null){
+            $rootScope.cartProducts=[];
+        }  
         if(angular.isDefined($rootScope.cartProducts)&&$rootScope.cartProducts!=''){
             angular.forEach($rootScope.cartProducts,function(c){
                 if(c.id_product==$scope.single_product.id_product){
@@ -1382,6 +1401,7 @@ $scope.buyProducts= function(){
             $rootScope.cartProducts=[];
             $rootScope.cartProducts=data.user_cart_details;
             var carts = $rootScope.cartProducts;
+            localStorage.removeItem('carts');
             localStorage.setItem('carts',JSON.stringify(carts));
             $('body').removeClass('modal-open');
             $("#login-modal1").modal('hide');
@@ -1401,7 +1421,8 @@ $scope.buyProducts= function(){
                 $("#login-modal1").modal('hide');
                 $rootScope.cartProducts=data.user_cart_details;
                 var carts = $rootScope.cartProducts;
-                localStorage.setItem('carts',JSON.stringify(carts));
+                    localStorage.removeItem('carts');
+                    localStorage.setItem('carts',JSON.stringify(carts));
 
             }
         }); 
