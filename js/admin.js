@@ -281,25 +281,25 @@ bookApp.run(function ($location, $rootScope, $state, $stateParams,$http,$cookies
         }
         var nav = $('.navbar');
     
-        $(window).scroll(function () {
-            /*var scroll = $(this).scrollTop();
-            var topDist = $("#navbar").position();
-            if (scroll > topDist.top) {
-                $('#navbar').css({"position":"fixed","top":"0","z-index": "9999","width":"100%"});
+        // $(window).scroll(function () {
+        //     /*var scroll = $(this).scrollTop();
+        //     var topDist = $("#navbar").position();
+        //     if (scroll > topDist.top) {
+        //         $('#navbar').css({"position":"fixed","top":"0","z-index": "9999","width":"100%"});
                 
-            } else {
-                $('#navbar').css({"position":"static","top":"auto"});
-            }*/
+        //     } else {
+        //         $('#navbar').css({"position":"static","top":"auto"});
+        //     }*/
 
-            var scroll = $(this).scrollTop();
-            var topDist = $("#container1").position();
-            if (scroll > topDist.top) {
-                $('#container1').css({"position":"fixed","top":"0","z-index": "9999","width":"100%","background-color":"#222"});
+        //     var scroll = $(this).scrollTop();
+        //     var topDist = $("#container1").position();
+        //     if (scroll > topDist.top) {
+        //         $('#container1').css({"position":"fixed","top":"0","z-index": "9999","width":"100%","background-color":"#222"});
                 
-            } else {
-                $('#container1').css({"position":"static","top":"auto"});
-            }
-        });
+        //     } else {
+        //         $('#container1').css({"position":"static","top":"auto"});
+        //     }
+        // });
 
 bookApp.filter('myDateFormatNew', function myDateFormat($filter){
   return function(text){
@@ -820,6 +820,7 @@ $scope.parseInt = parseInt;
 
 $scope.getAllProducts = function(categoryAddedIndex)
 {
+    $scope.loadingBarShow=true;
     $scope.productDetail=false;    
     var startIndex = $scope.limitIndex*$scope.startIndex;
 
@@ -874,6 +875,7 @@ $scope.getAllProducts = function(categoryAddedIndex)
     headers: {'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'}
     }).success(function (data,status) {
         $scope.products = data.products.products;
+        $scope.loadingBarShow=false;
         $scope.totalItems = parseInt(data.products.total_count);
         $scope.noOfPages=Math.ceil($scope.totalItems/$scope.limitIndex);
 
@@ -1116,6 +1118,16 @@ $scope.sendOrganizationReq =function()
         $scope.rating=Math.ceil($scope.single_product.rating);
         $scope.totalReviews= data.res.total_reviews;
         $scope.totalRatings= data.res.total_ratings;
+        $scope.showGoToCart=false;
+        if(angular.isDefined($rootScope.cartProducts)&&$rootScope.cartProducts!=''){
+            angular.forEach($rootScope.cartProducts,function(c){
+                if(c.id_product==$scope.single_product.id_product){
+                    $scope.showGoToCart=true;
+                }
+            })
+            
+        }
+
     }).error(function(data,stat){
 
     });
@@ -1187,6 +1199,15 @@ $scope.sendOrganizationReq =function()
                               text: 'Product is added to cart',
                               timer: 5000
                             })
+                $scope.showGoToCart=false;
+                if(angular.isDefined($rootScope.cartProducts)&&$rootScope.cartProducts!=''){
+                    angular.forEach($rootScope.cartProducts,function(c){
+                        if(c.id_product==$scope.single_product.id_product){
+                            $scope.showGoToCart=true;
+                        }
+                    })
+                    
+                }
 
             });
     }else{

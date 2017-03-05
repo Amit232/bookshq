@@ -248,6 +248,6 @@ class AdminController
           $res = $adminObj->uploadLenderBook($insertInfo);
         }
       }
-      return array('message'=>count($books).' notification sent. we will contact you shortly in mean time');
+      return array('message'=>count($books).' notification sent. We will conact once an order has been placed for one of your book(s)');
     }
 }

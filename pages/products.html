@@ -1,110 +1,21 @@
 <style type="text/css">
-    .img-responsive1{
-        display: block;
-        max-width: 100%;
-        height: 184px;
-    }
-.linkDisabled {
-  cursor: not-allowed !important;
-  pointer-events: none;
-  color: grey;
-}
-.linkDisabled1 {
-  cursor: not-allowed !important;
-  pointer-events: none;
-}
 
-.prvsBtns{padding: 4px 15px !important;background-color: #4fbfa8; font-size: 10px;
-
-  border: 1px solid #ddd; margin-right: 2px; color:#444444;}
-
-.prvsBtns:hover{background-color: #4fbfa8 !important; color: #fff;border: 1px solid #1c9ccb;}
-
-.nextBtns{padding: 4px 15px !important;background-color: #4fbfa8; font-size: 10px;
-
-  border: 1px solid #ddd; margin-left: 5px; color:#444444;}
-
-.nextBtns:hover{background-color: #4fbfa8 !important; color: #fff;border: 1px solid #1c9ccb;}
-
-.paginationnmbr{padding: 2px 7px !important; margin-right: 5px;}
-
-.activepagintion{background-color: black !important;text-align:center;border: 1px solid #1c9ccb;cursor: pointer;color: #fff!important;top: 1px;position: relative;}
-
-.deactivepagintion{text-align:center;border: 1px solid #ddd;
-
-  cursor: pointer;position: relative;top: 1px;color: #666666;}
-
-.rating { 
-  border: none;
-  float: left;
-}
-
-.rating > input { display: none; } 
-.rating > label:before { 
-  margin: 5px;
-  font-size: 1.25em;
-  font-family: FontAwesome;
-  display: inline-block;
-  content: "\f005";
-}
-
-.rating > .half:before { 
-  content: "\f089";
-  position: absolute;
-}
-
-.rating > label { 
-  color: #ddd; 
- float: right; 
-}
-
-/***** CSS Magic to Highlight Stars on Hover *****/
-
-.rating > input:checked ~ label, /* show gold star when clicked */
-
-.rating > input:checked + label:hover, /* hover current star when changing rating */
-.rating > input:checked ~ label:hover,
-.rating > label:hover ~ input:checked ~ label, /* lighten current selection */
-.rating > input:checked ~ label:hover ~ label { color: #FFD700;  } 
-.textareaclass{
-    outline: none;
-    border: none;
-    width: 100%;
-    font-size: 14px;
-    font-weight: 400;
-    resize: none;
-}
-label { font-size: 24px; }
-input[type=checkbox] { display:none; } /* to hide the checkbox itself */
-input[type=checkbox] + label:before {
-  font-family: FontAwesome;
-  display: inline-block;
-}
-input[type=checkbox] + label:before { content: "\f096"; } /* unchecked icon */
-input[type=checkbox] + label:before { letter-spacing: 10px; } /* space between checkbox and label */
-
-input[type=checkbox]:checked + label:before { content: "\f046"; } /* checked icon */
-input[type=checkbox]:checked + label:before { letter-spacing: 5px; } /* allow space for check mark */
-.btn-danger1 {
-    color: white !important;
-    background-color: black;
-    border-color: #FFF; /
-}
-.btn-danger1:hover{
-    color: white !important;
-    background-color: black;
-    border-color: #FFF; /
-}
-label {
-    font-size: 14px;
-}
 </style>
-
+<div class="spinner" title="Loading...." ng-show="loadingBarShow">
+  <span class="ball-1"></span>
+  <span class="ball-2"></span>
+  <span class="ball-3"></span>
+  <span class="ball-4"></span>
+  <span class="ball-5"></span>
+  <span class="ball-6"></span>
+  <span class="ball-7"></span>
+  <span class="ball-8"></span>
+</div>
 <div id="content" style="margin-top:10px">
             <div class="container">
-                <div class="col-md-12">
+                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 pd768-0">
                     <ul class="breadcrumb">
-                       <nav class="breadcrumb">
+                       <nav >
                           <a class="breadcrumb-item" style="color:black" data-ui-sref="home">Home></a>
                           <span class="breadcrumb-item active" style="color:#777" data-ui-sref="products">Products</span>
                           <a ng-if="backtoProductPage" ng-click="backToProductList()" style="color:black">Back to products list</a>
@@ -116,7 +27,7 @@ label {
                     </ul>
                 </div>
 
-                <div class="col-md-3">
+                <div class="col-xs-12 col-sm-4 col-md-3 col-lg-3">
                     
 
                     <div class="panel panel-default sidebar-menu">
@@ -157,60 +68,45 @@ label {
                     </div> -->
                 </div>
 
-                <div class="col-md-9" ng-clock ng-show="!productDetail">
-                    <div class="col-sm-12">
-                        <div class="col-sm-4" ng-repeat="p in products" style="margin-top:25px">
+                <div class="col-xs-12 col-sm-8 col-md-9 col-lg-9 pd768-0" ng-clock ng-show="!productDetail">
+                    <div class="col-sm-12 pd768-0">
+                        <div class="col-xs-12 col-sm-4 pd768-0 w568-50" ng-repeat="p in products">
                              <div class="col-xs-12" >
-                                <div class="col-lg-12 " style="margin:10px">
+                                <div class="col-lg-12">
                                     <img style="cursor:pointer" ng-src="./uploads/{{p.pic}}" width="128px" height="198px" ng-click="getProductDetail(p.id_product)">
                                 </div>
-                                <div class=" col-lg-12" >
-                                        <div class="col-lg-12"> 
+                                <div class="col-xs-12 no-padding">
+                                    <div class=" col-lg-12 m-5">
+                                        <div class="col-lg-12 no-padding"> 
                                             <a style="cursor:pointer" ng-click="getProductDetail(p.id_product)"><strong>{{p.name}}</strong></a>
                                         </div>
-                                        <!-- <a style="cursor:pointer" ng-click="getProductDetail(p.id_product)"><strong>{{p.name}}</strong></a>
-                                        <br>
-                                        
-                                        <span class="col-lg-12 " ng-show="!p.copies||p.copies<=0">
-                                            <span style="color:grey" class="text-left" > {{p.author}}</span>
-                                            <span style="color:grey" class="text-right">
-                                                Out of stock
-                                            </span>
-                                        </span>
-                                        <span class="col-lg-12 text-right" ng-show="p.copies&&p.copies>0">
-                                            <span style="color:grey"> {{p.author}}</span>
-                                        </span> -->
-
-                                    <!-- <div class="col-xs-12" ng-show="p.copies>0">
-                                        <button id="por_{{$index}}" class="btn btn-primary" ng-click="addProductToCart(p)"><i class="fa fa-shopping-cart" ></i>Add to cart</button>
-                                    </div> -->
-                                    <!-- <div class="col-xs-12" >
-                                        <a ng-show="!p.copies||p.copies<=0" href="" class="btn btn-primary disabled" ><i class="fa fa-shopping-cart"></i></a>
-                                    </div> -->
-                                </div>
-                                <div class=" col-lg-12" >
-                                        <div class="col-lg-12"> 
+                                    </div>
+                                    <div class=" col-lg-12" >
+                                        <div class="col-lg-12 no-padding"> 
                                             <span style="color:grey" class="text-left" > {{p.author}}</span>
                                         </div>
-                                </div> 
-                                <div class=" col-lg-12" >
-                                        <div class="col-lg-12"> 
-                                            <span ng-show="!p.copies||p.copies<=0" style="color:grey" class="text-left" > <sttong>Out of stock</sttong></span>
+                                    </div> 
+                                    <div class=" col-lg-12 m-12">
+                                        <div class="col-lg-12 no-padding"> 
+                                            <span ng-show="!p.copies||p.copies<=0" class="text-left outofStock"> 
+                                                <strong>Out of stock</strong>
+                                            </span>
                                             <span ng-show="p.copies>0" style="color:grey" class="text-left" ><br> </span>
                                         </div>
-                                </div>      
-                             </div> 
+                                    </div>  
+                                </div>    
+                            </div> 
                         </div>
 
                     </div>
                     <!-- /.products -->
 
-                    <div class="" ng-show="products.length>0" style="margin-bottom:15px">
+                    <div class="col-xs-12 no-padding m-b-15 paginationBkr" ng-show="products.length>0">
 
-                        <div class="col-sm-12 col-md-4 text-left" style="margin:28px">
+                        <div class="col-sm-12 col-md-4 text-left p-28">
                                 Showing <strong>{{(startIndex*parseInt(limitIndex))+1}}</strong> to <strong>{{totalItems>(startIndex*parseInt(limitIndex))+parseInt(limitIndex)?(startIndex*parseInt(limitIndex))+parseInt(limitIndex):totalItems}}</strong> of <strong>{{totalItems}}</strong> products
                         </div>
-                        <div class="col-lg-6 text-right">
+                        <div class="col-xs-12 col-sm-12 text-right">
                         <nav aria-label="Product page navigation">
                             <ul class = "pagination">
                                <li><a class="" ng-class="{'linkDisabled':startIndex == 0}" ng-disabled="startIndex == 0" ng-click="startIndex = startIndex - 1; setPage(startIndex, 'products'); loadingBarShow = true;"><i class="fa fa-angle-double-left" aria-hidden="true" style="margin: 0!important"></i></a></li>
@@ -226,7 +122,7 @@ label {
                     </div>
                     
                     <div>
-                        <p class="text-muted" ng-if="!products||products.length==0">
+                        <p class="text-muted" ng-if="products.length==0">
                         <span ng-if="$root.searchString!=''">No Records Are Avaialble For Your Search.</span>
                         <span ng-if="$root.searchString==''">No Records.</span></p>
                     </div>
