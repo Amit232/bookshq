@@ -1,10 +1,5 @@
-#!python
-import urllib, json, cStringIO
 from openpyxl import Workbook
-# from PIL import Image
-from openpyxl import load_workbook
 import sys
-import time
 from collections import defaultdict
 from apiclient.discovery import build
 
@@ -14,6 +9,7 @@ wb = Workbook()
 sheet = wb.create_sheet(title="Books_metadata_2", index=0)
 api_key = "AIzaSyAPb8ehPUYe6q4qyLL0LUVz_3wJu4nmR7E"
 service = build('books', 'v1', developerKey=api_key)
+
 
 def get_book_title_from_txt_file(path_to_file):
     """
@@ -27,12 +23,14 @@ def get_book_title_from_txt_file(path_to_file):
     print book_title_list
     return book_title_list
 
+
 def get_author_name(data):
     try:
         return data["items"][0]["volumeInfo"]["authors"][0].encode(
             'ascii', 'ignore')
     except:
         return "Not Available"
+
 
 def get_book_description(data):
     try:
@@ -41,15 +39,18 @@ def get_book_description(data):
     except:
         return "Not Available"
 
+
 def get_isbn(data):
     return data["items"][0]["volumeInfo"]["industryIdentifiers"][0][
                 "identifier"].encode('ascii', 'ignore')
+
 
 def get_category(data):
     try:
         return data["items"][0]["volumeInfo"]["categories"][0]
     except:
         return "Not Available"
+
 
 def get_image_url(data):
     try:
@@ -58,17 +59,20 @@ def get_image_url(data):
     except:
         return "Not Available"
 
+
 def get_average_rating(data):
     try:
         return data["items"][0]["volumeInfo"]["averageRating"]
     except:
         return "Not Available"
 
+
 def get_page_count(data):
     try:
         return data["items"][0]["volumeInfo"]["pageCount"]
     except:
         return "Not Available"
+
 
 def get_book_metadata():
     # Dictionary with book title as key and related information such as author, isbn, category, description etc..
@@ -78,8 +82,6 @@ def get_book_metadata():
         print "Book title is " + book_title
         request = service.volumes().list(source='public', q=book_title)
         response = request.execute()
-        # time.sleep(1)
-        # print "Reading json data after sleep"
         data = response
         print type(data)
         print "JSON data loaded"
@@ -101,6 +103,7 @@ def get_book_metadata():
     print failed_books_list
     return books_metadata_dictionary
 
+
 def dump_metadata_to_excel_file():
     global sheet
     global wb
@@ -116,7 +119,7 @@ def dump_metadata_to_excel_file():
     final_dictionary = get_book_metadata()
     print final_dictionary.keys()
     print sheet.max_row
-    for row, key in zip(range(2, 200), final_dictionary.keys()):
+    for row, key in zip(range(2, 900), final_dictionary.keys()):
         try:
             sheet["A" + str(row)] = key
             sheet["B" + str(row)] = final_dictionary[key]["author"]
@@ -124,11 +127,11 @@ def dump_metadata_to_excel_file():
             sheet["D" + str(row)] = final_dictionary[key]["category"]
             sheet["E" + str(row)] = final_dictionary[key]["isbn"]
             sheet["F" + str(row)] = final_dictionary[key]["image_url"]
-            # sheet["G" + str(row)] = final_dictionary[key]["average_rating"]
+            sheet["G" + str(row)] = final_dictionary[key]["average_rating"]
             sheet["H" + str(row)] = final_dictionary[key]["pageCount"]
         except Exception as e:
             print("Exception ", e , " occured for " + key)
             continue
 
-    wb.save("Metadata_134_1.xlsx")
+    wb.save("Metadata.xlsx")
 dump_metadata_to_excel_file()
