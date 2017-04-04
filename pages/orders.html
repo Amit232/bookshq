@@ -56,34 +56,34 @@ h1 { font-size: 1.5em; margin: 10px; }
 </style>
 <div id="content"  >
    <div class="container">
-                <div class="col-md-12">
+                <div class="col-xs-12">
                     <ul class="nav nav-tabs" >
-                        <li class="active" ng-init="showOrdersD=true;" ng-click="showOrdersD=true;" ><a   ><span ng-class="{'gcolor':showOrdersD,'bcolor':!showOrdersD}">Orders</span></a></li>
-                        <li class="active" ng-click="showOrdersD=false;"><a  ><span ng-class="{'gcolor':!showOrdersD,'bcolor':showOrdersD}" >Lender Products</span></a></li>
+                        <li class="active"  ng-init="showOrdersD=true;" ng-click="showOrdersD=true;" ><a href=""><span class="clickable" ng-class="{'gcolor':showOrdersD,'bcolor':!showOrdersD}">Your Orders</span></a></li>
+                        <li class="active"  ng-click="showOrdersD=false;"><a href=""><span class="clickable" ng-class="{'gcolor':!showOrdersD,'bcolor':showOrdersD}" >Books Lent</span></a></li>
                         
                     </ul>
                 </div>
 
-                <div class="col-md-12" id="basket" >
+                <div class="col-xs-12" id="basket" >
                 <div class="tab-content">
                     <div class="box" id="orders"  class="tab-pane" ng-show="showOrdersD">
                        
                         <form >
 
-                            <h1>Orders</h1>
+                            <h1>List of orders</h1>
                             <p class="text-muted" ng-if="!orders||orders.length==0">Currently there are no orders</p>
                            <!--  <p class="text-muted" ng-if="$root.cartProducts.length>0">You currently have {{$root.cartProducts.length}} item(s) in your cart.</p> -->
                             <div class="table-responsive" ng-if="orders.length>0">
                                 <table class="table">
                                     <thead>
                                         <tr>
-                                            <th >Books</th>
+                                            <th ></th>
                                             <th >Title</th>
                                             <th>Order Status</th>
                                             <th>Order Date</th>
                                             <th>Delivered Date</th>
                                             <th>Cancel Order</th>
-                                            <th >Complete</th>
+                                            <th >Return Book</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -97,7 +97,19 @@ h1 { font-size: 1.5em; margin: 10px; }
                                             <td><a href="">{{order.name}}</a>
                                             </td>
                                             <td>
+                                                <span ng-if="order.transaction_status=='cancelled'">
+                                                    Cancelled
+                                                </span>
+                                                <span ng-if="order.transaction_status=='in_progress'">
+                                                    Return is in progress
+                                                </span>
+                                                <span ng-if="order.transaction_status=='delivered'">
+                                                    Delivered
+                                                </span>
+                                                <span ng-if="order.transaction_status!='in_progress'&&order.transaction_status!='cancelled'&&order.transaction_status!='delivered'">
+                                                    
                                                 {{order.transaction_status}}
+                                                </span>
                                             </td> 
                                             <td>{{order.ordered_date}}</td>
                                             <td>{{order.date_issued}}</td>
@@ -132,8 +144,8 @@ h1 { font-size: 1.5em; margin: 10px; }
                        
                         <form >
 
-                            <h1>Lender Products</h1>
-                            <p class="text-muted" ng-if="!lenderedProducts||lenderedProducts.length==0">Currently there are no lendered products available</p>
+                            <h1>Books Lent</h1>
+                            <p class="text-muted" ng-if="!lenderedProducts||lenderedProducts.length==0">You have not lent any book as of now</p>
                            <!--  <p class="text-muted" ng-if="$root.cartProducts.length>0">You currently have {{$root.cartProducts.length}} item(s) in your cart.</p> -->
                             <div class="table-responsive" ng-if="lenderedProducts.length>0">
                                 <table class="table">
@@ -156,7 +168,7 @@ h1 { font-size: 1.5em; margin: 10px; }
                                             <td>
                                                 {{order.date_issued}}
                                             </td> 
-                                             <td >10Rs/Day
+                                             <td ><i class="fa fa-inr" aria-hidden="true"></i> {{amoutPerRent}}/Day
                                             </td>
                                         </tr>
                                     </tbody>
@@ -176,7 +188,11 @@ h1 { font-size: 1.5em; margin: 10px; }
               </div>    
 
             </div>
-            <div class="modal fade" id="returnreview" tabindex="0" role="dialog" aria-labelledby="Review" aria-hidden="true" data-backdrop="static">
+          
+
+  </div>
+</div>
+  <div class="modal fade" id="returnreview" tabindex="0" role="dialog" aria-labelledby="Review" aria-hidden="true" data-backdrop="static">
             <div class="modal-dialog modal-lg">
                     <div class="modal-content" style="width:80%;height:400px;">
                         <div class="modal-header">
@@ -220,6 +236,3 @@ h1 { font-size: 1.5em; margin: 10px; }
                     </div>
                 </div>
             </div>
-
-  </div>
-</div>

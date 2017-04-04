@@ -12,7 +12,7 @@ $config['database'] =   DB_NAME;
 
 //require_once ('libraries/Google/autoload.php');
 
-error_reporting(-1);
+error_reporting(0);
 /******** Autoload Function **********/
 function autoLoad($className){
     if (preg_match('/[^a-z0-9\-_.]/i', $className)) {
@@ -41,25 +41,28 @@ function phpmailerObj($to, $name, $subject, $message, $body, $altBody)
       //Send Mail to the student
     require_once 'classes/PHPMailer/class.phpmailer.php';
     $mail = new PHPMailer;
-    
-    $mail->From = "chiranjeeviadi@gmail.com";
-    $mail->FromName = "Full Name";
     $mail->isSMTP(); 
+    $mail->SMTPDebug  = 0;
+    $mail->From = "sachin@chainreader.in";
+    $mail->FromName = "Chain Readers";
+    $mail->Host = 'server31.hostwhitelabel.com';                 // Specify main and backup server
+    $mail->Username =  'sachin@chainreader.in'; 
+    $mail->Password = 'sachin@12345';  
     $mail->AddAddress($to,$name);  // Add a recipient
     $mail->Subject = $subject;
     $mail->Body    = $body;
     $mail->AltBody =  $altBody;
     $mail->SMTPSecure = 'tls'; 
-    $mail->Port = 587;
+    $mail->Port = 25;
     $mail->IsHTML(true);  
     ///return $mail->Send();
     if(!$mail->send()) 
     {
-        echo "Mailer Error: " . $mail->ErrorInfo;
+        //echo "Mailer Error: " . $mail->ErrorInfo;
     } 
     else 
     {
-        echo "Message has been sent successfully";
+        //echo "Message has been sent successfully";
         return true;   
     }
 }
@@ -71,10 +74,9 @@ $client_secret = '2nljwGNjASdvb_GLJXn9_5Zo';
 $redirect_uri = 'http://127.0.0.1/s/index.php';
 $config['due_days']=20;
 $config['per_date_rs']=5;
-
 $config['custom_sms_message']='We have received your order for order number';
 $config['custom_sms_message1']=' and it is being processed. You can expect delivery within 3 days';
-$config['sendSMS'] =false;
+$config['sendSMS'] =true;
 function sendSms($number,$message,$sender){
    //Your authentication key
     if($config['sendSMS']){
@@ -131,5 +133,18 @@ function sendSms($number,$message,$sender){
 curl_close($ch);
     }
 }
+
+
+define("DUE_DAYS",20);
+define("SHOW_AMOUNT_ON_RETURNING",true);
+define("SERVER_URL", 'https://chainreader.in/');
+define("RSPERDAY", '5');
+define("SEND_WELCOME_EMAIL", false);
+define("SEND_INVOICE_EMAIL", false);
+define("SEND_ORDER_DELIVERY_EMAIL",false);
+define("SEND_LENDER_BOOK_EMAIL",false);
+define("SEND_ORDER_RETURN_EMAIL",false);
+define("SEND_COMPLETED_RETURN__EMAIL",false);
+
 ?>
 

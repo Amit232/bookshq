@@ -100,320 +100,120 @@ input[type=checkbox]:checked + label:before { letter-spacing: 5px; } /* allow sp
 label {
     font-size: 14px;
 }
+.short-text {overflow: hidden; height: 80px;}
+
+.full-text{padding-top: 10px !important; height: auto;}
+
 </style>
-<div class="content" style="margin-top:20px">
+<div class="spinner" title="Loading...." ng-cloak ng-show="loadingBarShow">
+  <span class="ball-1"></span>
+  <span class="ball-2"></span>
+  <span class="ball-3"></span>
+  <span class="ball-4"></span>
+  <span class="ball-5"></span>
+  <span class="ball-6"></span>
+  <span class="ball-7"></span>
+  <span class="ball-8"></span>
+</div>
+<div class="content" >
     <div class="container">
-        <div class="col-md-12" >
-                    <div class="row" id="productMain">
-                        <div class="col-sm-3" style="margin-bottom:10px;padding: 20px;margin:0 0 25px">
-                            <div  class="txt-center" style="margin-top:11px">
-                                <img  ng-src="./uploads/{{single_product.pic}}" alt="" class="img-responsive" width="150px" height="220px">
-                            </div>
-                                <p style="margin-top:20px" class="text-left buttons" ng-show="single_product.copies>0">
-                                    <a ng-show="!showGoToCart" id="gotocartmessage"  ng-click="addProductToCart(single_product)" class="btn btn-primary" ><i class="fa fa-shopping-cart" ></i> Add to cart</a> 
-                                    <a ng-show="showGoToCart" href="#/basket" class="btn btn-primary" ><i class="fa fa-shopping-cart" ></i> Go to cart</a> 
-                                    <!-- <a href="" class="btn btn-default"><i class="fa fa-heart"></i> Add to wishlist</a> -->
-                                </p>
-                                 <p style="margin-top:20px"  class="text-left buttons" ng-show="!single_product.copies||single_product.copies<=0">
-                                    <button class="btn btn-primary disabled">
-                                        Out of stock
-                                    </button>
-                                    <!-- <a href="" class="btn btn-default"><i class="fa fa-heart"></i> Add to wishlist</a> -->
-                                </p>
-                                <div class="form-group">
-                                    <h4 class="text-center">Select your techpark?</h4>
-                                     <div class="radio" ng-repeat="o in oraganizations">
-                                      <label ><input id="radio_{{$index}}" type="radio" name="optradio" ng-model="$parent.selecttechpark" ng-value="{{o.id_organization}}">{{o.name}}</label>
-                                     </div>  
-                                     <div class="radio" data-toggle="collapse" data-target="#demo">
-                                      <label><input type="radio" name="optradio" ng-model="selecttechpark" value="not_avaiable">Not Available</label>
-                                     </div>  
-                                     
-                                    <div id="demo" class="collapse">
-                                        <span>Please drop the techpark name so that we can reach out for your service soon.</span>
-                                        <form id="sendReq" name="sendReq">
-                                        <div class="form-group">
-                                            <input type="text"  name="techpark1" id="techpark1" ng-model="techpark" class="form-control" placeholder="Techpark name">
-                                        </div>
-                                        <!-- <div class="form-group">
-                                            <input type="text" class="form-control" id="number-modal" placeholder="Contact Details">
-                                        </div> -->
-                                        <button class="btn btn-primary" ng-click="sendOrganizationReq()"><i class="fa fa-sign-in"></i> Send Request</button>
-                                    </div> 
-                                </div>
-<!-- 
-                            <div class="ribbon sale">
-                                <div class="theribbon">SALE</div>
-                                <div class="ribbon-background"></div>
-                            </div>
-
-                            <div class="ribbon new">
-                                <div class="theribbon">NEW</div>
-                                <div class="ribbon-background"></div>
-                            </div> -->
-                            <!-- /.ribbon -->
-
-                        </div>
-                        <div class="col-sm-8">
-                            <div class="box courses_years">
-                                
-                                <h2 class="text-center">{{single_product.name}}</h2>
-<!--                                 <p class="price">$124.00</p>
- -->                            <span class="text-center">
-                                <h4><span style="font-style:italic;color:grey;margin: 0px 10px;">by </span>{{single_product.author}}</h4>
-                                <div class="col-sm-12">
-                                <fieldset class="rating linkDisabled1" style="    margin: -7px -27px;" >
-                                    <input type="radio" id="star5" name="rating" value="5.00" ng-model="rating"/><label class = "full" for="star5" title="Awesome - 5 stars" ></label>
-                                    <input type="radio" id="star4half" name="rating" ng-model="rating" value="4.50" /><label class="half" for="star4half" title="Pretty good - 4.5 stars"></label>
-                                    <input type="radio" ng-model="rating" id="star4" name="rating" value="4.00" /><label class = "full" for="star4" title="Pretty good - 4 stars"></label>
-                                    <input type="radio" ng-model="rating" id="star3half" name="rating" value="3.50" /><label class="half" for="star3half" title="Meh - 3.5 stars"></label>
-                                    <input type="radio" ng-model="rating" id="star3" name="rating" value="3.00" /><label class = "full" for="star3" title="Meh - 3 stars"></label>
-                                    <input type="radio"  ng-model="rating" id="star2half" name="rating" value="2.50" /><label class="half" for="star2half" title="Kinda bad - 2.5 stars"></label>
-                                    <input type="radio" ng-model="rating" id="star2" name="rating" value="2.00" /><label class = "full" for="star2" title="Kinda bad - 2 stars"></label>
-                                    <input type="radio" ng-model="rating" id="star1half" name="rating" value="1.50" /><label class="half" for="star1half" title="Meh - 1.5 stars"></label>
-                                    <input type="radio" ng-model="rating" id="star1" name="rating" value="1.00" /><label class = "full" for="star1" title="Sucks big time - 1 star"></label>
-                                    <input type="radio" ng-model="rating" id="starhalf" name="rating" value="0.50" /><label class="half" for="starhalf" title="Sucks big time - 0.5 stars"></label>
-                                </fieldset>
-                                </div>
-                                </span>
-                                
-                                <span style="text-align:left">
-                                <h4>About the book</h4>
-                                <p><span ng-bind-html="to_trusted(single_product.description)" >
-                                </p>
-                                <hr>
-                                <div class="col-lg-12">
-                                </div>
-                                <h4><span ng-if="reviews.length>0">Reviews</span> </h4> 
-                                <blockquote ng-repeat="review in reviews">
-                                    <p><em>{{review.description}}.</em>
-                                    </p>
-                                    by
-                                    {{review.name}}
-                                </blockquote>
-                                </span>
-
-
-
-                            </div>
-
-                        </div>
-
+        <div class="col-xs-12" >
+            <div class="row" id="productMain">
+                <div class="col-sm-3" style="margin-bottom:10px;padding: 20px;margin:0 0 25px">
+                    <div  class="txt-left" style="margin-top:11px">
+                        <img  ng-src="./uploads/{{single_product.pic}}" alt=""  width="150px" height="220px">
                     </div>
-
-
-                   
-
-                   <!--  <div class="row same-height-row">
-                        <div class="col-md-3 col-sm-6">
-                            <div class="box same-height" style="height: 379px;">
-                                <h3>You may also like these products</h3>
-                            </div>
+                        <p style="margin-top:20px" class="text-left buttons" ng-cloak ng-cloak ng-show="single_product.copies>0">
+                            <a ng-cloak ng-show="!showGoToCart" id="gotocartmessage"  ng-click="addProductToCart(single_product)" class="btn btn-primary" ><i class="fa fa-shopping-cart" ></i> Add to Cart</a> 
+                            <a ng-cloak ng-show="showGoToCart" href="#/basket" class="btn btn-primary" ><i class="fa fa-shopping-cart" ></i> Go to Cart</a> 
+                            <!-- <a href="" class="btn btn-default"><i class="fa fa-heart"></i> Add to wishlist</a> -->
+                        </p>
+                         <p style="margin-top:20px"  class="text-left buttons" ng-cloak ng-cloak ng-show="!single_product.copies||single_product.copies<=0">
+                            <button class="btn btn-primary disabled">
+                                Out of stock
+                            </button>
+                            <!-- <a href="" class="btn btn-default"><i class="fa fa-heart"></i> Add to wishlist</a> -->
+                        </p>
+                        <div class="form-group">
+                            <h4 class="text-left">Select your techpark</h4>
+                             <div class="radio" ng-repeat="o in oraganizations">
+                              <label class="radio"><input id="radio_{{$index}}" type="radio" name="optradio" ng-model="$parent.selecttechpark" ng-value="{{o.id_organization}}">{{o.name}}</label>
+                             </div>  
+                             <div class="radio" data-toggle="collapse" data-target="#demo">
+                              <label class="radio"><input type="radio" name="optradio" ng-model="selecttechpark" value="not_avaiable">Not Available</label>
+                             </div>  
+                             
+                            <div id="demo" class="collapse">
+                                <span>Please drop the techpark name so that we can reach out for your service soon.</span>
+                                <form id="sendReq" name="sendReq">
+                                <div class="form-group">
+                                    <input type="text"  name="techpark1" id="techpark1" ng-model="techpark" class="form-control" placeholder="Techpark name">
+                                </div>
+                                <!-- <div class="form-group">
+                                    <input type="text" class="form-control" id="number-modal" placeholder="Contact Details">
+                                </div> -->
+                                <button class="btn btn-primary" ng-click="sendOrganizationReq()"><i class="fa fa-sign-in"></i> Send Request</button>
+                            </div> 
                         </div>
-
-                        <div class="col-md-3 col-sm-6">
-                            <div class="product same-height" style="height: 379px;">
-                                <div class="flip-container">
-                                    <div class="flipper">
-                                        <div class="front">
-                                            <a href="detail.html">
-                                                <img src="img/product2.jpg" alt="" class="img-responsive">
-                                            </a>
-                                        </div>
-                                        <div class="back">
-                                            <a href="detail.html">
-                                                <img src="img/product2_2.jpg" alt="" class="img-responsive">
-                                            </a>
-                                        </div>
-                                    </div>
-                                </div>
-                                <a href="detail.html" class="invisible">
-                                    <img src="img/product2.jpg" alt="" class="img-responsive">
-                                </a>
-                                <div class="text">
-                                    <h3>Fur coat</h3>
-                                    <p class="price">$143</p>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="col-md-3 col-sm-6">
-                            <div class="product same-height" style="height: 379px;">
-                                <div class="flip-container">
-                                    <div class="flipper">
-                                        <div class="front">
-                                            <a href="detail.html">
-                                                <img src="img/product1.jpg" alt="" class="img-responsive">
-                                            </a>
-                                        </div>
-                                        <div class="back">
-                                            <a href="detail.html">
-                                                <img src="img/product1_2.jpg" alt="" class="img-responsive">
-                                            </a>
-                                        </div>
-                                    </div>
-                                </div>
-                                <a href="detail.html" class="invisible">
-                                    <img src="img/product1.jpg" alt="" class="img-responsive">
-                                </a>
-                                <div class="text">
-                                    <h3>Fur coat</h3>
-                                    <p class="price">$143</p>
-                                </div>
-                            </div>
-                        </div>
-
-
-                        <div class="col-md-3 col-sm-6">
-                            <div class="product same-height" style="height: 379px;">
-                                <div class="flip-container">
-                                    <div class="flipper">
-                                        <div class="front">
-                                            <a href="detail.html">
-                                                <img src="img/product3.jpg" alt="" class="img-responsive">
-                                            </a>
-                                        </div>
-                                        <div class="back">
-                                            <a href="detail.html">
-                                                <img src="img/product3_2.jpg" alt="" class="img-responsive">
-                                            </a>
-                                        </div>
-                                    </div>
-                                </div>
-                                <a href="detail.html" class="invisible">
-                                    <img src="img/product3.jpg" alt="" class="img-responsive">
-                                </a>
-                                <div class="text">
-                                    <h3>Fur coat</h3>
-                                    <p class="price">$143</p>
-
-                                </div>
-                            </div>
-                        </div>
-
-                    </div> -->
-
-                   <!--  <div class="row same-height-row">
-                        <div class="col-md-3 col-sm-6">
-                            <div class="box same-height" style="height: 379px;">
-                                <h3>Products viewed recently</h3>
-                            </div>
-                        </div>
-
-
-                        <div class="col-md-3 col-sm-6">
-                            <div class="product same-height" style="height: 379px;">
-                                <div class="flip-container">
-                                    <div class="flipper">
-                                        <div class="front">
-                                            <a href="detail.html">
-                                                <img src="img/product2.jpg" alt="" class="img-responsive">
-                                            </a>
-                                        </div>
-                                        <div class="back">
-                                            <a href="detail.html">
-                                                <img src="img/product2_2.jpg" alt="" class="img-responsive">
-                                            </a>
-                                        </div>
-                                    </div>
-                                </div>
-                                <a href="detail.html" class="invisible">
-                                    <img src="img/product2.jpg" alt="" class="img-responsive">
-                                </a>
-                                <div class="text">
-                                    <h3>Fur coat</h3>
-                                    <p class="price">$143</p>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="col-md-3 col-sm-6">
-                            <div class="product same-height" style="height: 379px;">
-                                <div class="flip-container">
-                                    <div class="flipper">
-                                        <div class="front">
-                                            <a href="detail.html">
-                                                <img src="img/product1.jpg" alt="" class="img-responsive">
-                                            </a>
-                                        </div>
-                                        <div class="back">
-                                            <a href="detail.html">
-                                                <img src="img/product1_2.jpg" alt="" class="img-responsive">
-                                            </a>
-                                        </div>
-                                    </div>
-                                </div>
-                                <a href="detail.html" class="invisible">
-                                    <img src="img/product1.jpg" alt="" class="img-responsive">
-                                </a>
-                                <div class="text">
-                                    <h3>Fur coat</h3>
-                                    <p class="price">$143</p>
-                                </div>
-                            </div>
-                        </div>
-
-
-                        <div class="col-md-3 col-sm-6">
-                            <div class="product same-height" style="height: 379px;">
-                                <div class="flip-container">
-                                    <div class="flipper">
-                                        <div class="front">
-                                            <a href="detail.html">
-                                                <img src="img/product3.jpg" alt="" class="img-responsive">
-                                            </a>
-                                        </div>
-                                        <div class="back">
-                                            <a href="detail.html">
-                                                <img src="img/product3_2.jpg" alt="" class="img-responsive">
-                                            </a>
-                                        </div>
-                                    </div>
-                                </div>
-                                <a href="detail.html" class="invisible">
-                                    <img src="img/product3.jpg" alt="" class="img-responsive">
-                                </a>
-                                <div class="text">
-                                    <h3>Fur coat</h3>
-                                    <p class="price">$143</p>
-
-                                </div>
-                            </div>
-                        </div>
-
-                    </div> -->
 
                 </div>
-            </div>
-            <!-- /.container -->
-        </div>
-<div class="modal fade" id="techpark" tabindex="0" role="dialog" aria-labelledby="Login" aria-hidden="true">
+                <div class="col-sm-8" style="margin-bottom:10px;padding: 20px;margin:0 0 25px">
+                    <div class="box courses_years">
+                        
+                        <span class="col-sm-12">
+                            <h2 class="text-left" >{{single_product.name}}</h2>
+<!--                                 <p class="price">$124.00</p>
+-->                            </span>
+                        <span class="col-sm-12 text-left">
+                        <h4><span style="font-style:italic;color:grey;margin: 0px 10px;">by </span>{{single_product.author}}</h4>
+                        <div class="col-sm-12" style="margin-left: 8px;">
+                        <fieldset class="rating linkDisabled1" style="    margin: -7px -27px;" >
+                            <input type="radio" id="star5" name="rating" value="5.00" ng-model="rating"/><label class = "full" for="star5" title="Awesome - 5 stars" ></label>
+                            <input type="radio" id="star4half" name="rating" ng-model="rating" value="4.50" /><label class="half" for="star4half" title="Pretty good - 4.5 stars"></label>
+                            <input type="radio" ng-model="rating" id="star4" name="rating" value="4.00" /><label class = "full" for="star4" title="Pretty good - 4 stars"></label>
+                            <input type="radio" ng-model="rating" id="star3half" name="rating" value="3.50" /><label class="half" for="star3half" title="Meh - 3.5 stars"></label>
+                            <input type="radio" ng-model="rating" id="star3" name="rating" value="3.00" /><label class = "full" for="star3" title="Meh - 3 stars"></label>
+                            <input type="radio"  ng-model="rating" id="star2half" name="rating" value="2.50" /><label class="half" for="star2half" title="Kinda bad - 2.5 stars"></label>
+                            <input type="radio" ng-model="rating" id="star2" name="rating" value="2.00" /><label class = "full" for="star2" title="Kinda bad - 2 stars"></label>
+                            <input type="radio" ng-model="rating" id="star1half" name="rating" value="1.50" /><label class="half" for="star1half" title="Meh - 1.5 stars"></label>
+                            <input type="radio" ng-model="rating" id="star1" name="rating" value="1.00" /><label class = "full" for="star1" title="Sucks big time - 1 star"></label>
+                            <input type="radio" ng-model="rating" id="starhalf" name="rating" value="0.50" /><label class="half" for="starhalf" title="Sucks big time - 0.5 stars"></label>
+                        </fieldset>
+                        <label class="text" style="margin-left:25px"> "as per Google ratings"</label>
 
+                        </div>
+                        </span>
+                        
+                        <span class="col-sm-12" style="text-align:left;margin-left: -10px;">
+                        <span class="col-sm-12" style="text-align:left;margin-left: -1px;"><h4>About the book</h4></span>
+                        <p ng-class="{'short-text':!showmore,'full-text':showmore}" class="col-sm-12" ><span ng-bind-html="to_trusted(single_product.description)" >
+                        </p>
+                        <hr>
+                        <div class="col-lg-12">
+                        </div>
+                        <span ng-show="single_product.description.length>50&&!showmore" class="col-sm-12 text-right" ng-show="" ng-click="showmore=true"><a href="" style="color:blue">Read more</a></span>
+                        <span class="text-right col-sm-12" ng-show="single_product.description.length>50&&showmore" ng-click="showmore=false"><a href="" style="color:blue"> Read Less</a></span>
+                        
+                        <!-- <h4><span ng-cloak ng-if="reviews.length>0">Reviews</span> </h4> 
+                        <blockquote ng-repeat="review in reviews">
+                            <p><em>{{review.description}}.</em>
+                            </p>
+                            by
+                            {{review.name}}
+                        </blockquote> -->
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="techpark" tabindex="0" role="dialog" aria-labelledby="Login" aria-hidden="true">
             <div class="modal-dialog">
- 
                 <div class="modal-content">
                     <div class="modal-body">
-
-                        <!-- <p class="text-center btn btn-default btn-sm btn-primary"  >Not available?</p>
-                        <p class="text-center text-muted" id="demo" class="collapse">
-                            <div class="form-group">
-                                <input type="text" class="form-control" id="email-modal" placeholder="TechPartk Name">
-                            </div>
-                            <div class="form-group">
-                                <textarea col='2' rows="2" class="form-control" id="email-modal"  placeholder="TechPartk Address">
-                                    
-                                </textarea>
-                            </div>
-                            <div class="form-group">
-                                <input type="text" class="form-control" id="number-modal" placeholder="Contact Details">
-                            </div>
-
-                              <button class="btn btn-primary"><i class="fa fa-sign-in"></i> Send Request</button>
-                        </p>
-                        -->
                         <h3>If your techpark is not available in list?Fill the following details.></h3>
-                          
-                            <div id="demo">
+                        <div id="demo">
                             <form id="sendReq" name="sendReq">
                                 <div class="form-group">
                                     <input type="text"  name="techpark1" id="techpark1" ng-model="techpark" class="form-control" placeholder="Techpark name">
@@ -427,11 +227,9 @@ label {
                                     <input type="text" class="form-control" id="number-modal" placeholder="Contact Details">
                                 </div> -->
                                 <button class="btn btn-primary" ng-click="sendOrganizationReq()"><i class="fa fa-sign-in"></i> Send Request</button>
-                            </div>
-                          </form>
+                            </form>
+                        </div>
                     </div>
-
-
                 </div>
             </div>
         </div>

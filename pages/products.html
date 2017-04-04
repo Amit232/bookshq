@@ -1,7 +1,5 @@
-<style type="text/css">
 
-</style>
-<div class="spinner" title="Loading...." ng-show="loadingBarShow">
+<div class="spinner" title="Loading...." ng-cloak ng-show="loadingBarShow">
   <span class="ball-1"></span>
   <span class="ball-2"></span>
   <span class="ball-3"></span>
@@ -11,18 +9,18 @@
   <span class="ball-7"></span>
   <span class="ball-8"></span>
 </div>
-<div id="content" style="margin-top:10px">
+<div id="content" >
             <div class="container">
                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 pd768-0">
-                    <ul class="breadcrumb">
+                    <ul class="breadcrumb ">
                        <nav >
                           <a class="breadcrumb-item" style="color:black" data-ui-sref="home">Home></a>
                           <span class="breadcrumb-item active" style="color:#777" data-ui-sref="products">Products</span>
-                          <a ng-if="backtoProductPage" ng-click="backToProductList()" style="color:black">Back to products list</a>
+                          <a ng-cloak ng-if="backtoProductPage" ng-click="backToProductList()" style="color:black">Back to products list</a>
                         </nav>
                        <!--  <li><a class="breadcrumb-item" data-ui-sref="home"  > <span class="breadcrumb-item active">Products</span></a>
                         </li>
-                        <li ng-if="backtoProductPage" ><a ng-click="backToProductList()" style="color:black">Back to products list</a>
+                        <li ng-cloak ng-if="backtoProductPage" ><a ng-click="backToProductList()" style="color:black">Back to products list</a>
                         </li> -->
                     </ul>
                 </div>
@@ -36,7 +34,7 @@
                             <h3 class="panel-title">Categories <a class="btn btn-xs btn-danger1 pull-right" href="" ng-click="clearAllElemts()"><i class="fa fa-times-circle"></i> Clear</a></h3>
                         </div>
 
-                        <div class="panel-body" ng-if="categories.length>0">
+                        <div class="panel-body" ng-cloak ng-if="categories.length>0">
 
                             <form>
                                <!--  <div class="form-group">
@@ -48,7 +46,7 @@
                                     </div>
                                 </div> -->
                                 <div ng-repeat="c in categories track by $index">
-                                  <input id="box{{$index}}" type="checkbox" ng-model="categoriesIds[$index]" ng-true-value="1" ng-false-value="" type="checkbox" ng-change="startIndex=0;$limitIndex=6;getAllProducts($index);"/>
+                                  <input id="box{{$index}}" type="checkbox" ng-model="categoriesIds[$index]" ng-true-value="1" ng-false-value="" type="checkbox" ng-change="startIndex=0;$limitIndex=6;getAllProductsMain($index);"/>
                                   <label for="box{{$index}}">{{c.name}}</label>
                                 </div>
 
@@ -68,7 +66,7 @@
                     </div> -->
                 </div>
 
-                <div class="col-xs-12 col-sm-8 col-md-9 col-lg-9 pd768-0" ng-clock ng-show="!productDetail">
+                <div class="col-xs-12 col-sm-8 col-md-9 col-lg-9 pd768-0" ng-clock ng-cloak ng-show="!productDetail">
                     <div class="col-sm-12 pd768-0">
                         <div class="col-xs-12 col-sm-4 pd768-0 w568-50" ng-repeat="p in products">
                              <div class="col-xs-12" >
@@ -88,10 +86,10 @@
                                     </div> 
                                     <div class=" col-lg-12 m-12">
                                         <div class="col-lg-12 no-padding"> 
-                                            <span ng-show="!p.copies||p.copies<=0" class="text-left outofStock"> 
+                                            <span ng-cloak ng-show="!p.copies||p.copies<=0" class="text-left outofStock"> 
                                                 <strong>Out of stock</strong>
                                             </span>
-                                            <span ng-show="p.copies>0" style="color:grey" class="text-left" ><br> </span>
+                                            <span ng-cloak ng-show="p.copies>0" style="color:grey" class="text-left" ><br> </span>
                                         </div>
                                     </div>  
                                 </div>    
@@ -101,12 +99,12 @@
                     </div>
                     <!-- /.products -->
 
-                    <div class="col-xs-12 no-padding m-b-15 paginationBkr" ng-show="products.length>0">
+                    <div class="col-xs-12 no-padding paginationBkr" ng-cloak ng-show="products.length>0">
 
-                        <div class="col-sm-12 col-md-4 text-left p-28">
+                        <div class="col-sm-12 col-md-4 text-left margin17">
                                 Showing <strong>{{(startIndex*parseInt(limitIndex))+1}}</strong> to <strong>{{totalItems>(startIndex*parseInt(limitIndex))+parseInt(limitIndex)?(startIndex*parseInt(limitIndex))+parseInt(limitIndex):totalItems}}</strong> of <strong>{{totalItems}}</strong> products
                         </div>
-                        <div class="col-xs-12 col-sm-12 text-right">
+                        <div class="col-xs-12 col-sm-8 text-right ">
                         <nav aria-label="Product page navigation">
                             <ul class = "pagination">
                                <li><a class="" ng-class="{'linkDisabled':startIndex == 0}" ng-disabled="startIndex == 0" ng-click="startIndex = startIndex - 1; setPage(startIndex, 'products'); loadingBarShow = true;"><i class="fa fa-angle-double-left" aria-hidden="true" style="margin: 0!important"></i></a></li>
@@ -122,15 +120,15 @@
                     </div>
                     
                     <div>
-                        <p class="text-muted" ng-if="products.length==0">
-                        <span ng-if="$root.searchString!=''">No Records Are Avaialble For Your Search.</span>
-                        <span ng-if="$root.searchString==''">No Records.</span></p>
+                        <p class="text-muted" ng-cloak ng-if="products.length==0">
+                        <span ng-cloak ng-if="$root.searchString!=''">No Records Are Avaialble For Your Search.</span>
+                        <span ng-cloak ng-if="$root.searchString==''">No Records.</span></p>
                     </div>
 
 
                 </div>
                 <!-- /.col-md-9 -->
-                <div class="col-md-9" ng-clock ng-show="productDetail">
+                <div class="col-xs-9" ng-clock ng-cloak ng-show="productDetail">
                     <div class="row" id="productMain">
                         <div class="col-sm-4" style="    margin-left: 121px;" >
                             <div >
@@ -154,11 +152,11 @@
                                 <h1 class="text-center">{{single_product.name}}</h1>
 <!--                                 <p class="price">$124.00</p>
  -->
-                                <p class="text-center buttons" ng-show="single_product.copies>0">
-                                    <a href="" class="btn btn-primary" ng-click="addProductToCart(single_product)"><i class="fa fa-shopping-cart" ></i> Add to cart</a> 
+                                <p class="text-center buttons" ng-cloak ng-show="single_product.copies>0">
+                                    <a href="" class="btn btn-primary" ng-click="addProductToCart(single_product)"><i class="fa fa-shopping-cart" ></i> Add to Cart</a> 
                                     <!-- <a href="" class="btn btn-default"><i class="fa fa-heart"></i> Add to wishlist</a> -->
                                 </p>
-                                 <p class="text-center buttons" ng-show="!single_product.copies||single_product.copies<=0">
+                                 <p class="text-center buttons" ng-cloak ng-show="!single_product.copies||single_product.copies<=0">
                                     <a href="" class="btn btn-primary disabled"><i class="fa fa-shopping-cart"></i>Out of stock</a>
                                     <!-- <a href="" class="btn btn-default"><i class="fa fa-heart"></i> Add to wishlist</a> -->
                                 </p>

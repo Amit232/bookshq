@@ -60,10 +60,12 @@ class AdminController
       $dueDate =  date('Y-m-d', strtotime($updateInfo['date_issued']. ' + '.$dueDays.' days'));
       $updateInfo['due_date']=$dueDate;
       $updateInfo['status']=$status;
+      $mainTransactionID ="";
+      $adminObj = new Admin();
       for($i=0;$i<count($ids);$i++)
       {
         $trandId=$ids[$i];
-        $adminObj = new Admin();
+        $mainTransactionID = $trandId;
         $updateCondition=" id_sub_transaction ='$trandId'";
         $res = $adminObj->updateTransaction($updateInfo,$updateCondition);
         if($res||!$res){
@@ -85,6 +87,97 @@ class AdminController
           
         }
       
+      }
+      if($status=='delivered'){
+        if(SEND_ORDER_DELIVERY_EMAIL){
+
+
+          $productsDetails  =$adminObj->getSubTrasactionDetails($mainTransactionID);
+          if($productsDetails){
+
+            $to=$productsDetails[0]['user_email'];
+            $from='sachin@chainreader.in';
+            $url=SERVER_URL; 
+            $imgurl=SERVER_URL.'img/logo1.jpg';
+            $content = 'We are pleased to inform that the following book/s in your order #'.$productsDetails[0]['transaction_id_transaction'].' have been delivered. Enjoy Reading!.';
+            $subject='Delivery Confirmation for ChainReaders.in Order #'.$productsDetails[0]['transaction_id_transaction'];
+            $message = file_get_contents('../email_templates/delivery.html');
+            $message = str_replace('{url}', $url, $message);           
+            $message = str_replace('{name}', $productsDetails[0]['buyer_name'], $message);
+            $message = str_replace('{img}', $imgurl, $message);
+            $message = str_replace('{content}', $content, $message);
+            $message = str_replace('{orderpagelink}', SERVER_URL.'/#/orders', $message);
+
+            $body    = $message;
+            $altBody = '';
+            // call the phpmailerObj on mainConfig.php page
+            $mymail = phpmailerObj($to, $productsDetails[0]['buyer_name'], $subject, $message, $body, $altBody);
+            if($mymail){
+            }
+          }
+        }
+      }
+      if($status=='finished'){
+        if(SEND_COMPLETED_RETURN__EMAIL){
+
+
+          $productsDetails  =$adminObj->getSubTrasactionDetails($mainTransactionID);
+          if($productsDetails&&$productsDetails[0]['seler_id']&&$productsDetails[0]['seler_id']!=''){
+
+            $to=$productsDetails[0]['seller_email'];
+            $from='sachin@chainreader.in';
+            $url=SERVER_URL; 
+            $imgurl=SERVER_URL.'img/logo1.jpg';
+            $content = 'We are pleased to inform you that the book/s that you have uploaded have been returned to us. Please feel free to come and collect the book from our ChainReaders associate at your IT park on ( +1 day from the date the book has been returned to us )';
+
+            $subject= 'Book Return Order';
+            $message = file_get_contents('../email_templates/returnbook.html');
+            $message = str_replace('{url}', $url, $message);           
+            $message = str_replace('{name}', $productsDetails[0]['seler_name'], $message);
+            $message = str_replace('{img}', $imgurl, $message);
+            $message = str_replace('{content}', $content, $message);
+            $message = str_replace('{orderpagelink}', SERVER_URL.'/#/orders', $message);
+            $message1="";
+            $now = time(); // or your date as well
+            $date_issued = strtotime($productsDetails[0]['date_issued']);
+            $date_due = strtotime($productsDetails[0]['due_date']);
+            $datediff = $date_due - $date_issued;
+            if(SHOW_AMOUNT_ON_RETURNING){
+              $noOfdays = ($datediff / (60 * 60 * 24));
+              if($noOfdays>20){
+                $totalAmount = $noOfdays*RSPERDAY;
+                $totalAmountOwedByU = $totalAmount/2;
+              }else{
+                $totalAmount = (DUE_DAYS*RSPERDAY);
+                $totalAmountOwedByU = $totalAmount/2;
+              }
+            }else{
+              $noOfdays = ($datediff / (60 * 60 * 24));
+              $totalAmount ='-Currently its free-';
+              $totalAmountOwedByU = 'free';
+            }
+            $message1.='<tr>
+                        <td style="font-family:arial;font-size: 14px; vertical-align: middle; margin: 0; padding: 9px 0;" align="left">'.$productsDetails[0]['product_name'].'</td>
+                        <td style="font-family:arial;font-size: 14px; vertical-align: middle; margin: 0; padding: 9px 0;" align="left">'.RSPERDAY.'</td>
+                        <td style="font-family:arial; font-size: 14px; vertical-align: middle; margin: 0; padding: 9px 0;"  align="left">Rs '.$noOfdays.'/day</td>
+                         <td style="font-family:arial; font-size: 14px; vertical-align: middle; margin: 0; padding: 9px 0;"  align="left">Rs '.$totalAmount.'/day</td>
+                        </tr>
+                        <tr>
+                        <td>
+                          Total Amount Owed to you = '.$totalAmountOwedByU.'
+                        </td>
+                        </tr>';
+            $message = str_replace('{section_array}', $message1, $message);
+
+
+            $body    = $message;
+            $altBody = '';
+            // call the phpmailerObj on mainConfig.php page
+            $mymail = phpmailerObj($to, $productsDetails[0]['buyer_name'], $subject, $message, $body, $altBody);
+            if($mymail){
+            }
+          }
+        }
       }
       $message="Transaction updated successfully";
       return array('message'=>$message); 
@@ -121,7 +214,10 @@ class AdminController
       $insertInfo['name'] = ucfirst($product->name);
       $insertInfo['description'] = ucfirst($product->description);
       $insertInfo['author'] = ucfirst($product->author);
+      if(isset($product->ratings)&&$product->ratings!=''){
+              $insertInfo['ratings'] = $product->ratings;
 
+      }
       if($product->user_id_user&&$product->user_id_user!='')
       {
               $insertInfo['user_id_user'] =$product->user_id_user ;
@@ -164,6 +260,7 @@ class AdminController
         {
           $updateArray=[];
           $updateArray['status']=1;
+          $updateArray['product_id_product']=$res;
           $updateCondition=" id_lender_product_notification='$id_lender_notification'";
           $res1= $adminObj->updateLenderStatus($updateArray,$updateCondition);
         }
@@ -247,7 +344,45 @@ class AdminController
           $insertInfo['updated_at'] = date('Y-m-d h:i:s');
           $res = $adminObj->uploadLenderBook($insertInfo);
         }
+
+        if(SEND_LENDER_BOOK_EMAIL){
+            $userObj = new User();
+            $userDetails = $userObj->getUser($idUser);
+
+            $to=$userDetails[0]['email'];
+            $from='sachin@chainreader.in';
+            $url=SERVER_URL; 
+            $imgurl=SERVER_URL.'img/logo1.jpg';
+            $content = 'Thank you for uploading your book on ChainReaders.in. We will intimate you once a request comes in for your book.';
+            $subject='Acknowledgement of receipt of your book(s)';
+            $message = file_get_contents('../email_templates/lender.html');
+            $message = str_replace('{url}', $url, $message);           
+            $message = str_replace('{name}', $userDetails[0]['name'], $message);
+            $message = str_replace('{img}', $imgurl, $message);
+            $message = str_replace('{content}', $content, $message);
+
+
+            $message1="";
+            
+            for ($i=0; $i <count($books) ; $i++) {              # code...
+
+            $message1.='<tr>
+                        <td style="font-family:arial;font-size: 14px; vertical-align: middle; margin: 0; padding: 9px 0;" align="left">'.$books[$i].'</td>
+                        <td style="font-family:arial;font-size: 14px; vertical-align: middle; margin: 0; padding: 9px 0;" align="left">'.date('d M Y',  strtotime(date('Y-m-d H:i:s'))).'</td>';
+            }
+            $message = str_replace('{section_array}', $message1, $message);
+
+            $body    = $message;
+            $altBody = '';
+            // call the phpmailerObj on mainConfig.php page
+            $mymail = phpmailerObj($to, $userDetails[0]['name'], $subject, $message, $body, $altBody);
+            if($mymail){
+            }
+        }
+        return array('message'=>count($books).' notification sent. We will conact once an order has been placed for one of your book(s)');
+      }else{
+        return array('message'=>'closepoup');
       }
-      return array('message'=>count($books).' notification sent. We will conact once an order has been placed for one of your book(s)');
+      
     }
 }

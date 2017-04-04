@@ -1,0 +1,18 @@
+    <div id="content" >
+            <div class="container" >
+            <div class="col-xs-12 margin"></div>
+            <div class="col-xs-12">
+                  <accordion>
+                    <accordion-group ng-repeat="group in groups" heading="{{group.title}}" is-open="group.open">
+                      <accordion-heading>
+                                <span ng-bind="group.title"></span>
+                                
+                                               
+                      </accordion-heading>
+                          <span ng-bind="group.content"></span>
+
+                    </accordion-group>    
+                  </accordion>
+            </div>
+            </div>
+    </div>

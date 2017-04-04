@@ -37,7 +37,16 @@
 
         /*********Books Api Code Starts Here ************/
 
-
+        public function mainSend()
+        {
+            if($this->get_request_method() != "GET"){
+                        $this->response('',405);
+            }
+            $productControllerObj=new ProductController();
+            $categories = $productControllerObj->mainSend();
+            $this->response($this->json($categories),200);   
+            
+        }
 
         public function getCategories()
         {
@@ -68,7 +77,7 @@
                     }
                    
                     $productControllerObj=new ProductController();
-                    $login = $productControllerObj->login($this->_request['email'],$this->_request['id_google'],$this->_request['name'],$this->_request['csrf_token'],$this->_request['img_url']);
+                    $login = $productControllerObj->login($this->_request['email'],$this->_request['id_google'],$this->_request['name'],$this->_request['csrf-token'],$this->_request['img_url']);
                     if(!$login)
                     {
                     $error = array("message" => "Unauthorized access");
@@ -122,8 +131,8 @@
         public function addProductToCart()
         {
             $accessToken = $this->getHeader('Csrf-Token');
-            if(!$accessToken)
-            {
+             $accessToken1 = $this->getHeader('csrf-token');
+            if(!$accessToken&&!$accessToken1)            {
                 $error = array("message" => "Please login to add product to cart");
                 $this->response($this->json($error), 401);
             }
@@ -141,7 +150,7 @@
                 else
                 {
                    $error = array("message" =>  $productDetails['message']);
-                    $this->response($this->json($error), 401); 
+                    $this->response($this->json($error), 403); 
  
                 }
             }
@@ -149,8 +158,8 @@
 
         public function addBulkProductToCart(){
             $accessToken = $this->getHeader('Csrf-Token');
-            if(!$accessToken)
-            {
+             $accessToken1 = $this->getHeader('csrf-token');
+            if(!$accessToken&&!$accessToken1)            {
                 $error = array("message" => "Please login to add product to cart");
                 $this->response($this->json($error), 401);
             }
@@ -167,7 +176,7 @@
                 else
                 {
                    $error = array("message" =>  $productDetails['message']);
-                    $this->response($this->json($error), 401); 
+                    $this->response($this->json($error), 403); 
  
                 }
             }
@@ -180,7 +189,8 @@
                             $this->response('',405);
             }
             $accessToken = $this->getHeader('Csrf-Token');
-            if(!$accessToken)
+             $accessToken1 = $this->getHeader('csrf-token');
+            if(!$accessToken&&!$accessToken1)
             {
                 $error = array("message" => "Please login to add product to cart");
                 $this->response($this->json($error), 401);
@@ -201,8 +211,8 @@
                             $this->response('',405);
             }
             $accessToken = $this->getHeader('Csrf-Token');
-            if(!$accessToken)
-            {
+             $accessToken1 = $this->getHeader('csrf-token');
+            if(!$accessToken&&!$accessToken1)            {
                 $error = array("message" => "Please login to add product to cart");
                 $this->response($this->json($error), 401);
             }
@@ -315,8 +325,8 @@
         private function checkToken(){  
 
             $accessToken = $this->getHeader('Csrf-Token');
-            if(!$accessToken)
-            {
+            $accessToken1 = $this->getHeader('csrf-token');
+            if(!$accessToken&&!$accessToken1)            {
                 $error = array("message" => "Unauthorized access");
                 $this->response($this->json($error), 401);
             }
@@ -567,6 +577,16 @@
             }
             $productControllerObj=new ProductController();
             $results = $productControllerObj->getProductDetail($this->_request['id_product']);
+            $this->response($this->json($results), 200);
+        }
+
+
+        public function addSubScriber(){
+            if($this->get_request_method() != "POST"){
+                            $this->response('',405);
+            }
+            $productControllerObj=new ProductController();
+            $results = $productControllerObj->addSubScriber($this->_request['user']);
             $this->response($this->json($results), 200);
         }
 

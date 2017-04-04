@@ -158,6 +158,7 @@ bookAppAdmin.run(function ($location, $rootScope, $state, $stateParams,$http,$co
           $http.defaults.headers.common['X-Id-Admin']='';
           $location.path('/')
         }
+        console.log(SITE_URL);
 });
 
 bookAppAdmin.controller('loginCtrl', function ($scope,$rootScope,$interval, $http,$cookies,$location,$stateParams,$window){

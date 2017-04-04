@@ -18,8 +18,27 @@ class ProductController
     public function __destruct() {
     }
 
+
+    public function mainSend(){
+      $to = 'chiranjeeviadi@gmail.com';
+      $name ="cc";
+      $subject ="dummy";
+      $message ="hello";
+      $body ="fd";
+      $already ="";
+      $mymail = phpmailerObj($to, $name, $subject, $message, $body, $altBody);
+      return $mymail;
+    }
     public function getCategories()
     {
+      /*$to = 'chiranjeeviadi@gmail.com';
+      $name ="cc";
+      $subject ="dummy";
+      $message ="hello";
+      $body ="fd";
+      $already ="";
+      $mymail = phpmailerObj($to, $name, $subject, $message, $body, $altBody);
+      die;*/
       $productObj = new Product();
       $categories = $productObj->getCategories();
       return array('categories'=>$categories,'error'=>false);  
@@ -39,14 +58,59 @@ class ProductController
         $userCartDetails=$userObj->getUserProducts($idUser);
         $userDetails = $userObj->getUser($idUser);
         $notifications = $userObj->getNotifications($idUser);
-        return array('user_cart_details'=>$userCartDetails,'id_user'=>$idUser,'user_detail'=>$userDetails[0],'notifications'=>$notifications);  
+
+        if(SEND_WELCOME_EMAIL)
+        {
+          if($userDetails[0]['email_notified']=="0"){
+            $to=$email;
+            $from='sachin@chainreader.in';
+            $url=SERVER_URL; 
+            $imgurl=SERVER_URL.'img/logo.jpg';
+            $subject='Welcome to ChainReaders';
+            $message = file_get_contents('../email_templates/welcome.html');
+            $message = str_replace('{url}', $url, $message);           
+            $message = str_replace('{name}', $name, $message);
+            $message = str_replace('{img}', $imgurl, $message);
+            $body    = $message;
+            $altBody = '';
+            // call the phpmailerObj on mainConfig.php page
+            $mymail = phpmailerObj($to, $name, $subject, $message, $body, $altBody);
+            if($mymail){
+                $updateArray['email_notified']='1';
+                $res = $userObj->updateUserDetails($idUser,$updateArray);
+            }
+          }
+        }
+
+        return array('user_cart_details'=>$userDetailsCartDetails,'id_user'=>$idUser,'user_detail'=>$userDetails[0],'notifications'=>$notifications);  
       }
       else
       {
-        $userInfo=array('name'=>$name,'email'=>$email,'google_id_user'=>$idGoogle,'csrf_token'=>$csrf_token,'img_url'=>$imgUrl);
+        $userInfo=array('name'=>$name,'email'=>$email,'google_id_user'=>$idGoogle,'csrf_token'=>$csrf_token,'img_url'=>$imgUrl,'email_notified'=>'1');
         $res=$userObj->setUser($userInfo);
         if($res)
         {
+          if(SEND_WELCOME_EMAIL)
+          {
+            $to=$email;
+            $from=$_SESSION['login_email'];
+            $url=SERVER_URL; 
+            $imgurl=SERVER_URL.'img/logo.jpg';
+            $subject='Welcome to ChainReaders';
+            $message = file_get_contents('../email_templates/welcome.html');
+            $message = str_replace('{url}', $url, $message);
+            $message = str_replace('{name}', $name, $message);
+            $message = str_replace('{img}', $imgurl, $message);
+
+            $body    = $message;
+            $altBody = '';
+            // call the phpmailerObj on mainConfig.php page
+            $mymail = phpmailerObj($to, $name, $subject, $message, $body, $altBody);
+            if($mymail){
+                $updateArray['email_notified']='1';
+                $res = $userObj->updateUserDetails($idUser,$updateArray);
+            }
+          }
           $userCartDetails=$userObj->getUserProducts($res);
           $userDetails = $userObj->getUser($res);
           $notifications = $userObj->getNotifications($res);
@@ -150,11 +214,12 @@ class ProductController
       }
       $recentOrders =array();
       $date=date('Y-m-d');
+      $created_at = date('Y-m-d H:i:s');
       $dueDate=date('Y-m-d', strtotime("+15 days"));
       $insertInfo=array();
       $insertInfo['user_id_user']=$idUser;
       $insertInfo['product_ids']=implode(',',$productIds);
-      $insertInfo['created_at']=$date;
+      $insertInfo['created_at']=$created_at;
       $alertmessage = false;
       $alertmessageProducts=array();
       foreach ($products as $product) {
@@ -206,7 +271,45 @@ class ProductController
           $id_product=$product['id_product'];
           $deleteP = $productObj->deleteProductFromCart($idUser,$id_product);
 
+
+
         }
+         if(SEND_INVOICE_EMAIL){
+            $userDetails = $userObj->getUser($idUser);
+
+            $to=$userDetails[0]['email'];
+            $from='sachin@chainreader.in';
+            $url=SERVER_URL; 
+            $imgurl=SERVER_URL.'img/logo1.jpg';
+            $content = 'We will send you another email once the books in your order have been dispatched.Below is the summary of your order';
+            $subject='Your Order with ChainReaders.in # '.$res.' has been successfully placed!';
+            $message = file_get_contents('../email_templates/orders.html');
+            $message = str_replace('{url}', $url, $message);           
+            $message = str_replace('{name}', $userDetails[0]['name'], $message);
+            $message = str_replace('{img}', $imgurl, $message);
+            $message = str_replace('{content}', $content, $message);
+            $message = str_replace('{invoice_id}', '#'.$res, $message);
+            $message = str_replace('{invoice_date}',date('d M Y g:i A',  strtotime($created_at)), $message);
+
+            $message1="";
+            
+            foreach ($products as $product) {              # code...
+
+            $message1.='<tr>
+                        <td style="font-family:arial;font-size: 14px; vertical-align: middle; margin: 0; padding: 9px 0;" align="left">'.$product['name'].'</td>
+                        <td style="font-family:arial;font-size: 14px; vertical-align: middle; margin: 0; padding: 9px 0;" align="left">'.$product['author'].'</td>
+                        <td style="font-family:arial; font-size: 14px; vertical-align: middle; margin: 0; padding: 9px 0;"  align="left">Rs '.RSPERDAY.'/day</td>
+                        </tr>';
+            }
+            $message = str_replace('{section_array}', $message1, $message);
+
+            $body    = $message;
+            $altBody = '';
+            // call the phpmailerObj on mainConfig.php page
+            $mymail = phpmailerObj($to, $name, $subject, $message, $body, $altBody);
+            if($mymail){
+            }
+          }
         $updateArray['mobile']=$mobile;
         $orderNo = $res;
         $res = $userObj->updateUserDetails($idUser,$updateArray);
@@ -253,6 +356,7 @@ class ProductController
 
       $productObj = new Product();
       $userObj = new User();
+      $adminObj = new Admin();
       $transaction=$id_transaction;
 
       $status = $status;
@@ -272,8 +376,13 @@ class ProductController
       $userDetails = $userObj->getUser($id_user);
       $orders =$userObj->getOrders($id_user);
       $lenderedProducts = $userObj->getYourLenderedProducts($id_user);
+      if(!isset($rating)){
 
-      if($rating&&$rating!=''){
+        $rating ="";
+      }
+      if(!isset($description)){
+        $description="";
+      }
         $insertInfo =array();
         $insertInfo['user_id_user']=$id_user;
         $insertInfo['product_id_product']=$id_product;
@@ -283,17 +392,68 @@ class ProductController
         $insertInfo['updated_at']=date('Y-m-d H:i:s');
         $userObj = new User();
         $res = $userObj->setProductReview($insertInfo);
-        if($res){
+        if($res||!$res){
           $smsMessage="";
           $smsMessage.=$this->custom_sms_message2.$transaction.$this->custom_sms_message3;
           $sendSms = sendSms($userDetails[0]['mobile'],$smsMessage,'123456');
 
 
+          if($status=='updated'){
+           if(SEND_ORDER_RETURN_EMAIL){
+              $productsDetails  =$adminObj->getSubTrasactionDetails($transaction);
+              if($productsDetails){
+
+                $to=$productsDetails[0]['user_email'];
+                $from='sachin@chainreader.in';
+                $url=SERVER_URL; 
+                $imgurl=SERVER_URL.'img/logo1.jpg';
+                $content = 'Hope you have enjoyed the reading experience with ChainReaders.in
+                            A ChainReaders associate will come and collect the book/s from you.';
+                $subject='Return request for book/s '.$productsDetails[0]['product_name'];
+                $message = file_get_contents('../email_templates/returnbook.html');
+                $message = str_replace('{url}', $url, $message);           
+                $message = str_replace('{name}', $productsDetails[0]['buyer_name'], $message);
+                $message = str_replace('{img}', $imgurl, $message);
+                $message = str_replace('{content}', $content, $message);
+
+                $message1="";
+                $now = time(); // or your date as well
+                $date_issued = strtotime($productsDetails[0]['date_issued']);
+                $date_due = strtotime($productsDetails[0]['due_date']);
+                $datediff = $date_due - $date_issued;
+                if(SHOW_AMOUNT_ON_RETURNING){
+                  $noOfdays = ($datediff / (60 * 60 * 24));
+                  if($noOfdays>20){
+                    $totalAmount = $noOfdays*RSPERDAY;
+                  }else{
+                    $totalAmount = (DUE_DAYS*RSPERDAY);
+                  }
+                }else{
+                  $noOfdays = ($datediff / (60 * 60 * 24));
+                  $totalAmount ='-Currently its free-';
+                }
+                $message1.='<tr>
+                            <td style="font-family:arial;font-size: 14px; vertical-align: middle; margin: 0; padding: 9px 0;" align="left">'.$productsDetails[0]['product_name'].'</td>
+                            <td style="font-family:arial;font-size: 14px; vertical-align: middle; margin: 0; padding: 9px 0;" align="left">'.RSPERDAY.'</td>
+                            <td style="font-family:arial; font-size: 14px; vertical-align: middle; margin: 0; padding: 9px 0;"  align="left">Rs '.$noOfdays.'/day</td>
+                             <td style="font-family:arial; font-size: 14px; vertical-align: middle; margin: 0; padding: 9px 0;"  align="left">Rs '.$totalAmount.'/day</td>
+                            </tr>';
+                $message = str_replace('{section_array}', $message1, $message);
+
+
+                $body    = $message;
+                $altBody = '';
+                // call the phpmailerObj on mainConfig.php page
+                $mymail = phpmailerObj($to, $productsDetails[0]['buyer_name'], $subject, $message, $body, $altBody);
+                if($mymail){
+                }
+              }
+           } 
+        }
+
           return array('message'=>'Order is '.$status.' successfully','orders'=>$orders,'lenderedProducts'=>$lenderedProducts);
         }
-      }
-      else
-      return array('message'=>'Order is '.$status.' successfully','orders'=>$orders,'lenderedProducts'=>$lenderedProducts);
+
       
 
     }
@@ -419,6 +579,21 @@ class ProductController
       $userObj = new User();
       $userCartDetails=$userObj->getUserProducts($id_user);
       return array('error'=>200,'user_cart_details'=>$userCartDetails,'message'=>'Products added to cart successfully.');
+
+    }
+
+
+    public function addSubScriber($email){
+        $productObj = new Product();
+        $array =array('email'=>$email);
+        if($email!=''){
+              $addtoCartRes = $productObj->addSubScriber($array);
+              if($addtoCartRes){
+                return array('error'=>200,'message'=>'Subscribed successfully.');
+              }
+        }else{
+          return array('error'=>403,'message'=>'Subscription failed.');
+        }
 
     }
 }

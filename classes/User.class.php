@@ -112,7 +112,7 @@ class User{
         $where="st.user_id_user='$id_user'";
       
      
-       $q_orders="SELECT st.id_sub_transaction,st.transaction_id_transaction,st.ordered_date,u.name as buyer_name,p.*,st.date_issued,st.due_date,u1.name as seller_name,st.status as transaction_status FROM sub_transaction as st LEFT JOIN product as p ON st.product_id_product=p.id_product LEFT JOIN user as u ON st.user_id_user=u.id_user LEFT JOIN product_label as pl ON p.id_product=pl.product_id_product LEFT JOIN user as u1 ON pl.user_id_user=u1.id_user where $where Order By st.ordered_date DESC";
+       $q_orders="SELECT st.id_sub_transaction,st.transaction_id_transaction,st.ordered_date,u.name as buyer_name,p.*,st.date_issued,st.due_date,u1.name as seller_name,st.status as transaction_status FROM sub_transaction as st LEFT JOIN product as p ON st.product_id_product=p.id_product LEFT JOIN user as u ON st.user_id_user=u.id_user LEFT JOIN lender_product_notification as pl ON p.id_product=pl.product_id_product LEFT JOIN user as u1 ON pl.user_id_user=u1.id_user where $where Order By st.ordered_date DESC";
        $orders = $db->select($q_orders);
        return $orders;
       }
@@ -148,7 +148,7 @@ class User{
       {
         $where="st.user_id_user='$idUser' and st.status='delivered'";
       }
-    $q_select ="SELECT st.id_sub_transaction,st.transaction_id_transaction,st.ordered_date,u.name as buyer_name,p.*,p.name as productname,p.id_product as prod_id,st.date_issued,st.due_date,u1.name as seller_name,st.status as transaction_status,CONCAT('') as message FROM sub_transaction as st LEFT JOIN product as p ON st.product_id_product=p.id_product LEFT JOIN user as u ON st.user_id_user=u.id_user LEFT JOIN product_label as pl ON p.id_product=pl.product_id_product LEFT JOIN user as u1 ON pl.user_id_user=u1.id_user where $where Order By st.ordered_date DESC";
+    $q_select ="SELECT st.id_sub_transaction,st.transaction_id_transaction,st.ordered_date,u.name as buyer_name,p.*,p.name as productname,p.id_product as prod_id,st.date_issued,st.due_date,u1.name as seller_name,st.status as transaction_status,CONCAT('') as message FROM sub_transaction as st LEFT JOIN product as p ON st.product_id_product=p.id_product LEFT JOIN user as u ON st.user_id_user=u.id_user LEFT JOIN lender_product_notification as pl ON p.id_product=pl.product_id_product LEFT JOIN user as u1 ON pl.user_id_user=u1.id_user where $where Order By st.ordered_date DESC";
       $res = $db->select($q_select);
       $finalArray=array();
       if($res&&count($res)>0){

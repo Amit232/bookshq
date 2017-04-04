@@ -1,4 +1,4 @@
-var bookApp = angular.module('bookApp', ['ui.router','ngCookies','ngSanitize','timer','ngAnimate']);
+var bookApp = angular.module('bookApp', ['ui.router','ui.bootstrap','ngCookies','ngSanitize','timer','ngAnimate']);
 var interval =null;
 
 var validateOptions= {
@@ -49,25 +49,25 @@ bookApp.config(function($stateProvider, $urlRouterProvider) {
                         url: '/',
                         templateUrl : 'pages/home.html',
                         controller  : 'homeCtrl',
-                        title: 'Home'
+                        title: 'Rent and Lend books Online in Bangalore. Earn money by lending books'
                 })
                 .state('products',{
                         url: '/products',
                         templateUrl : 'pages/products.html',
                         controller  : 'productCtrl',
-                        title: 'Products'
+                        title: 'Rent or Lend books at the cheapest price in India | chainreaders.in'
                 })
                 .state('productsdetail',{
                         url: '/products/:id_category',
                         templateUrl : 'pages/products.html',
                         controller  : 'productCtrl',
-                        title: 'Products'
+                        title: 'Rent or Lend books at the cheapest price in India | chainreaders.in'
                 })
                 .state('singleproductsdetail',{
                         url: '/product/:id_product',
                         templateUrl : 'pages/product_details.html',
                         controller  : 'singleProductCtrl',
-                        title: 'Product'
+                        title: 'Rent or Lend books at the cheapest price in India | chainreaders.in'
                 })
                 .state('basket',{
                         url: '/basket',
@@ -79,13 +79,31 @@ bookApp.config(function($stateProvider, $urlRouterProvider) {
                         url: '/orders',
                         templateUrl : 'pages/orders.html',
                         controller  : 'ordersCtrl',
-                        title: 'Orders'
+                        title: 'Your Orders'
                 })
                 .state('register',{
                         url: '/register',
                         templateUrl : 'pages/register.html',
                         controller  : 'registerCtrl',
                         title: 'Register'
+                })
+                .state('faq',{
+                        url: '/faq',
+                        templateUrl : 'pages/faq.html',
+                        controller  : 'faqCtrl',
+                        title: 'FAQ'
+                }) 
+                .state('aboutus',{
+                        url: '/aboutus',
+                        templateUrl : 'pages/about_us.html',
+                        controller  : 'aboutUsCtrl',
+                        title: 'About us'
+                })
+                .state('termsconditions',{
+                        url: '/terms-and-conditions',
+                        templateUrl : 'pages/terms.html',
+                        controller  : 'termsCtrl',
+                        title: 'Terms & Conditions'
                 })
               /*  // route for the instruction page
                 .state('instruction',{
@@ -143,7 +161,9 @@ bookApp.run(function ($location, $rootScope, $state, $stateParams,$http,$cookies
             // //console.log('$rootScope.user_role',$rootScope.user_role);
             
         })
+        $rootScope.amoutPerRent =5;
         $rootScope.enableSignIn=true;
+        console.log($cookies.email,$cookies.id_user)
         if(angular.isDefined($cookies.email)&&$cookies.email&&$cookies.id_user)
         {
             var randomSting= makeid(40);
@@ -192,15 +212,36 @@ bookApp.run(function ($location, $rootScope, $state, $stateParams,$http,$cookies
         {
         }
         $rootScope.logout = function(){
-            $rootScope.enableSignIn=true;
+             $rootScope.enableSignIn=true;
             angular.forEach($cookies, function (cookie, key) {
                 delete $cookies[key];                
             });
             $http.defaults.headers.common['Csrf-Token']='';
             $http.defaults.headers.common['Google_Id']='';
             $http.defaults.headers.common['id_user']='';
+            $rootScope.cartProducts = [];
+            localStorage.removeItem('carts');
             //$location.path('/');
-            $window.location.href=BASE_URL_NEW+'#/';
+            $timeout(function() {
+                $window.location.reload();
+            }, 10);
+            var auth2 = gapi.auth2.getAuthInstance();
+            if(angular.isDefined(auth2)){
+              auth2.signOut().then(function () {
+                localStorage.removeItem('carts');
+                var a =[];
+                $rootScope.cartProducts=angular.copy(a);
+                
+
+              });   
+            }
+            else{
+                localStorage.removeItem('carts');
+                 var a =[];
+                $rootScope.cartProducts=angular.copy(a);
+                
+
+            }
         } 
         $rootScope.tableDatas=[];
         $rootScope.abc=[];
@@ -232,6 +273,16 @@ bookApp.run(function ($location, $rootScope, $state, $stateParams,$http,$cookies
                     });
         }
         $rootScope.getCategories(); 
+        var screenWidth = $window.innerWidth;
+        if (screenWidth < 700){
+            $rootScope.includeMobileTemplate = true;
+        }else{
+            $rootScope.includeDesktopTemplate = true;
+            $rootScope.includeMobileTemplate = false;
+
+        }
+        $rootScope.includeMobileTemplate1=""
+
         $rootScope.submitLenderProduct = function(data){
           $('#lender_books1').validate(angular.extend({
             // Rules for form validation
@@ -262,15 +313,25 @@ bookApp.run(function ($location, $rootScope, $state, $stateParams,$http,$cookies
                         {
                             $('body').removeClass('modal-open');
                             //alert(data.message);
-                            swal({
-                              title: '',
-                              text: data.message,
-                              timer: 5000
-                            })
-                            $(".close").trigger('click');
-                            $rootScope.tableDatas=[];
-                            $rootScope.abc=[];
+                            if(data.message=='closepoup'){
+                                $('body').removeClass('modal-open');
+                                $(".close").trigger('click');
+                                $rootScope.tableDatas=[];
+                                $rootScope.abc=[];
+                            }else{
+                                swal({
+                                  title: '',
+                                  text: 'We will contact you via mail, once we receive an order for your book',
+                                  timer: 5000
+                                })
+                                $(".close").trigger('click');
+                                $rootScope.tableDatas=[];
+                                $rootScope.abc=[];
+                            }
                         }
+                }).error(function(data,status){
+                    $('body').removeClass('modal-open');
+                    $(".close").trigger('click'); 
                 });   
             }
 
@@ -288,7 +349,64 @@ bookApp.run(function ($location, $rootScope, $state, $stateParams,$http,$cookies
             }
         }
         var nav = $('.navbar');
-    
+        $rootScope.myInterval = 3000;
+        $rootScope.slides = [
+            {
+              image: './img/home/6.jpg'
+            },
+            {
+              image: './img/home/6.jpg'
+            },
+            {
+              image: './img/home/6.jpg'
+            },
+            {
+              image: './img/home/6.jpg'
+            }
+        ];
+        $rootScope.subscribeUser= function(user){
+           $rootScope.subscribedmessageshow = false;
+
+            $('#subscribe').validate(angular.extend({
+            // Rules for form validation
+            rules: {
+                subscriber: {
+                    required: true,
+                    email:true
+                }
+            },
+            // Messages for form validation
+            messages: {
+                subscriber : {
+                        required : '<center><i style="color:red">Subscriber email cannot be blank</i></center>',
+                }
+            }
+
+            },validateOptions));
+            if($('#subscribe').valid()){
+                $http({
+                    method: "POST",
+                    timeout:60000,                                    
+                    url: SITE_URL+'addSubScriber',
+                    data : $.param({'user':user}),
+                    headers: {'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'}
+                }).success(function (data,status) {
+                    if(status==200){
+                        $rootScope.message =data.message;
+                        $rootScope.subscribedmessageshow = true;
+                        $timeout(function() {
+                            $("#subscriber").val('');
+                            $rootScope.message="";
+                            $rootScope.subscribe_user ="";
+                            $rootScope.subscribedmessageshow =false;
+                        }, 5000);
+                    }
+                }).error(function(data,status){
+                        $rootScope.subscribedmessageshow = false;
+
+                });
+            }
+        }
         // $(window).scroll(function () {
         //     /*var scroll = $(this).scrollTop();
         //     var topDist = $("#navbar").position();
@@ -629,6 +747,7 @@ $rootScope.login = function(param)
                      $("#modalsignup").modal('hide');
                     $cookies.id_user = data.id_user;
                     $cookies.name = data.user_detail.name;
+                    $cookies.mobile = data.user_detail.mobile;
                     $rootScope.loggedUserDetails={};
                     $rootScope.loggedUserDetails.name = data.user_detail.name;
                     $rootScope.user_cart_details = data.user_cart_details;
@@ -670,8 +789,8 @@ $rootScope.login = function(param)
                                          $rootScope.cartProducts=[];
                                          $rootScope.cartProducts=data.user_cart_details;
                                          var carts = $rootScope.cartProducts;
-                                        localStorage.removeItem('carts');
-                                        localStorage.setItem('carts',JSON.stringify(carts));   
+                                            localStorage.removeItem('carts');
+                                            localStorage.setItem('carts',JSON.stringify(carts));   
                                         /*swal({
                                                       title: '',
                                                       text: 'Product is added to cart',
@@ -682,10 +801,17 @@ $rootScope.login = function(param)
                         }
                         else
                         {
+                            console.log($rootScope.user_cart_details);
+                            if(angular.isDefined($rootScope.user_cart_details)&&$rootScope.user_cart_details.length>0){
+                                $rootScope.cartProducts=$rootScope.user_cart_details;
+                                var carts = $rootScope.cartProducts;
+                                localStorage.removeItem('carts');
+                                localStorage.setItem('carts',JSON.stringify(carts)); 
+                            }else
                             $rootScope.cartProducts=[];
                         }
-                        if(angular.isDefined(param)&&param=='getcookiefunctin')
-                        $timeout(function() {$window.location.reload();}, 100);
+                        //if(angular.isDefined(param)&&param=='getcookiefunctin')
+                        //$timeout(function() {$window.location.reload();}, 100);
 
                         
                     ////console.log($rootScope.cartProducts);
@@ -703,6 +829,7 @@ $rootScope.login = function(param)
      $rootScope.getCookiesValues=function() {
         if($cookies)
         {
+            console.log($cookies.email);
             if(angular.isDefined($cookies.email)&&$cookies.email)
             {
                 var randomSting= makeid(40);
@@ -736,6 +863,7 @@ $rootScope.login = function(param)
     $rootScope.enableCookies=function(){
         interval=$interval($rootScope.getCookiesValues, 2000);
     } 
+    //rootScope.enableCookies();
         
 });
 bookApp.controller('homeCtrl', function ($scope,$rootScope,$interval,$timeout, $http,$cookies,$location,$stateParams,$window){
@@ -753,9 +881,16 @@ bookApp.controller('homeCtrl', function ($scope,$rootScope,$interval,$timeout, $
     $scope.redirectToProduct=function(id_product){
         $location.path('/product/'+id_product);
     }
-
+    function onLoad() {
+      gapi.load('auth2', function() {
+        gapi.auth2.init();
+        console.log(gapi.auth2);
+      });
+    }
+    onLoad();
 
     $rootScope.logout = function(){
+
         $rootScope.enableSignIn=true;
         angular.forEach($cookies, function (cookie, key) {
             delete $cookies[key];                
@@ -766,7 +901,26 @@ bookApp.controller('homeCtrl', function ($scope,$rootScope,$interval,$timeout, $
         $rootScope.cartProducts = [];
         localStorage.removeItem('carts');
         //$location.path('/');
-        $window.location.href=BASE_URL_NEW+'#/';
+        $timeout(function() {
+            $window.location.reload();
+        }, 10);
+        var auth2 = gapi.auth2.getAuthInstance();
+        if(angular.isDefined(auth2)){
+          auth2.signOut().then(function () {
+            localStorage.removeItem('carts');
+            var a =[];
+            $rootScope.cartProducts=angular.copy(a);
+            
+
+          });   
+        }
+        else{
+            localStorage.removeItem('carts');
+             var a =[];
+            $rootScope.cartProducts=angular.copy(a);
+            
+
+        }
     }   
 
     $scope.getTrendingBooks = function() {
@@ -796,6 +950,8 @@ if(interval!=null||interval==null)
         
     }
 }
+    $rootScope.searchString="";
+
 if(angular.isDefined($stateParams.id_category)&&$stateParams.id_category!=''){
     $scope.id_category = $stateParams.id_category;
 }else{
@@ -853,6 +1009,7 @@ $scope.getAllProducts = function(categoryAddedIndex)
                 categories.push($scope.id_category);
             }*/
 
+            
     if(angular.isDefined($scope.categoriesIds)&&$scope.categoriesIds.length>0)
     {
         angular.forEach($scope.categoriesIds,function(a,key){
@@ -905,7 +1062,10 @@ $scope.getAllProducts = function(categoryAddedIndex)
         $scope.products =[];
     });
 }
-
+$rootScope.getAllProductsMain=function(index){
+    $rootScope.searchString ="";
+    $rootScope.getAllProducts(index);
+}
 $rootScope.getAllProducts=function(){
     $scope.getAllProducts();
 }
@@ -956,7 +1116,7 @@ $scope.backToProductList = function(){
     $scope.noOfPages=0;
     $scope.totalItems=0;
     $scope.backtoProductPage=false;
-     $scope.getAllProducts();
+    $scope.getAllProducts();
 
 }
 $scope.getProductDetail = function(id_pro)
@@ -1054,6 +1214,9 @@ $scope.clearAllElemts=function(){
 
 bookApp.controller('singleProductCtrl', function ($scope,$rootScope,$interval, $http,$cookies,$location,$stateParams,$window){
 $("#return-to-top").trigger('click');
+$scope.loadingBarShow=true;
+    $rootScope.searchString="";
+
 if(interval!=null||interval==null)
     {
         if(angular.isDefined($cookies.id_user)&&$cookies.id_user!=''){
@@ -1127,7 +1290,7 @@ $scope.sendOrganizationReq =function()
         });    
     }
 }
-
+    
     $scope.id_product = $stateParams.id_product;
     var params={'id_product':$scope.id_product}
     $http({
@@ -1137,14 +1300,17 @@ $scope.sendOrganizationReq =function()
     data : $.param(params),
     headers: {'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'}
     }).success(function (data,status) {
+
         $scope.single_product = data.res.product;
         $scope.reviews=data.res.reviews;
         $scope.productDetail=true;    
         $scope.backtoProductPage=true;
-        $scope.rating=Math.ceil($scope.single_product.rating);
+        //$scope.rating=Math.ceil($scope.single_product.ratings);
+        $scope.rating=$scope.single_product.ratings;
         $scope.totalReviews= data.res.total_reviews;
         $scope.totalRatings= data.res.total_ratings;
         $scope.showGoToCart=false;
+        $scope.loadingBarShow=false;
         if($rootScope.cartProducts==null){
             $rootScope.cartProducts=[];
         }  
@@ -1196,7 +1362,7 @@ $scope.sendOrganizationReq =function()
     }else{
         swal({
                       title: '',
-                      text: 'Please select the techpark availability',
+                      text: 'Please select your techpark',
                       timer: 5000
             })
 
@@ -1268,6 +1434,25 @@ if(interval!=null||interval==null)
 }
 $scope.showBasket=true;
 
+$scope.beforelogincheckout= function(){
+    if(angular.isUndefined($cookies.id_user))
+    {
+       
+        swal({ 
+              title: '',
+              text: 'Please login and add product to cart',
+              timer: 5000
+          },
+          function(){
+                    $(".bs-example-modal-lg").modal("show");
+                    $rootScope.registerorloginClick('login');
+        });
+        return false;
+    }else{
+        //data-toggle="modal" data-target="#login-modal1"
+        $("#login-modal1").modal("toggle");
+    }
+}
 $scope.getOrganizations= function(){
     $http({
     method: "get",
@@ -1331,7 +1516,10 @@ $scope.deleteProductFromCart = function (product) {
     
 }
 $scope.selecttechpark='' ; 
-$scope.mobile='';      
+$scope.mobile='';   
+if(angular.isDefined($cookies.mobile)&&$cookies.mobile!=''){
+    $scope.mobile = $cookies.mobile;
+}   
 $scope.buyProducts= function(){
     if(angular.isUndefined($cookies.id_user))
     {
@@ -1385,12 +1573,14 @@ $scope.buyProducts= function(){
         headers: {'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'}
         }).success(function (data,status) {
             if(status==200)
-               
                 swal({
                       title: '',
-                      text: data.meessage,
+                      text: 'Thank you for placing an order with us. You will receive a notification once your book is ready to be dispatched.',
                       timer: 5000
-                    })
+                })
+
+            $cookies.mobile = $scope.mobile;
+
             //alert(data.meessage);
 
             $scope.showBasket=false;
@@ -1404,6 +1594,7 @@ $scope.buyProducts= function(){
             localStorage.setItem('carts',JSON.stringify(carts));
             $('body').removeClass('modal-open');
             $("#login-modal1").modal('hide');
+            
         }).error(function(data,status){
             if(status==403)
             {
@@ -1583,4 +1774,105 @@ if(interval!=null||interval==null)
             
         }
     }
+});
+
+bookApp.controller('faqCtrl', function ($scope,$rootScope,$interval, $http,$cookies,$location,$stateParams,$window){
+
+if(interval!=null||interval==null)
+    {
+        if(angular.isDefined($cookies.id_user)&&$cookies.id_user!=''){
+        $interval.cancel(interval);
+        interval=null
+            
+        }
+    }
+
+    $scope.groups = [
+    {
+        "title" : "How much will I earn per book?",
+        "content" : "You will earn Rs.5/day for each book you lend to Chainreaders",
+        "open" : false
+    },
+    {
+        "title" : "In which IT parks is the service available in?",
+        "content" : "Chainreaders are now available at Embassy Tech Village( ETV ), Embassy Golf Links(EGL).",
+        "open" : false
+    },
+    {
+        "title" : "For how many days can I borrow a book?",
+        "content" : "You can borrow a book for any number of days. There is no late fee levied by Chainreaders",
+        "open" : false
+    },
+    {
+        "title" : "What is the total number of books at Chainreaders?",
+        "content" : "Chainreaders has a collection of around 5000 books. We are striving hard to expand our collection each and every day.",
+        "open" : false
+    },
+    {
+        "title" : "What if my book gets lost or damaged?",
+        "content" : "We at Chainreaders are first and foremost book lovers. We want to assure our customers that our ",
+        "open" : false
+    },
+    {
+        "title" : "What is the charge per book?",
+        "content" : "Each book is charged at Rs 5/day. The cost per day is not dependent on the marked price of the book.",
+        "open" : false
+    },
+    {
+        "title" : "How much do people at ChainReaders earn?",
+        "content" : "Chainreaders is a startup. For every book that is transacted through our website we earn Rs.5/day",
+        "open" : false
+    },
+    {
+        "title" : "What is the payment system followed?",
+        "content" : "Cash on Delivery is the mode of payment that is followd presntly. The website will soon be equipped with the option to complete transactions by performing online payments",
+        "open" : false
+    },
+    {
+        "title" : "How to submit a request for a book if it is not present on the website?",
+        "content" : "Please login and click on Add Lender book",
+        "open" : false
+    },
+    {
+        "title" : "How to let people at ChainReaders know that you have completed reading the book?",
+        "content" : "Please login and click on Orders page in the Home screen.",
+        "open" : false
+    },
+    {
+        "title" : "How many books can I order in a single go?",
+        "content" : "There is no limit on the number of books that can be ordered.",
+        "open" : false
+    },
+    {
+        "title" : "How can you reach us? ",
+        "content" : "Feel free to email us at help@chainreaders.in or give us a call at 8867713633",
+        "open" : false
+    }]
+
+});
+
+bookApp.controller('aboutUsCtrl', function ($scope,$rootScope,$interval, $http,$cookies,$location,$stateParams,$window){
+
+if(interval!=null||interval==null)
+    {
+        if(angular.isDefined($cookies.id_user)&&$cookies.id_user!=''){
+        $interval.cancel(interval);
+        interval=null
+            
+        }
+    }
+
+});
+
+bookApp.controller('termsCtrl', function ($scope,$rootScope,$interval, $http,$cookies,$location,$stateParams,$window){
+
+if(interval!=null||interval==null)
+    {
+        if(angular.isDefined($cookies.id_user)&&$cookies.id_user!=''){
+        $interval.cancel(interval);
+        interval=null
+            
+        }
+    }
+
 });

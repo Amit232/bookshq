@@ -898,8 +898,9 @@ h1 {
   font-weight: 300;
 }
 #footer {
-  background: #e0e0e0;
+  background: #222222;
   padding: 20px 0;
+      color: white;
 }
 #footer ul {
   padding-left: 0;
@@ -1692,7 +1693,7 @@ address {
 
 } 
 .abcRioButtonBlue {
-    background-color: #dd4b39!important;
+    background-color: #4285f4!important;
     box-shadow: none!important;
 }
 /*.navbar-inverse {
@@ -1914,4 +1915,8 @@ body {
   z-index: -8;
   background-color: #FFEB3B;
   animation-timing-function: cubic-bezier(0.5, 2.4, 0.9, 0.9);
+}
+
+.margin17{
+  margin: 17px auto !important
 }

@@ -47,9 +47,9 @@ class Admin{
     public function getTransactions($startIndex=0,$limitIndex=10){
       global $db;
       $where='1';
-      $q_transaction="SELECT st.id_sub_transaction,st.transaction_id_transaction,st.ordered_date,u.name as buyer_name,p.name as product_name,p.id_product as id_product,st.date_issued,st.due_date,u1.name as seller_name,st.status as transaction_status FROM sub_transaction as st LEFT JOIN product as p ON st.product_id_product=p.id_product LEFT JOIN user as u ON st.user_id_user=u.id_user LEFT JOIN product_label as pl ON p.id_product=pl.product_id_product LEFT JOIN user as u1 ON pl.user_id_user=u1.id_user where $where Order By st.ordered_date  LIMIT $limitIndex OFFSET $startIndex ";
+      $q_transaction="SELECT st.id_sub_transaction,st.transaction_id_transaction,st.ordered_date,u.name as buyer_name,p.name as product_name,p.id_product as id_product,st.date_issued,st.due_date,u1.name as seller_name,st.status as transaction_status FROM sub_transaction as st LEFT JOIN product as p ON st.product_id_product=p.id_product LEFT JOIN user as u ON st.user_id_user=u.id_user LEFT JOIN lender_product_notification as pl ON p.id_product=pl.product_id_product LEFT JOIN user as u1 ON pl.user_id_user=u1.id_user where $where Order By st.ordered_date  LIMIT $limitIndex OFFSET $startIndex ";
       $where1='1';
-      $q_transaction1="SELECT st.id_sub_transaction,st.transaction_id_transaction,st.ordered_date,u.name as buyer_name,p.name as product_name,p.id_product as id_product,st.date_issued,st.due_date,u1.name as seller_name,st.status as transaction_status FROM sub_transaction as st LEFT JOIN product as p ON st.product_id_product=p.id_product LEFT JOIN user as u ON st.user_id_user=u.id_user LEFT JOIN product_label as pl ON p.id_product=pl.product_id_product LEFT JOIN user as u1 ON pl.user_id_user=u1.id_user where $where1  Order By st.ordered_date";
+      $q_transaction1="SELECT st.id_sub_transaction,st.transaction_id_transaction,st.ordered_date,u.name as buyer_name,p.name as product_name,p.id_product as id_product,st.date_issued,st.due_date,u1.name as seller_name,st.status as transaction_status FROM sub_transaction as st LEFT JOIN product as p ON st.product_id_product=p.id_product LEFT JOIN user as u ON st.user_id_user=u.id_user LEFT JOIN lender_product_notification as pl ON p.id_product=pl.product_id_product LEFT JOIN user as u1 ON pl.user_id_user=u1.id_user where $where1  Order By st.ordered_date";
     
     $transactions = $db->select($q_transaction);
 
@@ -165,7 +165,7 @@ class Admin{
     public function getSubTrasactionDetails($id_sub_transaction){
       global $db;
       $where="st.id_sub_transaction = '$id_sub_transaction'";
-     $q_transaction=  "SELECT st.id_sub_transaction,st.transaction_id_transaction,st.ordered_date,u.name as buyer_name,p.name as product_name,p.id_product as id_product,st.date_issued,st.due_date,u1.name as seller_name,st.status as transaction_status,u.mobile FROM sub_transaction as st LEFT JOIN product as p ON st.product_id_product=p.id_product LEFT JOIN user as u ON st.user_id_user=u.id_user LEFT JOIN product_label as pl ON p.id_product=pl.product_id_product LEFT JOIN user as u1 ON pl.user_id_user=u1.id_user where $where";
+     $q_transaction=  "SELECT st.id_sub_transaction,st.transaction_id_transaction,st.ordered_date,u.name as buyer_name,u.email as user_email,p.name as product_name,p.id_product as id_product,st.date_issued,st.due_date,u1.id_user as seler_id,u1.email as seller_email, u1.name as seller_name,st.status as transaction_status,u.mobile FROM sub_transaction as st LEFT JOIN product as p ON st.product_id_product=p.id_product LEFT JOIN user as u ON st.user_id_user=u.id_user LEFT JOIN lender_product_notification as pl ON p.id_product=pl.product_id_product LEFT JOIN user as u1 ON pl.user_id_user=u1.id_user where $where";
      $transactions = $db->select($q_transaction); 
      return $transactions;
     }

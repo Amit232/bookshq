@@ -85,7 +85,7 @@ class Product{
       {
         $where='1';
       }
-     $q_transaction="SELECT st.id_sub_transaction,st.transaction_id_transaction,st.ordered_date,u.name as buyer_name,p.name as product_name,p.id_product as id_product,st.date_issued,st.due_date,u1.name as seller_name,st.status as transaction_status FROM sub_transaction as st LEFT JOIN product as p ON st.product_id_product=p.id_product LEFT JOIN user as u ON st.user_id_user=u.id_user LEFT JOIN product_label as pl ON p.id_product=pl.product_id_product LEFT JOIN user as u1 ON pl.user_id_user=u1.id_user where $where Order By st.ordered_date";
+     $q_transaction="SELECT st.id_sub_transaction,st.transaction_id_transaction,st.ordered_date,u.name as buyer_name,p.name as product_name,p.id_product as id_product,st.date_issued,st.due_date,u1.name as seller_name,st.status as transaction_status FROM sub_transaction as st LEFT JOIN product as p ON st.product_id_product=p.id_product LEFT JOIN user as u ON st.user_id_user=u.id_user LEFT JOIN lender_product_notification as pl ON p.id_product=pl.product_id_product LEFT JOIN user as u1 ON pl.user_id_user=u1.id_user where $where Order By st.ordered_date";
      $transactions = $db->select($q_transaction);
      return $transactions;
 
@@ -105,7 +105,7 @@ public function getOrders($id_user='')
         $where="st.user_id_user='$id_user'";
       
      
-       $q_orders="SELECT st.id_sub_transaction,st.transaction_id_transaction,st.ordered_date,u.name as buyer_name,p.*,st.date_issued,st.due_date,u1.name as seller_name,st.status as transaction_status FROM sub_transaction as st LEFT JOIN product as p ON st.product_id_product=p.id_product LEFT JOIN user as u ON st.user_id_user=u.id_user LEFT JOIN product_label as pl ON p.id_product=pl.product_id_product LEFT JOIN user as u1 ON pl.user_id_user=u1.id_user where $where Order By st.ordered_date";
+       $q_orders="SELECT st.id_sub_transaction,st.transaction_id_transaction,st.ordered_date,u.name as buyer_name,p.*,st.date_issued,st.due_date,u1.name as seller_name,st.status as transaction_status FROM sub_transaction as st LEFT JOIN product as p ON st.product_id_product=p.id_product LEFT JOIN user as u ON st.user_id_user=u.id_user LEFT JOIN lender_product_notification as pl ON p.id_product=pl.product_id_product LEFT JOIN user as u1 ON pl.user_id_user=u1.id_user where $where Order By st.ordered_date";
        $orders = $db->select($q_orders);
        return $orders;
       }
@@ -151,7 +151,7 @@ public function getOrders($id_user='')
   public function getYourLenderedProducts($id_user)
   {
     global $db;
-    $q_select="SELECT pl.user_id_user as lendered_user_id,p.name,p.pic,st.* FROM sub_transaction as st JOIN product_label as pl ON pl.user_id_user=st.user_id_user AND pl.product_id_product=st.product_id_product LEFT JOIN product as p ON pl.product_id_product=p.id_product  WHERE p.user_id_user='$id_user' GROUP BY st.product_id_product";
+    $q_select="SELECT pl.user_id_user as lendered_user_id,p.name,p.pic,st.* FROM sub_transaction as st JOIN lender_product_notification as pl ON pl.user_id_user=st.user_id_user AND pl.product_id_product=st.product_id_product LEFT JOIN product as p ON pl.product_id_product=p.id_product  WHERE p.user_id_user='$id_user' GROUP BY st.product_id_product";
     $res = $db->select($q_select);
     return $res;
   }
@@ -180,10 +180,10 @@ public function getOrders($id_user='')
       }
       if($categories&&count($categories)>0) 
       {
-        $orderByQ = "ORDER BY FIELD(product.category_id_category ,$categories)";
+        $orderByQ = "ORDER BY FIELD(product.category_id_category ,$categories),product.updated_at DESC";
       }
       else{
-        $orderByQ ="Order BY product.updated_at";
+        $orderByQ ="Order BY product.updated_at DESC";
       }
        $q_products= "SELECT product.*,avg(phur.rating) as rating FROM product left join product_has_user_review as phur ON phur.product_id_product=product.id_product where $where group by product.id_product $orderByQ LIMIT $limitIndex OFFSET $startIndex";
       $products = $db->select($q_products);
@@ -279,6 +279,13 @@ public function getOrders($id_user='')
 
     public function addBulkProductToCart($id_user,$products){
       
+    }
+
+
+    public function addSubScriber($insert){
+      global $db;
+      $res=$db->insert('subscribers',$insert);
+      return $res;
     }
     
 }
