@@ -605,6 +605,15 @@
             }
         }
 
+        public function contact(){
+            if($this->get_request_method() != "POST"){
+                            $this->response('',405);
+            }
+            $productControllerObj=new ProductController();
+            $results = $productControllerObj->addContactedUsers($this->_request['contact']);
+            $this->response($this->json($results), 200);
+        }
+
         
         /************ END *****************/
 

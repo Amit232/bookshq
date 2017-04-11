@@ -297,6 +297,12 @@ public function getOrders($id_user='')
       return $res;
     }
     
+
+    public function addContactedUsers($insert){
+      global $db;
+      $res=$db->insert('contacted_users',$insert);
+      return $res;
+    }
 }
 
 ?>    

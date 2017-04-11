@@ -638,4 +638,24 @@ class ProductController
             $notifications = $userObj->getNotifications($idUser);
             return array('error'=>200,'notifications'=>$notifications);
     }
+
+
+
+    public function addContactedUsers($contact){
+        $productObj = new Product();
+        $array =array('firstname'=>$contact['firstname'],
+                      'lastname'=>$contact['lastname'],
+                      'email'=>$contact['email'],
+                      'subject'=>$contact['subject'],
+                      'message'=>$contact['message']);
+        if($array!=''){
+              $addContactedUsers = $productObj->addContactedUsers($array);
+              if($addContactedUsers){
+                return array('error'=>200,'message'=>'Information sent successfully. we will notify you shortly.');
+              }
+        }else{
+          return array('error'=>403,'message'=>'Information not sent. Please contact support.');
+        }
+
+    }
 }

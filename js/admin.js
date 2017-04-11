@@ -105,6 +105,12 @@ bookApp.config(function($stateProvider, $urlRouterProvider) {
                         controller  : 'termsCtrl',
                         title: 'Terms & Conditions'
                 })
+                .state('contactus',{
+                        url: '/contact',
+                        templateUrl : 'pages/contact.html',
+                        controller  : 'contactCtrl',
+                        title: 'Contact us'
+                })
               /*  // route for the instruction page
                 .state('instruction',{
                         url: '/instruction',
@@ -362,12 +368,12 @@ bookApp.run(function ($location, $rootScope, $state, $stateParams,$http,$cookies
                                 $rootScope.tableDatas=[];
                                 $rootScope.abc=[];
                             }else{
-                                /*swal({
+                                swal({
                                   title: '',
                                   text: 'We will contact you via mail, once we receive an order for your book',
                                   timer: 5000
-                                })*/
-                                $.toast({
+                                })
+                                /*$.toast({
                                     text: "We will contact you via mail, once we receive an order for your book", // Text that is to be shown in the toast
                                     showHideTransition: 'slide', // fade, slide or plain
                                     allowToastClose: true, // Boolean value true or false
@@ -379,7 +385,7 @@ bookApp.run(function ($location, $rootScope, $state, $stateParams,$http,$cookies
                                     textAlign: 'center',  // Text alignment i.e. left, right or center
                                     loader: false,  // Whether to show loader or not. True by default
                                     loaderBg: '#ffffff',  // Background color of the toast loader
-                                });
+                                });*/
                                 $(".close").trigger('click');
                                 $rootScope.tableDatas=[];
                                 $rootScope.abc=[];
@@ -692,12 +698,12 @@ $rootScope.normalLoginD = function(email,password)
           allowToastClose: true,
           position: 'top-right',
         });*/
-        /*swal({
+        swal({
           title: '',
           text: 'You are alredy logged in to application',
           timer: 5000
-        })*/
-        $.toast({
+        })
+        /*$.toast({
               text:'You are alredy logged in to application', // Text that is to be shown in the toast
               icon: 'info',
               showHideTransition: 'slide', // fade, slide or plain
@@ -710,7 +716,7 @@ $rootScope.normalLoginD = function(email,password)
               textAlign: 'center',  // Text alignment i.e. left, right or center
               loader: false,  // Whether to show loader or not. True by default
               loaderBg: '#ffffff',  // Background color of the toast loader
-        });
+        });*/
         return false;
     }
     else
@@ -826,12 +832,12 @@ $rootScope.cartProducts=angular.copy(a);
                 if(status==403)
                     {
                        // alert(data.message);
-                        /*swal({
+                        swal({
                           title: '',
                           text: data.message,
                           timer: 5000
-                        })*/
-                        $.toast({
+                        })
+                       /* $.toast({
                               text:data.message, // Text that is to be shown in the toast
                               icon: 'error',
                               showHideTransition: 'slide', // fade, slide or plain
@@ -844,7 +850,7 @@ $rootScope.cartProducts=angular.copy(a);
                               textAlign: 'center',  // Text alignment i.e. left, right or center
                               loader: false,  // Whether to show loader or not. True by default
                               loaderBg: '#ffffff',  // Background color of the toast loader
-                        });
+                        });*/
                     }
             });
         }
@@ -1431,12 +1437,12 @@ $scope.sendOrganizationReq =function()
             {
                 //alert('Organization addedd successfully.You will be nofified once it is verified.');
                
-                /*swal({
+                swal({
                   title: '',
                   text: 'Organization addedd successfully.You will be notified once it is verified.',
                   timer: 5000
-                })*/
-                $.toast({
+                })
+               /* $.toast({
                     text: "Organization addedd successfully.You will be notified once it is verified.", // Text that is to be shown in the toast
                     showHideTransition: 'slide', // fade, slide or plain
                     allowToastClose: true, // Boolean value true or false
@@ -1448,7 +1454,7 @@ $scope.sendOrganizationReq =function()
                     textAlign: 'center',  // Text alignment i.e. left, right or center
                     loader: false,  // Whether to show loader or not. True by default
                     loaderBg: '#ffffff',  // Background color of the toast loader
-                });
+                });*/
                 $('body').removeClass('modal-open');
                 $("#login-modal1").modal('hide');
             }
@@ -1532,12 +1538,12 @@ $scope.sendOrganizationReq =function()
     }
     if(angular.isDefined($scope.selecttechpark)&&$scope.selecttechpark!=''){
         if($scope.selecttechpark=='not_avaiable'){
-            /*swal({
+            swal({
                       title: '',
                       text: 'Please select the valid techpark availability',
                       timer: 5000
-            })*/
-            $.toast({
+            })
+           /* $.toast({
                 text: "Please select the valid techpark availability", // Text that is to be shown in the toast
                 icon: 'error',
                 showHideTransition: 'slide', // fade, slide or plain
@@ -1550,17 +1556,17 @@ $scope.sendOrganizationReq =function()
                 textAlign: 'center',  // Text alignment i.e. left, right or center
                 loader: false,  // Whether to show loader or not. True by default
                 loaderBg: '#ffffff',  // Background color of the toast loader
-            });
+            });*/
 
             return false;
         }
     }else{
-        /*swal({
+        swal({
                       title: '',
                       text: 'Please select your techpark',
                       timer: 5000
-            })*/
-        $.toast({
+            })
+        /*$.toast({
                 text: "Please select your techpark", // Text that is to be shown in the toast
                 icon: 'error',
                 showHideTransition: 'slide', // fade, slide or plain
@@ -1573,7 +1579,7 @@ $scope.sendOrganizationReq =function()
                 textAlign: 'center',  // Text alignment i.e. left, right or center
                 loader: false,  // Whether to show loader or not. True by default
                 loaderBg: '#ffffff',  // Background color of the toast loader
-        });
+        });*/
 
         return false;
     }
@@ -1674,7 +1680,7 @@ $scope.showBasket=true;
 $scope.beforelogincheckout= function(){
     if(angular.isUndefined($cookies.id_user))
     {
-        $.toast({
+        /*$.toast({
             text: "Please login and add product to cart", // Text that is to be shown in the toast
             showHideTransition: 'slide', // fade, slide or plain
             icon:'error',
@@ -1692,8 +1698,8 @@ $scope.beforelogincheckout= function(){
                 $rootScope.registerorloginClick('login');
                 $.toast().reset('all');
             }
-        });
-       /* swal({ 
+        });*/
+        swal({ 
               title: '',
               text: 'Please login and add product to cart',
               timer: 5000
@@ -1701,7 +1707,7 @@ $scope.beforelogincheckout= function(){
           function(){
                     $(".bs-example-modal-lg").modal("show");
                     $rootScope.registerorloginClick('login');
-        });*/
+        });
         return false;
     }else{
         //data-toggle="modal" data-target="#login-modal1"
@@ -1788,7 +1794,7 @@ $scope.buyProducts= function(){
     {
        
         $("#closeBtnOrder").trigger('click');
-        $.toast({
+        /*$.toast({
             text: "Please login and add product to cart", // Text that is to be shown in the toast
             showHideTransition: 'slide', // fade, slide or plain
             icon:'error',
@@ -1806,8 +1812,8 @@ $scope.buyProducts= function(){
                 $rootScope.registerorloginClick('login');
                 $.toast().reset('all');
             }
-        });
-        /*swal({ 
+        });*/
+        swal({ 
               title: '',
               text: 'Please login and add product to cart',
               timer: 5000
@@ -1815,7 +1821,7 @@ $scope.buyProducts= function(){
           function(){
                     $(".bs-example-modal-lg").modal("show");
                     $rootScope.registerorloginClick('login');
-        });*/
+        });
         
         return false;
     }
@@ -1855,25 +1861,25 @@ $scope.buyProducts= function(){
         headers: {'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'}
         }).success(function (data,status) {
             if(status==200)
-               /* swal({
+                swal({
                       title: '',
                       text: 'Thank you for placing an order with us. You will receive a notification once your book is ready to be dispatched.',
                       timer: 5000
-                })*/
-                $.toast({
-                    text: "Thank you for placing an order with us. You will receive a notification once your book is ready to be dispatched.", // Text that is to be shown in the toast
-                    showHideTransition: 'slide', // fade, slide or plain
-                    allowToastClose: true, // Boolean value true or false
-                    hideAfter: 6000, // false to make it sticky or number representing the miliseconds as time after which toast needs to be hidden
-                    stack: 1, // false if there should be only one toast at a time or a number representing the maximum number of toasts to be shown at a time
-                    position: 'mid-center', // bottom-left or bottom-right or bottom-center or top-left or top-right or top-center or mid-center or an object representing the left, right, top, bottom values
-                    bgColor: '#000000',  // Background color of the toast
-                    textColor: '#ffffff',  // Text color of the toast
-                    textAlign: 'center',  // Text alignment i.e. left, right or center
-                    loader: false,  // Whether to show loader or not. True by default
-                    loaderBg: '#ffffff',  // Background color of the toast loader
+                })
+                // $.toast({
+                //     text: "Thank you for placing an order with us. You will receive a notification once your book is ready to be dispatched.", // Text that is to be shown in the toast
+                //     showHideTransition: 'slide', // fade, slide or plain
+                //     allowToastClose: true, // Boolean value true or false
+                //     hideAfter: 6000, // false to make it sticky or number representing the miliseconds as time after which toast needs to be hidden
+                //     stack: 1, // false if there should be only one toast at a time or a number representing the maximum number of toasts to be shown at a time
+                //     position: 'mid-center', // bottom-left or bottom-right or bottom-center or top-left or top-right or top-center or mid-center or an object representing the left, right, top, bottom values
+                //     bgColor: '#000000',  // Background color of the toast
+                //     textColor: '#ffffff',  // Text color of the toast
+                //     textAlign: 'center',  // Text alignment i.e. left, right or center
+                //     loader: false,  // Whether to show loader or not. True by default
+                //     loaderBg: '#ffffff',  // Background color of the toast loader
                     
-                });
+                // });
 
             $cookies.mobile = $scope.mobile;
 
@@ -1895,7 +1901,7 @@ $scope.buyProducts= function(){
             if(status==403)
             {
                 //alert(data.meessage);
-                $.toast({
+               /* $.toast({
                     text: data.meessage, // Text that is to be shown in the toast
                     icon:'error',
                     showHideTransition: 'slide', // fade, slide or plain
@@ -1909,12 +1915,12 @@ $scope.buyProducts= function(){
                     loader: false,  // Whether to show loader or not. True by default
                     loaderBg: '#ffffff',  // Background color of the toast loader
                     
-                });
-                /*swal({
+                });*/
+                swal({
                       title: '',
                       text: data.meessage,
                       timer: 5000
-                    })*/
+                    })
 
                 $scope.message=data.meessage;
                 $('body').removeClass('modal-open');
@@ -1969,12 +1975,12 @@ $scope.sendOrganizationReq =function()
             {
                 //alert('Organization addedd successfully.You will be nofified once it is verified.');
                
-                /*swal({
+                swal({
                       title: '',
                       text: 'Organization addedd successfully.You will be nofified once it is verified.',
                       timer: 5000
-                    })*/
-                $.toast({
+                    })
+                /*$.toast({
                     text: 'Organization addedd successfully.You will be nofified once it is verified.', // Text that is to be shown in the toast
                     showHideTransition: 'slide', // fade, slide or plain
                     allowToastClose: true, // Boolean value true or false
@@ -1987,7 +1993,7 @@ $scope.sendOrganizationReq =function()
                     loader: false,  // Whether to show loader or not. True by default
                     loaderBg: '#ffffff',  // Background color of the toast loader
                     
-                });
+                });*/
                 $('body').removeClass('modal-open');
                 $("#login-modal1").modal('hide');
             }
@@ -2065,12 +2071,12 @@ $scope.changeTransactionStatus = function(id_subtransaction,order_status){
                     //alert(data.message);
                     $('body').removeClass('modal-open');
                     $("#returnreview").modal('hide');
-                     /*swal({
+                     swal({
                       title: '',
                       text: data.message,
                       timer: 5000
-                    })*/
-                     $.toast({
+                    })
+                     /*$.toast({
                         text: data.message, // Text that is to be shown in the toast
                         showHideTransition: 'slide', // fade, slide or plain
                         allowToastClose: true, // Boolean value true or false
@@ -2083,7 +2089,7 @@ $scope.changeTransactionStatus = function(id_subtransaction,order_status){
                         loader: false,  // Whether to show loader or not. True by default
                         loaderBg: '#ffffff',  // Background color of the toast loader
                         
-                    });
+                    });*/
                     if(order_status=='in_progress'){
                         $scope.id_subtransaction="";
                         $scope.status="";
@@ -2212,5 +2218,108 @@ if(interval!=null||interval==null)
             
         }
     }
+
+});
+
+bookApp.controller('contactCtrl', function ($scope,$rootScope,$interval, $http,$cookies,$location,$stateParams,$window){
+$.toast().reset('all');
+if(interval!=null||interval==null)
+    {
+        if(angular.isDefined($cookies.id_user)&&$cookies.id_user!=''){
+        $interval.cancel(interval);
+        interval=null
+            
+        }
+    }
+
+
+ $scope.formFill = function(contact){
+
+        $('#contactform').validate(angular.extend({
+            // Rules for form validation
+            rules: {
+                firstname: {
+                    required: true,
+                    maxlength:255
+                },
+                lastname: {
+                  required: true,
+                  maxlength:255
+
+                },
+                email: {
+                  email:true,  
+                  required: true,
+                  maxlength:255
+
+                },
+                subject: {
+                  required: true,
+                  maxlength:255
+
+                },
+                message: {
+                  required: true,
+                  maxlength:255
+
+                }
+            },
+            // Messages for form validation
+            messages: {
+                firstname : {
+                        required : '<center><i style="color:red">Firstname cannot be blank</i></center>',
+                },
+                lastname : {
+                        required : '<center><i style="color:red">Lastname cannot be blank</i></center>',
+                },
+                email : {
+                        required : '<center><i style="color:red">Email cannot be blank</i></center>',
+                },
+                subject : {
+                        required : '<center><i style="color:red">Subject cannot be blank</i></center>',
+                },
+                message : {
+                        required : '<center><i style="color:red">Message cannot be blank</i></center>',
+                }
+
+            }
+
+        },validateOptions));
+
+    if($('#contactform').valid()&&$scope.contact!=''){
+
+        
+            $http({
+                method: "POST",
+                timeout:60000,                                    
+                url: SITE_URL+'contact',
+                data : $.param({'contact':contact}),
+                headers: {'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'}
+                }).success(function (data,status) {
+                    $scope.contact={};    
+                    /*$.toast({
+                        text: data.message, // Text that is to be shown in the toast
+                        showHideTransition: 'slide', // fade, slide or plain
+                        allowToastClose: true, // Boolean value true or false
+                        hideAfter: 4000, // false to make it sticky or number representing the miliseconds as time after which toast needs to be hidden
+                        stack: 1, // false if there should be only one toast at a time or a number representing the maximum number of toasts to be shown at a time
+                        position: 'bottom-center', // bottom-left or bottom-right or bottom-center or top-left or top-right or top-center or mid-center or an object representing the left, right, top, bottom values
+                        bgColor: '#000000',  // Background color of the toast
+                        textColor: '#ffffff',  // Text color of the toast
+                        textAlign: 'center',  // Text alignment i.e. left, right or center
+                        loader: false,  // Whether to show loader or not. True by default
+                        loaderBg: '#ffffff',  // Background color of the toast loader
+                        
+                    });*/
+                    swal({ 
+                      title: '',
+                      text: data.message,
+                      timer: 5000
+                    });
+                }).error(function(data,status){
+
+                });
+         }  
+    } 
 
 });
