@@ -3,7 +3,7 @@ setlocale(LC_ALL, 'Asia/Kolkata');
 date_default_timezone_set("Asia/Kolkata");
 defined("DB_HOST") ? null : define("DB_HOST", "localhost");
 defined("DB_USER") ? null : define("DB_USER", "root");
-defined("DB_PASSWORD") ? null : define("DB_PASSWORD", "admin");
+defined("DB_PASSWORD") ? null : define("DB_PASSWORD", "");
 defined("DB_NAME") ? null : define("DB_NAME", "library");
 $config['host']   = DB_HOST;
 $config['username'] = DB_USER;
@@ -72,7 +72,7 @@ function phpmailerObj($to, $name, $subject, $message, $body, $altBody)
 $client_id = '588003759784-r4a4dbqrbd4bh6q55o3rm79j7nbsjula.apps.googleusercontent.com';
 $client_secret = '2nljwGNjASdvb_GLJXn9_5Zo';
 $redirect_uri = 'http://127.0.0.1/s/index.php';
-$config['due_days']=20;
+$config['due_days']=21;
 $config['per_date_rs']=5;
 $config['custom_sms_message']='We have received your order for order number';
 $config['custom_sms_message1']=' and it is being processed. You can expect delivery within 3 days';
@@ -135,15 +135,20 @@ curl_close($ch);
 }
 
 
-define("DUE_DAYS",20);
+define("DUE_DAYS",21);
+define("DUE_WEEKS",3);
 define("SHOW_AMOUNT_ON_RETURNING",true);
 define("SERVER_URL", 'https://chainreader.in/');
 define("RSPERDAY", '5');
+define("RSPERWEEK", '29');
+define("RSDUEPERDAY", '29');
+define("RSDUEPERWEEK", '39');
+define("LENDEDPERWEEK", '10');
 define("SEND_WELCOME_EMAIL", false);
 define("SEND_INVOICE_EMAIL", false);
 define("SEND_ORDER_DELIVERY_EMAIL",false);
 define("SEND_LENDER_BOOK_EMAIL",false);
-define("SEND_ORDER_RETURN_EMAIL",false);
+define("SEND_ORDER_RETURN_EMAIL",true);
 define("SEND_COMPLETED_RETURN__EMAIL",false);
 
 ?>

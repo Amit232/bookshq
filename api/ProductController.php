@@ -65,7 +65,7 @@ class ProductController
             $to=$email;
             $from='sachin@chainreader.in';
             $url=SERVER_URL; 
-            $imgurl=SERVER_URL.'img/logo.jpg';
+            $imgurl=SERVER_URL.'img/logo1.jpg';
             $subject='Welcome to ChainReaders';
             $message = file_get_contents('../email_templates/welcome.html');
             $message = str_replace('{url}', $url, $message);           
@@ -95,7 +95,7 @@ class ProductController
             $to=$email;
             $from=$_SESSION['login_email'];
             $url=SERVER_URL; 
-            $imgurl=SERVER_URL.'img/logo.jpg';
+            $imgurl=SERVER_URL.'img/logo1.jpg';
             $subject='Welcome to ChainReaders';
             $message = file_get_contents('../email_templates/welcome.html');
             $message = str_replace('{url}', $url, $message);
@@ -108,7 +108,7 @@ class ProductController
             $mymail = phpmailerObj($to, $name, $subject, $message, $body, $altBody);
             if($mymail){
                 $updateArray['email_notified']='1';
-                $res = $userObj->updateUserDetails($idUser,$updateArray);
+                $res1 = $userObj->updateUserDetails($idUser,$updateArray);
             }
           }
           $userCartDetails=$userObj->getUserProducts($res);
@@ -298,7 +298,7 @@ class ProductController
             $message1.='<tr>
                         <td style="font-family:arial;font-size: 14px; vertical-align: middle; margin: 0; padding: 9px 0;" align="left">'.$product['name'].'</td>
                         <td style="font-family:arial;font-size: 14px; vertical-align: middle; margin: 0; padding: 9px 0;" align="left">'.$product['author'].'</td>
-                        <td style="font-family:arial; font-size: 14px; vertical-align: middle; margin: 0; padding: 9px 0;"  align="left">Rs '.RSPERDAY.'/day</td>
+                        <td style="font-family:arial; font-size: 14px; vertical-align: middle; margin: 0; padding: 9px 0;"  align="left">Rs '.RSPERWEEK.'/week</td>
                         </tr>';
             }
             $message = str_replace('{section_array}', $message1, $message);
@@ -360,11 +360,13 @@ class ProductController
       $transaction=$id_transaction;
 
       $status = $status;
-
+      $curretDateTime = date('Y-m-d H:i:s');
       $Updateinfo=[];
 
       $Updateinfo['status']=$status;
-
+      if($status=='in_progress'){
+        $Updateinfo['returned_date'] = $curretDateTime;
+      }
       $Updatecondition=" id_sub_transaction='$transaction'";
 
       $res = $productObj->setTransactionStatus($Updateinfo,$Updatecondition);
@@ -417,26 +419,60 @@ class ProductController
                 $message = str_replace('{content}', $content, $message);
 
                 $message1="";
+                //echo $productsDetails[0]['returned_date']."fddf".$productsDetails[0]['date_issued']."fddf";
+                $date_due=date_create($productsDetails[0]['returned_date']);
+                $date_issued=date_create($productsDetails[0]['date_issued']);
+                $diff=date_diff($date_issued,$date_due);
+                $noOfdays = $diff->format("%a days");
+                //echo $noOfdays;die;
                 $now = time(); // or your date as well
-                $date_issued = strtotime($productsDetails[0]['date_issued']);
-                $date_due = strtotime($productsDetails[0]['due_date']);
-                $datediff = $date_due - $date_issued;
+                /*$date_issued = strtotime($productsDetails[0]['date_issued']);
+                $date_due = strtotime($productsDetails[0]['returned_date']);
+                $datediff = $date_due - $date_issued;*/
                 if(SHOW_AMOUNT_ON_RETURNING){
-                  $noOfdays = ($datediff / (60 * 60 * 24));
-                  if($noOfdays>20){
+                  //$noOfdays = ($datediff / (60 * 60 * 24));
+                  /*if($noOfdays>21){
                     $totalAmount = $noOfdays*RSPERDAY;
+                    $daysLeft = $noOfdays-DUE_DAYS;
+                    
                   }else{
                     $totalAmount = (DUE_DAYS*RSPERDAY);
+                  }*/
+                  if($noOfdays>0&&$noOfdays>7){
+                    $remainingDays = $noOfdays % 7;
+                    $exactweeks = ($noOfdays - $remainingDays) / 7;
+                    if($exactweeks>DUE_WEEKS){
+                      $remainingWeeks = $exactweeks-DUE_WEEKS;
+                      $totalAmount = $exactweeks * RSPERWEEK;
+                      //$totalAmount+ = $remainingDays*RSDUEPERDAY;
+                      if($remainingWeeks>0){
+                        $totalAmount+= $remainingWeeks*RSDUEPERWEEK;
+                      }
+                      if($remainingDays>0){
+                        $totalAmount+= (1*RSDUEPERWEEK);
+                      }
+                    }else{
+                      $totalAmount = $exactweeks * RSPERWEEK;
+                      if($remainingDays>0){
+                        $totalAmount+= (1*RSDUEPERWEEK);
+                      }
+                    }
+                  }
+                  else{
+                    $totalAmount = RSPERWEEK;
                   }
                 }else{
                   $noOfdays = ($datediff / (60 * 60 * 24));
                   $totalAmount ='-Currently its free-';
                 }
+                //echo $noOfdays."dffd";
+                //echo $totalAmount;
+                //<td style="font-family:arial; font-size: 14px; vertical-align: middle; margin: 0; padding: 9px 0;"  align="left">Rs '.$noOfdays.'/day</td>
                 $message1.='<tr>
                             <td style="font-family:arial;font-size: 14px; vertical-align: middle; margin: 0; padding: 9px 0;" align="left">'.$productsDetails[0]['product_name'].'</td>
-                            <td style="font-family:arial;font-size: 14px; vertical-align: middle; margin: 0; padding: 9px 0;" align="left">'.RSPERDAY.'</td>
-                            <td style="font-family:arial; font-size: 14px; vertical-align: middle; margin: 0; padding: 9px 0;"  align="left">Rs '.$noOfdays.'/day</td>
-                             <td style="font-family:arial; font-size: 14px; vertical-align: middle; margin: 0; padding: 9px 0;"  align="left">Rs '.$totalAmount.'/day</td>
+                            <td style="font-family:arial;font-size: 14px; vertical-align: middle; margin: 0; padding: 9px 0;" align="left">'.RSPERWEEK.'</td>
+                            
+                             <td style="font-family:arial; font-size: 14px; vertical-align: middle; margin: 0; padding: 9px 0;"  align="left">Rs '.$totalAmount.'</td>
                             </tr>';
                 $message = str_replace('{section_array}', $message1, $message);
 
@@ -595,5 +631,11 @@ class ProductController
           return array('error'=>403,'message'=>'Subscription failed.');
         }
 
+    }
+
+    public function getNotifications($idUser){
+            $userObj = new User();
+            $notifications = $userObj->getNotifications($idUser);
+            return array('error'=>200,'notifications'=>$notifications);
     }
 }

@@ -96,7 +96,7 @@ class AdminController
           if($productsDetails){
 
             $to=$productsDetails[0]['user_email'];
-            $from='sachin@chainreader.in';
+            $from='admin@chainreaders.in';
             $url=SERVER_URL; 
             $imgurl=SERVER_URL.'img/logo1.jpg';
             $content = 'We are pleased to inform that the following book/s in your order #'.$productsDetails[0]['transaction_id_transaction'].' have been delivered. Enjoy Reading!.';
@@ -125,7 +125,7 @@ class AdminController
           if($productsDetails&&$productsDetails[0]['seler_id']&&$productsDetails[0]['seler_id']!=''){
 
             $to=$productsDetails[0]['seller_email'];
-            $from='sachin@chainreader.in';
+            $from='admin@chainreaders.in';
             $url=SERVER_URL; 
             $imgurl=SERVER_URL.'img/logo1.jpg';
             $content = 'We are pleased to inform you that the book/s that you have uploaded have been returned to us. Please feel free to come and collect the book from our ChainReaders associate at your IT park on ( +1 day from the date the book has been returned to us )';
@@ -139,17 +139,41 @@ class AdminController
             $message = str_replace('{orderpagelink}', SERVER_URL.'/#/orders', $message);
             $message1="";
             $now = time(); // or your date as well
-            $date_issued = strtotime($productsDetails[0]['date_issued']);
-            $date_due = strtotime($productsDetails[0]['due_date']);
-            $datediff = $date_due - $date_issued;
+            /*$date_issued = strtotime($productsDetails[0]['date_issued']);
+            $date_due = strtotime($productsDetails[0]['returned_date']);
+            $datediff = $date_due - $date_issued;*/
+            $date_due=date_create($productsDetails[0]['returned_date']);
+            $date_issued=date_create($productsDetails[0]['date_issued']);
+            $diff=date_diff($date_issued,$date_due);
+            $noOfdays = $diff->format("%a days");
             if(SHOW_AMOUNT_ON_RETURNING){
-              $noOfdays = ($datediff / (60 * 60 * 24));
-              if($noOfdays>20){
-                $totalAmount = $noOfdays*RSPERDAY;
-                $totalAmountOwedByU = $totalAmount/2;
+              //$noOfdays = ($datediff / (60 * 60 * 24));
+              if($noOfdays>0&&$noOfdays>7){
+                $remainingDays = $noOfdays % 7;
+                $exactweeks = ($noOfdays - $remainingDays) / 7;
+                if($exactweeks>DUE_WEEKS){
+                  $remainingWeeks = $exactweeks-DUE_WEEKS;
+                  $totalAmount = $exactweeks * RSPERWEEK;
+                  //$totalAmount+ = $remainingDays*RSDUEPERDAY;
+                  if($remainingWeeks>0){
+                    $totalAmount+= $remainingWeeks*RSDUEPERWEEK;
+                  }
+                  if($remainingDays>0){
+                    $totalAmount+= (1*RSDUEPERWEEK);
+                  }
+                  $totalAmountOwedByU = $exactweeks*LENDEDPERWEEK;
+                }else{
+                  $totalAmount = $exactweeks * RSPERWEEK;
+                  if($remainingDays>0){
+                    $totalAmount+= (1*RSDUEPERWEEK);
+                    $exactweeks++;
+                  }
+                  $totalAmountOwedByU = $exactweeks*LENDEDPERWEEK;
+                }
+                
               }else{
-                $totalAmount = (DUE_DAYS*RSPERDAY);
-                $totalAmountOwedByU = $totalAmount/2;
+                $totalAmount = RSPERWEEK;
+                $totalAmountOwedByU = LENDEDPERWEEK;
               }
             }else{
               $noOfdays = ($datediff / (60 * 60 * 24));
@@ -158,7 +182,7 @@ class AdminController
             }
             $message1.='<tr>
                         <td style="font-family:arial;font-size: 14px; vertical-align: middle; margin: 0; padding: 9px 0;" align="left">'.$productsDetails[0]['product_name'].'</td>
-                        <td style="font-family:arial;font-size: 14px; vertical-align: middle; margin: 0; padding: 9px 0;" align="left">'.RSPERDAY.'</td>
+                        <td style="font-family:arial;font-size: 14px; vertical-align: middle; margin: 0; padding: 9px 0;" align="left">'.RSPERWEEK.'</td>
                         <td style="font-family:arial; font-size: 14px; vertical-align: middle; margin: 0; padding: 9px 0;"  align="left">Rs '.$noOfdays.'/day</td>
                          <td style="font-family:arial; font-size: 14px; vertical-align: middle; margin: 0; padding: 9px 0;"  align="left">Rs '.$totalAmount.'/day</td>
                         </tr>
@@ -350,7 +374,7 @@ class AdminController
             $userDetails = $userObj->getUser($idUser);
 
             $to=$userDetails[0]['email'];
-            $from='sachin@chainreader.in';
+            $from='admin@chainreaders.in';
             $url=SERVER_URL; 
             $imgurl=SERVER_URL.'img/logo1.jpg';
             $content = 'Thank you for uploading your book on ChainReaders.in. We will intimate you once a request comes in for your book.';

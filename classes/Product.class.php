@@ -128,12 +128,21 @@ public function getOrders($id_user='')
     return $categorys;
   }
 
-  public function getTrendingBooks($limit=8)
+  public function getTrendingBooks($limit=20)
   {
     global $db;
-    $q_t_items= "SELECT p.id_product,p.author,p.name,p.pic,p.pic_name,COUNT(t.product_id_product) as product_count FROM product as p LEFT JOIN sub_transaction as t ON t.product_id_product=p.id_product GROUP BY p.id_product ORDER BY product_count DESC LIMIT $limit";
+    $q_t_items= "SELECT p.id_product,p.author,p.name,p.pic,p.pic_name,COUNT(t.product_id_product) as product_count FROM product as p LEFT JOIN sub_transaction as t ON t.product_id_product=p.id_product GROUP BY p.id_product ORDER BY product_count,p.updated_at DESC LIMIT $limit";
     $treding_pr=$db->select($q_t_items);
-    return $treding_pr;
+    if($treding_pr&&count($treding_pr)>=20){
+
+      return $treding_pr;
+    }else{
+
+      $q_t_items_new= "SELECT p.id_product,p.author,p.name,p.pic,p.pic_name FROM product as p GROUP BY p.id_product ORDER BY p.updated_at DESC LIMIT $limit";
+      $treding_pr_new=$db->select($q_t_items_new);
+      return $treding_pr_new;
+
+    }
 
   }
 

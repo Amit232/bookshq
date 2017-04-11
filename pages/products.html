@@ -46,7 +46,7 @@
                                     </div>
                                 </div> -->
                                 <div ng-repeat="c in categories track by $index">
-                                  <input id="box{{$index}}" type="checkbox" ng-model="categoriesIds[$index]" ng-true-value="1" ng-false-value="" type="checkbox" ng-change="startIndex=0;$limitIndex=6;getAllProductsMain($index);"/>
+                                  <input id="box{{$index}}" type="checkbox" ng-model="$root.categoriesIds[$index]" ng-true-value="1" ng-false-value="" type="checkbox" ng-change="startIndex=0;$limitIndex=6;getAllProductsMain($index);"/>
                                   <label for="box{{$index}}">{{c.name}}</label>
                                 </div>
 
@@ -68,20 +68,24 @@
 
                 <div class="col-xs-12 col-sm-8 col-md-9 col-lg-9 pd768-0" ng-clock ng-cloak ng-show="!productDetail">
                     <div class="col-sm-12 pd768-0">
-                        <div class="col-xs-12 col-sm-4 pd768-0 w568-50" ng-repeat="p in products">
+                        <div class="col-xs-12 col-sm-4 pd768-0 w568-50" ng-repeat="p in products" title="{{p.name}}"> 
                              <div class="col-xs-12" >
-                                <div class="col-lg-12">
-                                    <img style="cursor:pointer" ng-src="./uploads/{{p.pic}}" width="128px" height="198px" ng-click="getProductDetail(p.id_product)">
+                                <div class="col-lg-12" >
+                                    <img style="cursor:pointer;width: 134px !important;
+    height: 201px !important;" ng-src="./uploads/{{p.pic}}"  ng-click="getProductDetail(p.id_product)">
                                 </div>
                                 <div class="col-xs-12 no-padding">
                                     <div class=" col-lg-12 m-5">
                                         <div class="col-lg-12 no-padding"> 
-                                            <a style="cursor:pointer" ng-click="getProductDetail(p.id_product)"><strong>{{p.name}}</strong></a>
+                                            <a style="cursor:pointer" ng-click="getProductDetail(p.id_product)"><strong>
+                                                
+                                                <span ng-if="p.name.length>20" >{{p.name|limitTo:20}}..</span>
+                                                <span ng-if="p.name.length<=20">{{p.name}}</span></strong></a>
                                         </div>
                                     </div>
-                                    <div class=" col-lg-12" >
+                                    <div class="col-lg-12" >
                                         <div class="col-lg-12 no-padding"> 
-                                            <span style="color:grey" class="text-left" > {{p.author}}</span>
+                                            <span style="color:grey" class="text-left" > {{p.author||""}}</span>
                                         </div>
                                     </div> 
                                     <div class=" col-lg-12 m-12">
@@ -132,7 +136,7 @@
                     <div class="row" id="productMain">
                         <div class="col-sm-4" style="    margin-left: 121px;" >
                             <div >
-                                <img  ng-src="./uploads/{{single_product.pic}}" alt="" class="img-responsive" width="150px" height="220px">
+                                <img  ng-src="./uploads/{{single_product.pic}}" alt="" class="img-responsive" style="width: 134px;height: 201px;">
                             </div>
 <!-- 
                             <div class="ribbon sale">

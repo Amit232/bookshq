@@ -63,187 +63,428 @@
                 <div class="">
                     <div class="container">
                         <div class="col-md-12 trendingBk m-12">
-                            <h2><span style="color:black">Trending Books</span></h2>
+                            <h2><span style="color:black">Best Selling Books</span></h2>
                         </div>
                     </div>
                 </div>
 
                 <div class="container">
                     <div class="product-slider">
-                        <div class="item" ng-click="redirectToProduct(trending_books[0].id_product)">
+                        <div class="item" ng-click="redirectToProduct(trending_books[0].id_product)" title="{{trending_books[0].name}}">
                             <div class="product">
                                 <div class="">
                                     <div class="" style="margin: 6px 22px 0;">
                                         <div class="">
                                             <a href="">
-                                                <img src="./uploads/{{trending_books[0].pic}}" alt="" class="img-responsive">
+                                                <img src="./uploads/{{trending_books[0].pic}}" alt="" style="width: 134px;height: 201px;">
                                             </a>
                                         </div>
                                     </div>
                                 </div>
-                                <div class="text">
-                                    <h3><a href="">{{trending_books[0].name}}</a></h3>
+                                <div class="text text-center" >
+                                    <h5><a href="">{{trending_books[0].name}}</a></h5>
                                   
                                 </div>
-                                <div class="text">
-                                    <h5><a href="" >{{trending_books[0].author}}</a></h5>
+                                <div class="text text-center" >
+                                    <a href="" style="font-style: oblique;">{{trending_books[0].author}}</a>
                                 </div>
                             </div>
                         </div>
 
-                         <div class="item"  ng-click="redirectToProduct(trending_books[1].id_product)">
+                         <div class="item"  ng-click="redirectToProduct(trending_books[1].id_product)" title="{{trending_books[1].name}}">
                             <div class="product">
                                 <div class="">
                                     <div class="" style="margin: 6px 22px 0;">
                                         <div class="">
                                             <a href="">
-                                                <img src="./uploads/{{trending_books[1].pic}}" alt="" class="img-responsive">
+                                                <img src="./uploads/{{trending_books[1].pic}}" alt="" style="width: 134px;height: 201px;">
                                             </a>
                                         </div>
                                     </div>
                                 </div>
-                                <div class="text">
-                                    <h3><a href="">{{trending_books[1].name}}</a></h3>
+                                <div class="text text-center">
+                                    <h5><a href="">{{trending_books[1].name}}</a></h5>
                                 </div>
-                                <div class="text">
-                                    <h5><a href="" >{{trending_books[1].author}}</a></h5>
+                                <div class="text text-center" >
+                                    <a href="" style="font-style: italic;">{{trending_books[1].author}}</a>
                                 </div>
                             </div>
                         </div>
 
-                        <div class="item"  ng-click="redirectToProduct(trending_books[2].id_product)">
+                        <div class="item"  ng-click="redirectToProduct(trending_books[2].id_product)" title="{{trending_books[2].name}}">
                             <div class="product">
                                 <div class="">
                                     <div class="" style="margin: 6px 22px 0;">
                                         <div class="">
                                             <a href="">
-                                                <img src="./uploads/{{trending_books[2].pic}}" alt="" class="img-responsive">
+                                                <img src="./uploads/{{trending_books[2].pic}}" alt="" style="width: 134px;height: 201px;">
                                             </a>
                                         </div>
                                     </div>
                                 </div>
-                                <div class="text">
-                                    <h3><a href="">{{trending_books[2].name}}</a></h3>
+                                <div class="text text-center">
+                                    <h5><a href="">{{trending_books[2].name}}</a></h5>
                                   
                                 </div>
-                                <div class="text">
-                                    <h5><a href="" >{{trending_books[2].author}}</a></h5>
+                                <div class="text text-center" >
+                                    <a href="" style="font-style: italic;">{{trending_books[2].author}}</a>
                                 </div>
                             </div>
                         </div>
 
-                        <div class="item"  ng-click="redirectToProduct(trending_books[3].id_product)">
+                        <div class="item"  ng-click="redirectToProduct(trending_books[3].id_product)" title="{{trending_books[3].name}}">
                             <div class="product">
                                 <div class="">
                                     <div class="" style="margin: 6px 22px 0;">
                                         <div class="">
                                             <a href="">
-                                    <img src="./uploads/{{trending_books[3].pic}}" alt="" class="img-responsive">
+                                    <img src="./uploads/{{trending_books[3].pic}}" alt="" style="width: 134px;height: 201px;">
                                             </a>
                                         </div>
                                        
                                     </div>
                                 </div>
-                                <div class="text">
-                                    <h3><a href="">{{trending_books[3].name}}</a></h3>
+                                <div class="text text-center">
+                                    <h5><a href="">{{trending_books[3].name}}</a></h5>
                                   
                                 </div>
-                                <div class="text">
-                                    <h5><a href="" >{{trending_books[3].author}}</a></h5>
+                                <div class="text text-center" >
+                                    <a href="" style="font-style: italic;">{{trending_books[3].author}}</a>
                                 </div>
                             </div>
                         </div>
 
-                        <div class="item"  ng-click="redirectToProduct(trending_books[4].id_product)">
+                        <div class="item"  ng-click="redirectToProduct(trending_books[4].id_product)" title="{{trending_books[4].name}}">
                             <div class="product">
                                 <div class="">
                                     <div class="" style="margin: 6px 22px 0;">
                                         <div class="">
                                             <a href="">
-                                    <img src="./uploads/{{trending_books[4].pic}}" alt="" class="img-responsive">
+                                    <img src="./uploads/{{trending_books[4].pic}}" alt="" style="width: 134px;height: 201px;">
                                             </a>
                                         </div>
                                         
                                     </div>
                                 </div>
                                 
-                                <div class="text">
-                                    <h3><a href="">{{trending_books[4].name}}</a></h3>
+                                <div class="text text-center">
+                                    <h5><a href="">{{trending_books[4].name}}</a></h5>
                                   
                                 </div>
-                                <div class="text">
-                                    <h5><a href="" >{{trending_books[4].author}}</a></h5>
+                                <div class="text text-center" >
+                                    <a href="" style="font-style: italic;">{{trending_books[4].author}}</a>
                                 </div>
                             </div>
                         </div>
 
-                        <div class="item"  ng-click="redirectToProduct(trending_books[5].id_product)">
+                        <div class="item"  ng-click="redirectToProduct(trending_books[5].id_product)" title="{{trending_books[5].name}}">
                             <div class="product">
                                 <div class="">
                                     <div class="" style="margin: 6px 22px 0;">
                                         <div class="">
                                             <a href="">
-                                    <img src="./uploads/{{trending_books[5].pic}}" alt="" class="img-responsive">
+                                    <img src="./uploads/{{trending_books[5].pic}}" alt="" style="width: 134px;height: 201px;">
                                             </a>
                                         </div>
                                         
                                     </div>
                                 </div>
                                
-                                 <div class="text">
-                                    <h3><a href="">{{trending_books[5].name}}</a></h3>
+                                 <div class="text text-center">
+                                    <h5><a href="">{{trending_books[5].name}}</a></h5>
                                   
                                 </div>
-                                <div class="text">
-                                    <h5><a href="" >{{trending_books[5].author}}</a></h5>
+                                <div class="text text-center" >
+                                    <a href="" style="font-style: italic;">{{trending_books[5].author}}</a>
                                 </div>
 
                             </div>
                         </div>
 
-                        <div class="item"  ng-click="redirectToProduct(trending_books[6].id_product)">
+                        <div class="item"  ng-click="redirectToProduct(trending_books[6].id_product)" title="{{trending_books[6].name}}">
                             <div class="product">
                                 <div class="">
                                     <div class="" style="margin: 6px 22px 0;">
                                         <div class="">
                                             <a href="">
-                                    <img src="./uploads/{{trending_books[6].pic}}" alt="" class="img-responsive">
+                                    <img src="./uploads/{{trending_books[6].pic}}" alt="" style="width: 134px;height: 201px;">
                                             </a>
                                         </div>
                                     </div>
                                 </div>
-                                <div class="text">
-                                    <h3><a href="">{{trending_books[6].name}}</a></h3>
+                                <div class="text text-center">
+                                    <h5><a href="">{{trending_books[6].name}}</a></h5>
                                   
                                 </div>
-                                <div class="text">
-                                    <h5><a href="" >{{trending_books[6].author}}</a></h5>
+                                <div class="text text-center" >
+                                    <a href="" style="font-style: italic;">{{trending_books[6].author}}</a>
                                 </div>
 
                               
                             </div>
                         </div>
 
-                        <div class="item"  ng-click="redirectToProduct(trending_books[7].id_product)">
+                        <div class="item"  ng-click="redirectToProduct(trending_books[7].id_product)" title="{{trending_books[7].name}}"> 
                             <div class="product">
                                 <div class="">
                                     <div class="" style="margin: 6px 22px 0;">
                                         <div class="">
                                             <a href="">
-                                    <img src="./uploads/{{trending_books[7].pic}}" alt="" class="img-responsive">
+                                    <img src="./uploads/{{trending_books[7].pic}}" alt="" style="width: 134px;height: 201px;">
                                             </a>
                                         </div>
                                     </div>
                                 </div>
-                                <div class="text">
-                                    <h3><a href="">{{trending_books[7].name}}</a></h3>
+                                <div class="text text-center">
+                                    <h5><a href="">{{trending_books[7].name}}</a></h5>
                                   
                                 </div>
-                                <div class="text">
-                                    <h5><a href="" >{{trending_books[7].author}}</a></h5>
+                                <div class="text text-center" >
+                                    <a href="" style="font-style: italic;">{{trending_books[7].author}}</a>
                                 </div>
                             </div>
                         </div> 
+                        <div class="item"  ng-click="redirectToProduct(trending_books[8].id_product)" title="{{trending_books[8].name}}"> 
+                            <div class="product">
+                                <div class="">
+                                    <div class="" style="margin: 6px 22px 0;">
+                                        <div class="">
+                                            <a href="">
+                                    <img src="./uploads/{{trending_books[8].pic}}" alt="" style="width: 134px;height: 201px;">
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="text text-center">
+                                    <h5><a href="">{{trending_books[8].name}}</a></h5>
+                                  
+                                </div>
+                                <div class="text text-center" >
+                                    <a href="" style="font-style: italic;">{{trending_books[8].author}}</a>
+                                </div>
+                            </div>
+                        </div> 
+                        <div class="item"  ng-click="redirectToProduct(trending_books[9].id_product)" title="{{trending_books[9].name}}"> 
+                            <div class="product">
+                                <div class="">
+                                    <div class="" style="margin: 6px 22px 0;">
+                                        <div class="">
+                                            <a href="">
+                                    <img src="./uploads/{{trending_books[9].pic}}" alt="" style="width: 134px;height: 201px;">
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="text text-center">
+                                    <h5><a href="">{{trending_books[9].name}}</a></h5>
+                                  
+                                </div>
+                                <div class="text text-center" >
+                                    <a href="" style="font-style: italic;">{{trending_books[9].author}}</a>
+                                </div>
+                            </div>
+                        </div> 
+                        <div class="item"  ng-click="redirectToProduct(trending_books[10].id_product)" title="{{trending_books[10].name}}"> 
+                            <div class="product">
+                                <div class="">
+                                    <div class="" style="margin: 6px 22px 0;">
+                                        <div class="">
+                                            <a href="">
+                                    <img src="./uploads/{{trending_books[7].pic}}" alt="" style="width: 134px;height: 201px;">
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="text text-center">
+                                    <h5><a href="">{{trending_books[10].name}}</a></h5>
+                                  
+                                </div>
+                                <div class="text text-center" >
+                                    <a href="" style="font-style: italic;">{{trending_books[10].author}}</a>
+                                </div>
+                            </div>
+                        </div> 
+                        <div class="item"  ng-click="redirectToProduct(trending_books[11].id_product)" title="{{trending_books[11].name}}"> 
+                            <div class="product">
+                                <div class="">
+                                    <div class="" style="margin: 6px 22px 0;">
+                                        <div class="">
+                                            <a href="">
+                                    <img src="./uploads/{{trending_books[11].pic}}" alt="" style="width: 134px;height: 201px;">
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="text text-center">
+                                    <h5><a href="">{{trending_books[11].name}}</a></h5>
+                                  
+                                </div>
+                                <div class="text text-center" >
+                                    <a href="" style="font-style: italic;">{{trending_books[11].author}}</a>
+                                </div>
+                            </div>
+                        </div> 
+                        <div class="item"  ng-click="redirectToProduct(trending_books[12].id_product)" title="{{trending_books[12].name}}"> 
+                            <div class="product">
+                                <div class="">
+                                    <div class="" style="margin: 6px 22px 0;">
+                                        <div class="">
+                                            <a href="">
+                                    <img src="./uploads/{{trending_books[12].pic}}" alt="" style="width: 134px;height: 201px;">
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="text text-center">
+                                    <h5><a href="">{{trending_books[12].name}}</a></h5>
+                                  
+                                </div>
+                                <div class="text text-center" >
+                                    <a href="" style="font-style: italic;">{{trending_books[12].author}}</a>
+                                </div>
+                            </div>
+                        </div> 
+                        <div class="item"  ng-click="redirectToProduct(trending_books[13].id_product)" title="{{trending_books[13].name}}"> 
+                            <div class="product">
+                                <div class="">
+                                    <div class="" style="margin: 6px 22px 0;">
+                                        <div class="">
+                                            <a href="">
+                                    <img src="./uploads/{{trending_books[13].pic}}" alt="" style="width: 134px;height: 201px;">
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="text text-center">
+                                    <h5><a href="">{{trending_books[13].name}}</a></h5>
+                                  
+                                </div>
+                                <div class="text text-center" >
+                                    <a href="" style="font-style: italic;">{{trending_books[13].author}}</a>
+                                </div>
+                            </div>
+                        </div> 
+                        <div class="item"  ng-click="redirectToProduct(trending_books[14].id_product)" title="{{trending_books[14].name}}"> 
+                            <div class="product">
+                                <div class="">
+                                    <div class="" style="margin: 6px 22px 0;">
+                                        <div class="">
+                                            <a href="">
+                                    <img src="./uploads/{{trending_books[14].pic}}" alt="" style="width: 134px;height: 201px;">
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="text text-center">
+                                    <h5><a href="">{{trending_books[14].name}}</a></h5>
+                                  
+                                </div>
+                                <div class="text text-center" >
+                                    <a href="" style="font-style: italic;">{{trending_books[14].author}}</a>
+                                </div>
+                            </div>
+                        </div> 
+                        <div class="item"  ng-click="redirectToProduct(trending_books[15].id_product)" title="{{trending_books[15].name}}"> 
+                            <div class="product">
+                                <div class="">
+                                    <div class="" style="margin: 6px 22px 0;">
+                                        <div class="">
+                                            <a href="">
+                                    <img src="./uploads/{{trending_books[15].pic}}" alt="" style="width: 134px;height: 201px;">
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="text text-center">
+                                    <h5><a href="">{{trending_books[15].name}}</a></h5>
+                                  
+                                </div>
+                                <div class="text text-center" >
+                                    <a href="" style="font-style: italic;">{{trending_books[15].author}}</a>
+                                </div>
+                            </div>
+                        </div> 
+                         <div class="item"  ng-click="redirectToProduct(trending_books[16].id_product)" title="{{trending_books[16].name}}"> 
+                            <div class="product">
+                                <div class="">
+                                    <div class="" style="margin: 6px 22px 0;">
+                                        <div class="">
+                                            <a href="">
+                                    <img src="./uploads/{{trending_books[16].pic}}" alt="" style="width: 134px;height: 201px;">
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="text text-center">
+                                    <h5><a href="">{{trending_books[16].name}}</a></h5>
+                                  
+                                </div>
+                                <div class="text text-center" >
+                                    <a href="" style="font-style: italic;">{{trending_books[16].author}}</a>
+                                </div>
+                            </div>
+                        </div> 
+                         <div class="item"  ng-click="redirectToProduct(trending_books[17].id_product)" title="{{trending_books[17].name}}"> 
+                            <div class="product">
+                                <div class="">
+                                    <div class="" style="margin: 6px 22px 0;">
+                                        <div class="">
+                                            <a href="">
+                                    <img src="./uploads/{{trending_books[17].pic}}" alt="" style="width: 134px;height: 201px;">
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="text text-center">
+                                    <h5><a href="">{{trending_books[17].name}}</a></h5>
+                                  
+                                </div>
+                                <div class="text text-center" >
+                                    <a href="" style="font-style: italic;">{{trending_books[17].author}}</a>
+                                </div>
+                            </div>
+                        </div> 
+                         <div class="item"  ng-click="redirectToProduct(trending_books[18].id_product)" title="{{trending_books[18].name}}"> 
+                            <div class="product">
+                                <div class="">
+                                    <div class="" style="margin: 6px 22px 0;">
+                                        <div class="">
+                                            <a href="">
+                                    <img src="./uploads/{{trending_books[18].pic}}" alt="" style="width: 134px;height: 201px;">
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="text text-center">
+                                    <h5><a href="">{{trending_books[18].name}}</a></h5>
+                                  
+                                </div>
+                                <div class="text text-center" >
+                                    <a href="" style="font-style: italic;">{{trending_books[18].author}}</a>
+                                </div>
+                            </div>
+                        </div> 
+                         <div class="item"  ng-click="redirectToProduct(trending_books[19].id_product)" title="{{trending_books[19].name}}"> 
+                            <div class="product">
+                                <div class="">
+                                    <div class="" style="margin: 6px 22px 0;">
+                                        <div class="">
+                                            <a href="">
+                                    <img src="./uploads/{{trending_books[19].pic}}" alt="" style="width: 134px;height: 201px;">
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="text text-center">
+                                    <h5><a href="">{{trending_books[19].name}}</a></h5>
+                                  
+                                </div>
+                                <div class="text text-center" >
+                                    <a href="" style="font-style: italic;">{{trending_books[19].author}}</a>
+                                </div>
+                            </div>
+                        </div>
+                         
                        
                     </div>
                     <!-- /.product-slider -->

@@ -45,6 +45,7 @@
     pointer-events: all !important;
     background-color: #444;
     color: #fff;
+    font-size:larger;
 }
 
 .jq-toast-single h2 {

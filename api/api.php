@@ -590,6 +590,22 @@
             $this->response($this->json($results), 200);
         }
 
+        public function getNotifications(){
+            if($this->get_request_method() != "GET"){
+                            $this->response('',405);
+            }
+            $productControllerObj=new ProductController();
+            $results =array();
+            if(isset($this->_request['id_user'])){
+                $results = $productControllerObj->getNotifications($this->_request['id_user']);
+                $this->response($this->json($results), 200);
+            }
+            else{
+                $this->response($this->json($results), 200);
+            }
+        }
+
+        
         /************ END *****************/
 
         

@@ -142,8 +142,6 @@ bookApp.factory('authHttpResponseInterceptor',['$q','$location','$rootScope',fun
                     $location.path('/');
                 }
                 if (rejection.status === 0) {
-                    if(!$rootScope.offline)
-                        networkConnectivity($rootScope,'offline');
                 }
                 else
                     $rootScope.offline = false;
@@ -155,15 +153,60 @@ bookApp.factory('authHttpResponseInterceptor',['$q','$location','$rootScope',fun
     //Http Intercpetor to check auth failures for xhr requests
     $httpProvider.interceptors.push('authHttpResponseInterceptor');
 }]);
+function responsiveVideo() {
+    return {
+        restrict: 'A',
+        link:  function(scope, element) {
+            var figure = element;
+            var video = element.children();
+            video
+                .attr('data-aspectRatio', video.height() / video.width())
+                .removeAttr('height')
+                .removeAttr('width')
+
+            //We can use $watch on $window.innerWidth also.
+            $(window).resize(function() {
+                var newWidth = figure.width();
+                video
+                    .width(newWidth)
+                    .height(newWidth * video.attr('data-aspectRatio'));
+            }).resize();
+        }
+    }
+}
+bookApp.directive('responsiveVideo', responsiveVideo);
 bookApp.run(function ($location, $rootScope, $state, $stateParams,$http,$cookies,$templateCache,$interval,$window,$sce,$timeout) {
         $rootScope.$state = $state;
         $rootScope.$on('$stateChangeStart', function(event, toState, toParams, fromState, fromParams){
             // //console.log('$rootScope.user_role',$rootScope.user_role);
             
         })
-        $rootScope.amoutPerRent =5;
+        $rootScope.amoutPerRent = 29;
         $rootScope.enableSignIn=true;
         console.log($cookies.email,$cookies.id_user)
+        $rootScope.getNotifications=function(id_user){
+            $http({
+                method: "get",
+                timeout:60000,                                    
+                url: SITE_URL+'getNotifications',
+                params:{'id_user':id_user},
+                headers: {'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'}
+                }).success(function (data,status) {
+                    $rootScope.notifications=[];
+                    if(angular.isDefined(data.notifications)){
+                        angular.forEach(data.notifications,function(m){
+                            if(m.message!=''){
+                                var obj={};
+                                obj.message= m.message;
+                                obj.name=m.name;
+                                obj.id_product = m.id_project;
+                                $rootScope.notifications.push(obj);
+                            }
+                        })
+                    }
+                    $cookies.notifications=JSON.stringify($rootScope.notifications);
+                });
+        }
         if(angular.isDefined($cookies.email)&&$cookies.email&&$cookies.id_user)
         {
             var randomSting= makeid(40);
@@ -173,11 +216,11 @@ bookApp.run(function ($location, $rootScope, $state, $stateParams,$http,$cookies
             $rootScope.enableSignIn=false;
             $rootScope.loggedUserDetails = $cookies;
             $rootScope.notifications=[];
-            if(angular.isDefined($cookies.notifications)&&$cookies.notifications!='')
-            $rootScope.notifications=JSON.parse($cookies.notifications);
+            $rootScope.getNotifications($cookies.id_user);
 
         }
-        $rootScope.cartProducts=[];
+        var a =[];
+        $rootScope.cartProducts=angular.copy(a);
               
       /* $http.defaults.headers.common['X-Csrf-Token']   = $cookies.csrf_token;
         $http.defaults.headers.common['X-Id-Exam']   = $cookies.id_exam;
@@ -319,11 +362,24 @@ bookApp.run(function ($location, $rootScope, $state, $stateParams,$http,$cookies
                                 $rootScope.tableDatas=[];
                                 $rootScope.abc=[];
                             }else{
-                                swal({
+                                /*swal({
                                   title: '',
                                   text: 'We will contact you via mail, once we receive an order for your book',
                                   timer: 5000
-                                })
+                                })*/
+                                $.toast({
+                                    text: "We will contact you via mail, once we receive an order for your book", // Text that is to be shown in the toast
+                                    showHideTransition: 'slide', // fade, slide or plain
+                                    allowToastClose: true, // Boolean value true or false
+                                    hideAfter: 4000, // false to make it sticky or number representing the miliseconds as time after which toast needs to be hidden
+                                    stack: 1, // false if there should be only one toast at a time or a number representing the maximum number of toasts to be shown at a time
+                                    position: 'mid-center', // bottom-left or bottom-right or bottom-center or top-left or top-right or top-center or mid-center or an object representing the left, right, top, bottom values
+                                    bgColor: '#000000',  // Background color of the toast
+                                    textColor: '#ffffff',  // Text color of the toast
+                                    textAlign: 'center',  // Text alignment i.e. left, right or center
+                                    loader: false,  // Whether to show loader or not. True by default
+                                    loaderBg: '#ffffff',  // Background color of the toast loader
+                                });
                                 $(".close").trigger('click');
                                 $rootScope.tableDatas=[];
                                 $rootScope.abc=[];
@@ -341,9 +397,15 @@ bookApp.run(function ($location, $rootScope, $state, $stateParams,$http,$cookies
             var loc= $location.path();
             if(loc.search('/products')>-1)
             {
+                var a=[];
+                $rootScope.categoriesIds = angular.copy(a);
+ 
                 $rootScope.getAllProducts();
             }
             else{
+                var a=[];
+                $rootScope.categoriesIds = angular.copy(a);
+
                 if($rootScope.searchString!='')
                 $location.path('/products');
             }
@@ -534,13 +596,26 @@ $rootScope.registerD=function(newUser)
                       allowToastClose: true,
                       position: 'top-right',
                     });*/
-                    swal({
+                   /* swal({
                               title: '',
                               text: data.message,
                               timer: 5000
-                            })
+                            })*/
+                    $.toast({
+                          text:data.message, // Text that is to be shown in the toast
+                          showHideTransition: 'slide', // fade, slide or plain
+                          allowToastClose: true, // Boolean value true or false
+                          hideAfter: 4000, // false to make it sticky or number representing the miliseconds as time after which toast needs to be hidden
+                          stack: 1, // false if there should be only one toast at a time or a number representing the maximum number of toasts to be shown at a time
+                          position: 'mid-center', // bottom-left or bottom-right or bottom-center or top-left or top-right or top-center or mid-center or an object representing the left, right, top, bottom values
+                          bgColor: '#000000',  // Background color of the toast
+                          textColor: '#ffffff',  // Text color of the toast
+                          textAlign: 'center',  // Text alignment i.e. left, right or center
+                          loader: false,  // Whether to show loader or not. True by default
+                          loaderBg: '#ffffff',  // Background color of the toast loader
+                    });
                     $rootScope.newUSer={};
-                    $rootScope.cartProducts=data.user_cart_details;
+                    $rootScope.cartProducts=angular.copy(data.user_cart_details);
                     var carts = $rootScope.cartProducts;
                     localStorage.removeItem('carts');
                     localStorage.setItem('carts',JSON.stringify(carts));   
@@ -550,11 +625,25 @@ $rootScope.registerD=function(newUser)
                 {
                     //alert(data.message);
                    
-                    swal({
+                   /* swal({
                       title: '',
                       text: data.message,
                       timer: 5000
-                    })
+                    })*/
+                    $.toast({
+                          text:data.message, // Text that is to be shown in the toast
+                          icon: 'error',
+                          showHideTransition: 'slide', // fade, slide or plain
+                          allowToastClose: true, // Boolean value true or false
+                          hideAfter: 4000, // false to make it sticky or number representing the miliseconds as time after which toast needs to be hidden
+                          stack: 1, // false if there should be only one toast at a time or a number representing the maximum number of toasts to be shown at a time
+                          position: 'mid-center', // bottom-left or bottom-right or bottom-center or top-left or top-right or top-center or mid-center or an object representing the left, right, top, bottom values
+                          bgColor: '#000000',  // Background color of the toast
+                          textColor: '#ffffff',  // Text color of the toast
+                          textAlign: 'center',  // Text alignment i.e. left, right or center
+                          loader: false,  // Whether to show loader or not. True by default
+                          loaderBg: '#ffffff',  // Background color of the toast loader
+                    });
 
                    
                 }
@@ -603,11 +692,25 @@ $rootScope.normalLoginD = function(email,password)
           allowToastClose: true,
           position: 'top-right',
         });*/
-        swal({
+        /*swal({
           title: '',
           text: 'You are alredy logged in to application',
           timer: 5000
-        })
+        })*/
+        $.toast({
+              text:'You are alredy logged in to application', // Text that is to be shown in the toast
+              icon: 'info',
+              showHideTransition: 'slide', // fade, slide or plain
+              allowToastClose: true, // Boolean value true or false
+              hideAfter: 4000, // false to make it sticky or number representing the miliseconds as time after which toast needs to be hidden
+              stack: 1, // false if there should be only one toast at a time or a number representing the maximum number of toasts to be shown at a time
+              position: 'mid-center', // bottom-left or bottom-right or bottom-center or top-left or top-right or top-center or mid-center or an object representing the left, right, top, bottom values
+              bgColor: '#000000',  // Background color of the toast
+              textColor: '#ffffff',  // Text color of the toast
+              textAlign: 'center',  // Text alignment i.e. left, right or center
+              loader: false,  // Whether to show loader or not. True by default
+              loaderBg: '#ffffff',  // Background color of the toast loader
+        });
         return false;
     }
     else
@@ -682,7 +785,8 @@ $rootScope.normalLoginD = function(email,password)
                         }
                     }
                     if($rootScope.cartProducts==undefined||$rootScope.cartProducts==null){
-                        $rootScope.cartProducts=[];
+                       var a =[];
+$rootScope.cartProducts=angular.copy(a);
                     }
                     if(angular.isDefined($rootScope.cartProducts)&&$rootScope.cartProducts.length>0)
                     {
@@ -710,7 +814,8 @@ $rootScope.normalLoginD = function(email,password)
                     }
                     else
                     {
-                        $rootScope.cartProducts=[];
+                        var a =[];
+$rootScope.cartProducts=angular.copy(a);
                     }
                    // $timeout(function() {$window.location.reload();}, 100);
                     //$window.location.href=BASE_URL_NEW+'#/';
@@ -721,11 +826,25 @@ $rootScope.normalLoginD = function(email,password)
                 if(status==403)
                     {
                        // alert(data.message);
-                        swal({
+                        /*swal({
                           title: '',
                           text: data.message,
                           timer: 5000
-                        })
+                        })*/
+                        $.toast({
+                              text:data.message, // Text that is to be shown in the toast
+                              icon: 'error',
+                              showHideTransition: 'slide', // fade, slide or plain
+                              allowToastClose: true, // Boolean value true or false
+                              hideAfter: 4000, // false to make it sticky or number representing the miliseconds as time after which toast needs to be hidden
+                              stack: 1, // false if there should be only one toast at a time or a number representing the maximum number of toasts to be shown at a time
+                              position: 'mid-center', // bottom-left or bottom-right or bottom-center or top-left or top-right or top-center or mid-center or an object representing the left, right, top, bottom values
+                              bgColor: '#000000',  // Background color of the toast
+                              textColor: '#ffffff',  // Text color of the toast
+                              textAlign: 'center',  // Text alignment i.e. left, right or center
+                              loader: false,  // Whether to show loader or not. True by default
+                              loaderBg: '#ffffff',  // Background color of the toast loader
+                        });
                     }
             });
         }
@@ -775,9 +894,10 @@ $rootScope.login = function(param)
                         }
                     }
                     if($rootScope.cartProducts==undefined||$rootScope.cartProducts==null){
-                        $rootScope.cartProducts=[];
+                        var a=[];
+                        $rootScope.cartProducts=angular.copy(a);
                     }
-                    if(angular.isDefined($rootScope.cartProducts)&&$rootScope.cartProducts.length>0)
+                    if(angular.isDefined($rootScope.cartProducts)&&$rootScope.cartProducts!=null&&$rootScope.cartProducts.length>0)
                         {
                             $http({
                                     method: "post",
@@ -787,7 +907,7 @@ $rootScope.login = function(param)
                                     headers: {'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'}
                                     }).success(function (data,status) {
                                          $rootScope.cartProducts=[];
-                                         $rootScope.cartProducts=data.user_cart_details;
+                                         $rootScope.cartProducts=angular.copy(data.user_cart_details);
                                          var carts = $rootScope.cartProducts;
                                             localStorage.removeItem('carts');
                                             localStorage.setItem('carts',JSON.stringify(carts));   
@@ -802,13 +922,15 @@ $rootScope.login = function(param)
                         else
                         {
                             console.log($rootScope.user_cart_details);
-                            if(angular.isDefined($rootScope.user_cart_details)&&$rootScope.user_cart_details.length>0){
-                                $rootScope.cartProducts=$rootScope.user_cart_details;
+                            if(angular.isDefined($rootScope.user_cart_details)&&$rootScope.user_cart_details!=null&&$rootScope.user_cart_details.length>0){
+                                $rootScope.cartProducts=angular.copy($rootScope.user_cart_details);
                                 var carts = $rootScope.cartProducts;
                                 localStorage.removeItem('carts');
                                 localStorage.setItem('carts',JSON.stringify(carts)); 
-                            }else
-                            $rootScope.cartProducts=[];
+                            }else{
+                             var a=[];   
+                            $rootScope.cartProducts=angular.copy(a);;
+                            }
                         }
                         //if(angular.isDefined(param)&&param=='getcookiefunctin')
                         //$timeout(function() {$window.location.reload();}, 100);
@@ -867,6 +989,7 @@ $rootScope.login = function(param)
         
 });
 bookApp.controller('homeCtrl', function ($scope,$rootScope,$interval,$timeout, $http,$cookies,$location,$stateParams,$window){
+ $.toast().reset('all');
     //console.log('gggg');
     if(interval!=null||interval==null)
     {
@@ -942,6 +1065,7 @@ bookApp.controller('homeCtrl', function ($scope,$rootScope,$interval,$timeout, $
 
 });
 bookApp.controller('productCtrl', function ($scope,$rootScope,$interval, $http,$cookies,$location,$stateParams,$window,$timeout){
+$.toast().reset('all');
 if(interval!=null||interval==null)
 {
     if(angular.isDefined($cookies.id_user)&&$cookies.id_user!=''){
@@ -967,13 +1091,13 @@ $scope.getCategories =function () {
             headers: {'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'}
             }).success(function (data,status) {
                 $scope.categories = data.categories;
-                $scope.categoriesIds=[];
+                $rootScope.categoriesIds=[];
                 if(angular.isDefined($stateParams.id_category)&&$stateParams.id_category!=''){
                     $scope.id_category = $stateParams.id_category;
                     var keyos ='';
                     angular.forEach($scope.categories,function(val,key){
                         if($stateParams.id_category==val.id_category){
-                            $scope.categoriesIds[key.toString()]="1";
+                            $rootScope.categoriesIds[key.toString()]="1";
                             keyos = key.toString()
                             
                         }
@@ -1004,15 +1128,15 @@ $scope.getAllProducts = function(categoryAddedIndex)
 
     var limitIndex = $scope.limitIndex;
     var categories = [];
-    ////console.log($scope.categoriesIds);
+    console.log($rootScope.categoriesIds);
     /*if(angular.isDefined($scope.id_category)&&$scope.id_category!=''){
                 categories.push($scope.id_category);
             }*/
 
             
-    if(angular.isDefined($scope.categoriesIds)&&$scope.categoriesIds.length>0)
+    if(angular.isDefined($rootScope.categoriesIds)&&$rootScope.categoriesIds.length>0)
     {
-        angular.forEach($scope.categoriesIds,function(a,key){
+        angular.forEach($rootScope.categoriesIds,function(a,key){
             if(angular.isDefined(a)&&a!=''&&a!=null&&a==1){
                 angular.forEach($scope.categories,function(val1,key1){
                     if(key==key1){
@@ -1025,7 +1149,7 @@ $scope.getAllProducts = function(categoryAddedIndex)
             
         });
 
-        angular.forEach($scope.categoriesIds,function(a,key){
+        angular.forEach($rootScope.categoriesIds,function(a,key){
             if(angular.isDefined(a)&&a!=''&&a!=null&&a==1){
                 angular.forEach($scope.categories,function(val3,key4){
                     if(key==key4&&categories.indexOf(val3.id_category)==-1){
@@ -1155,7 +1279,8 @@ $scope.getProductDetail = function(id_pro)
 $scope.addProductToCart = function(product)
 {
     if($rootScope.cartProducts==undefined||$rootScope.cartProducts==null){
-        $rootScope.cartProducts=[];
+        var a =[];
+        $rootScope.cartProducts=angular.copy(a);
     }
     if(angular.isDefined($rootScope.cartProducts)&&$rootScope.cartProducts.length>0)
     {
@@ -1164,12 +1289,26 @@ $scope.addProductToCart = function(product)
             {
                 //alert('Product is already added to cart');
                
-                swal({
+                /*swal({
                       title: '',
                       text: 'Product is already added to cart',
                       timer: 5000
                     })
-
+*/
+                 $.toast({
+                      text:'Product is already added to cart', // Text that is to be shown in the toast
+                      showHideTransition: 'slide', // fade, slide or plain
+                      icon:'error',
+                      allowToastClose: true, // Boolean value true or false
+                      hideAfter: 4000, // false to make it sticky or number representing the miliseconds as time after which toast needs to be hidden
+                      stack: 1, // false if there should be only one toast at a time or a number representing the maximum number of toasts to be shown at a time
+                      position: 'mid-center', // bottom-left or bottom-right or bottom-center or top-left or top-right or top-center or mid-center or an object representing the left, right, top, bottom values
+                      bgColor: '#000000',  // Background color of the toast
+                      textColor: '#ffffff',  // Text color of the toast
+                      textAlign: 'center',  // Text alignment i.e. left, right or center
+                      loader: false,  // Whether to show loader or not. True by default
+                      loaderBg: '#ffffff',  // Background color of the toast loader
+                });
                 return false;
             }
         }
@@ -1189,11 +1328,24 @@ $scope.addProductToCart = function(product)
         localStorage.removeItem('carts');
         var carts = $rootScope.cartProducts;
         localStorage.setItem('carts',JSON.stringify(carts));
-        swal({
+        /*swal({
                       title: '',
                       text: 'Product is added to cart',
                       timer: 5000
-                    })
+                    })*/
+        $.toast({
+              text:'Product is added to cart', // Text that is to be shown in the toast
+              showHideTransition: 'slide', // fade, slide or plain
+              allowToastClose: true, // Boolean value true or false
+              hideAfter: 5000, // false to make it sticky or number representing the miliseconds as time after which toast needs to be hidden
+              stack: 1, // false if there should be only one toast at a time or a number representing the maximum number of toasts to be shown at a time
+              position: 'bottom-center', // bottom-left or bottom-right or bottom-center or top-left or top-right or top-center or mid-center or an object representing the left, right, top, bottom values
+              bgColor: '#000000',  // Background color of the toast
+              textColor: '#ffffff',  // Text color of the toast
+              textAlign: 'center',  // Text alignment i.e. left, right or center
+              loader: false,  // Whether to show loader or not. True by default
+              loaderBg: '#ffffff',  // Background color of the toast loader
+        });
 
     });
 
@@ -1203,7 +1355,7 @@ $scope.clearAllElemts=function(){
     $('.ckbox').prop('checked', false);
     $scope.startIndex=0;
     $scope.limitIndex=6;
-    $scope.categoriesIds=[];
+    $rootScope.categoriesIds=[];
     $scope.searchString="";
     $rootScope.searchString="";
     $scope.getAllProducts();
@@ -1216,7 +1368,7 @@ bookApp.controller('singleProductCtrl', function ($scope,$rootScope,$interval, $
 $("#return-to-top").trigger('click');
 $scope.loadingBarShow=true;
     $rootScope.searchString="";
-
+$.toast().reset('all');
 if(interval!=null||interval==null)
     {
         if(angular.isDefined($cookies.id_user)&&$cookies.id_user!=''){
@@ -1279,11 +1431,24 @@ $scope.sendOrganizationReq =function()
             {
                 //alert('Organization addedd successfully.You will be nofified once it is verified.');
                
-                swal({
-                      title: '',
-                      text: 'Organization addedd successfully.You will be notified once it is verified.',
-                      timer: 5000
-                    })
+                /*swal({
+                  title: '',
+                  text: 'Organization addedd successfully.You will be notified once it is verified.',
+                  timer: 5000
+                })*/
+                $.toast({
+                    text: "Organization addedd successfully.You will be notified once it is verified.", // Text that is to be shown in the toast
+                    showHideTransition: 'slide', // fade, slide or plain
+                    allowToastClose: true, // Boolean value true or false
+                    hideAfter: 5000, // false to make it sticky or number representing the miliseconds as time after which toast needs to be hidden
+                    stack: 1, // false if there should be only one toast at a time or a number representing the maximum number of toasts to be shown at a time
+                    position: 'bottom-center', // bottom-left or bottom-right or bottom-center or top-left or top-right or top-center or mid-center or an object representing the left, right, top, bottom values
+                    bgColor: '#000000',  // Background color of the toast
+                    textColor: '#ffffff',  // Text color of the toast
+                    textAlign: 'center',  // Text alignment i.e. left, right or center
+                    loader: false,  // Whether to show loader or not. True by default
+                    loaderBg: '#ffffff',  // Background color of the toast loader
+                });
                 $('body').removeClass('modal-open');
                 $("#login-modal1").modal('hide');
             }
@@ -1312,7 +1477,8 @@ $scope.sendOrganizationReq =function()
         $scope.showGoToCart=false;
         $scope.loadingBarShow=false;
         if($rootScope.cartProducts==null){
-            $rootScope.cartProducts=[];
+               var a=[] 
+            $rootScope.cartProducts=a;
         }  
         if(angular.isDefined($rootScope.cartProducts)&&$rootScope.cartProducts!=''){
             angular.forEach($rootScope.cartProducts,function(c){
@@ -1330,7 +1496,8 @@ $scope.sendOrganizationReq =function()
     $scope.addProductToCart = function(product)
     {
     if($rootScope.cartProducts==null){
-        $rootScope.cartProducts=[];
+        var a=[];
+        $rootScope.cartProducts=angular.copy(a);
     }  
     if(angular.isDefined($rootScope.cartProducts)&&$rootScope.cartProducts.length>0)
     {
@@ -1339,11 +1506,25 @@ $scope.sendOrganizationReq =function()
             {
                 //alert('Product is already added to cart');
                
-                swal({
+                /*swal({
                       title: '',
                       text: 'Product is already added to cart',
                       timer: 5000
-                    })
+                    })*/
+                $.toast({
+                    text: "Product is already added to cart", // Text that is to be shown in the toast
+                    showHideTransition: 'slide', // fade, slide or plain
+                    icon:'error',
+                    allowToastClose: true, // Boolean value true or false
+                    hideAfter: 5000, // false to make it sticky or number representing the miliseconds as time after which toast needs to be hidden
+                    stack: 1, // false if there should be only one toast at a time or a number representing the maximum number of toasts to be shown at a time
+                    position: 'bottom-center', // bottom-left or bottom-right or bottom-center or top-left or top-right or top-center or mid-center or an object representing the left, right, top, bottom values
+                    bgColor: '#000000',  // Background color of the toast
+                    textColor: '#ffffff',  // Text color of the toast
+                    textAlign: 'center',  // Text alignment i.e. left, right or center
+                    loader: false,  // Whether to show loader or not. True by default
+                    loaderBg: '#ffffff',  // Background color of the toast loader
+                });
 
                 return false;
             }
@@ -1351,20 +1532,48 @@ $scope.sendOrganizationReq =function()
     }
     if(angular.isDefined($scope.selecttechpark)&&$scope.selecttechpark!=''){
         if($scope.selecttechpark=='not_avaiable'){
-            swal({
+            /*swal({
                       title: '',
                       text: 'Please select the valid techpark availability',
                       timer: 5000
-            })
+            })*/
+            $.toast({
+                text: "Please select the valid techpark availability", // Text that is to be shown in the toast
+                icon: 'error',
+                showHideTransition: 'slide', // fade, slide or plain
+                allowToastClose: true, // Boolean value true or false
+                hideAfter: 5000, // false to make it sticky or number representing the miliseconds as time after which toast needs to be hidden
+                stack: 1, // false if there should be only one toast at a time or a number representing the maximum number of toasts to be shown at a time
+                position: 'mid-center', // bottom-left or bottom-right or bottom-center or top-left or top-right or top-center or mid-center or an object representing the left, right, top, bottom values
+                bgColor: '#000000',  // Background color of the toast
+                textColor: '#ffffff',  // Text color of the toast
+                textAlign: 'center',  // Text alignment i.e. left, right or center
+                loader: false,  // Whether to show loader or not. True by default
+                loaderBg: '#ffffff',  // Background color of the toast loader
+            });
 
             return false;
         }
     }else{
-        swal({
+        /*swal({
                       title: '',
                       text: 'Please select your techpark',
                       timer: 5000
-            })
+            })*/
+        $.toast({
+                text: "Please select your techpark", // Text that is to be shown in the toast
+                icon: 'error',
+                showHideTransition: 'slide', // fade, slide or plain
+                allowToastClose: true, // Boolean value true or false
+                hideAfter: 4000, // false to make it sticky or number representing the miliseconds as time after which toast needs to be hidden
+                stack: 1, // false if there should be only one toast at a time or a number representing the maximum number of toasts to be shown at a time
+                position: 'mid-center', // bottom-left or bottom-right or bottom-center or top-left or top-right or top-center or mid-center or an object representing the left, right, top, bottom values
+                bgColor: '#000000',  // Background color of the toast
+                textColor: '#ffffff',  // Text color of the toast
+                textAlign: 'center',  // Text alignment i.e. left, right or center
+                loader: false,  // Whether to show loader or not. True by default
+                loaderBg: '#ffffff',  // Background color of the toast loader
+        });
 
         return false;
     }
@@ -1394,11 +1603,24 @@ $scope.sendOrganizationReq =function()
                 localStorage.removeItem('carts');
                 var carts = $rootScope.cartProducts;
                 localStorage.setItem('carts',JSON.stringify(carts));
-                swal({
+                /*swal({
                               title: '',
                               text: 'Product is added to cart',
                               timer: 5000
-                            })
+                            })*/
+                $.toast({
+                    text: "Product is added to cart", // Text that is to be shown in the toast
+                    showHideTransition: 'slide', // fade, slide or plain
+                    allowToastClose: true, // Boolean value true or false
+                    hideAfter: 4000, // false to make it sticky or number representing the miliseconds as time after which toast needs to be hidden
+                    stack: 1, // false if there should be only one toast at a time or a number representing the maximum number of toasts to be shown at a time
+                    position: 'bottom-center', // bottom-left or bottom-right or bottom-center or top-left or top-right or top-center or mid-center or an object representing the left, right, top, bottom values
+                    bgColor: '#000000',  // Background color of the toast
+                    textColor: '#ffffff',  // Text color of the toast
+                    textAlign: 'center',  // Text alignment i.e. left, right or center
+                    loader: false,  // Whether to show loader or not. True by default
+                    loaderBg: '#ffffff',  // Background color of the toast loader
+                });
                 $scope.showGoToCart=false;
                 if(angular.isDefined($rootScope.cartProducts)&&$rootScope.cartProducts!=''){
                     angular.forEach($rootScope.cartProducts,function(c){
@@ -1411,7 +1633,21 @@ $scope.sendOrganizationReq =function()
 
             });
     }else{
+        $.toast({
+                    text: "Product is added to cart", // Text that is to be shown in the toast
+                    showHideTransition: 'slide', // fade, slide or plain
+                    allowToastClose: true, // Boolean value true or false
+                    hideAfter: 4000, // false to make it sticky or number representing the miliseconds as time after which toast needs to be hidden
+                    stack: 1, // false if there should be only one toast at a time or a number representing the maximum number of toasts to be shown at a time
+                    position: 'bottom-center', // bottom-left or bottom-right or bottom-center or top-left or top-right or top-center or mid-center or an object representing the left, right, top, bottom values
+                    bgColor: '#000000',  // Background color of the toast
+                    textColor: '#ffffff',  // Text color of the toast
+                    textAlign: 'center',  // Text alignment i.e. left, right or center
+                    loader: false,  // Whether to show loader or not. True by default
+                    loaderBg: '#ffffff',  // Background color of the toast loader
+                });
         $rootScope.cartProducts.push(product);
+        console.log($rootScope.cartProducts);
         localStorage.removeItem('carts');
         var carts = $rootScope.cartProducts;
         localStorage.setItem('carts',JSON.stringify(carts));
@@ -1423,7 +1659,8 @@ $scope.sendOrganizationReq =function()
 });
 
 bookApp.controller('basketCtrl', function ($scope,$rootScope,$interval, $http,$cookies,$location,$stateParams,$window){
-
+$.toast().reset('all');
+console.log($rootScope.cartProducts);
 if(interval!=null||interval==null)
 {
     if(angular.isDefined($cookies.id_user)&&$cookies.id_user!=''){
@@ -1437,8 +1674,26 @@ $scope.showBasket=true;
 $scope.beforelogincheckout= function(){
     if(angular.isUndefined($cookies.id_user))
     {
-       
-        swal({ 
+        $.toast({
+            text: "Please login and add product to cart", // Text that is to be shown in the toast
+            showHideTransition: 'slide', // fade, slide or plain
+            icon:'error',
+            allowToastClose: true, // Boolean value true or false
+            hideAfter: 4000, // false to make it sticky or number representing the miliseconds as time after which toast needs to be hidden
+            stack: 1, // false if there should be only one toast at a time or a number representing the maximum number of toasts to be shown at a time
+            position: 'mid-center', // bottom-left or bottom-right or bottom-center or top-left or top-right or top-center or mid-center or an object representing the left, right, top, bottom values
+            bgColor: '#000000',  // Background color of the toast
+            textColor: '#ffffff',  // Text color of the toast
+            textAlign: 'center',  // Text alignment i.e. left, right or center
+            loader: false,  // Whether to show loader or not. True by default
+            loaderBg: '#ffffff',  // Background color of the toast loader
+            afterHidden: function (){
+                $(".bs-example-modal-lg").modal("show");
+                $rootScope.registerorloginClick('login');
+                $.toast().reset('all');
+            }
+        });
+       /* swal({ 
               title: '',
               text: 'Please login and add product to cart',
               timer: 5000
@@ -1446,7 +1701,7 @@ $scope.beforelogincheckout= function(){
           function(){
                     $(".bs-example-modal-lg").modal("show");
                     $rootScope.registerorloginClick('login');
-        });
+        });*/
         return false;
     }else{
         //data-toggle="modal" data-target="#login-modal1"
@@ -1474,12 +1729,13 @@ $scope.deleteProductFromCart = function (product) {
         data : $.param({'product':product,'id_user':$cookies.id_user}),
         headers: {'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'}
         }).success(function (data,status) {
-            $rootScope.cartProducts=data.user_cart_details;
+            $rootScope.cartProducts=angular.copy(data.user_cart_details);
             var carts = $rootScope.cartProducts;
                     localStorage.removeItem('carts');
                     localStorage.setItem('carts',JSON.stringify(carts));
         });
    }else{
+        //console.log($rootScope.cartProducts);
         var pId= '';
             if(angular.isDefined(product.id_product)){
                     pId = product.id_product;
@@ -1490,7 +1746,7 @@ $scope.deleteProductFromCart = function (product) {
             }
         }
 
-        //console.log(product,$rootScope.cartProducts.length);
+        //console.log(product,$rootScope.cartProducts);
         if(angular.isDefined($rootScope.cartProducts)&&$rootScope.cartProducts.length>0){
             for (var i = 0; i < $rootScope.cartProducts.length; i++) {
                 var id_pro = '';
@@ -1501,13 +1757,20 @@ $scope.deleteProductFromCart = function (product) {
                     id_pro = $rootScope.cartProducts[i].product_id_product;
                     }
                 }
-                //console.log(pId,"f",id_pro)
+                //console.log(pId,"f",id_pro,i,$rootScope.cartProducts);
+
+                var cartProducts = $rootScope.cartProducts;
+                //console.log(pId,"f",id_pro,i,cartProducts);
                 if(id_pro&&id_pro!=''){
-                    if(id_pro==pId)
-                    $rootScope.cartProducts.splice(i);
-                    var carts = $rootScope.cartProducts;
-                    localStorage.removeItem('carts');
-                    localStorage.setItem('carts',JSON.stringify(carts));
+                    if(id_pro==pId){
+                        cartProducts.splice(i,1);
+                        //console.log(pId,"f",id_pro,i,cartProducts);
+                        $rootScope.cartProducts = angular.copy(cartProducts);
+                        var carts = cartProducts;
+
+                        localStorage.removeItem('carts');
+                        localStorage.setItem('carts',JSON.stringify(carts));
+                    }
                 }
             }
         }
@@ -1525,7 +1788,26 @@ $scope.buyProducts= function(){
     {
        
         $("#closeBtnOrder").trigger('click');
-        swal({ 
+        $.toast({
+            text: "Please login and add product to cart", // Text that is to be shown in the toast
+            showHideTransition: 'slide', // fade, slide or plain
+            icon:'error',
+            allowToastClose: true, // Boolean value true or false
+            hideAfter: 4000, // false to make it sticky or number representing the miliseconds as time after which toast needs to be hidden
+            stack: 1, // false if there should be only one toast at a time or a number representing the maximum number of toasts to be shown at a time
+            position: 'mid-center', // bottom-left or bottom-right or bottom-center or top-left or top-right or top-center or mid-center or an object representing the left, right, top, bottom values
+            bgColor: '#000000',  // Background color of the toast
+            textColor: '#ffffff',  // Text color of the toast
+            textAlign: 'center',  // Text alignment i.e. left, right or center
+            loader: false,  // Whether to show loader or not. True by default
+            loaderBg: '#ffffff',  // Background color of the toast loader
+            afterHidden: function (){
+                $(".bs-example-modal-lg").modal("show");
+                $rootScope.registerorloginClick('login');
+                $.toast().reset('all');
+            }
+        });
+        /*swal({ 
               title: '',
               text: 'Please login and add product to cart',
               timer: 5000
@@ -1533,7 +1815,7 @@ $scope.buyProducts= function(){
           function(){
                     $(".bs-example-modal-lg").modal("show");
                     $rootScope.registerorloginClick('login');
-        });
+        });*/
         
         return false;
     }
@@ -1573,11 +1855,25 @@ $scope.buyProducts= function(){
         headers: {'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'}
         }).success(function (data,status) {
             if(status==200)
-                swal({
+               /* swal({
                       title: '',
                       text: 'Thank you for placing an order with us. You will receive a notification once your book is ready to be dispatched.',
                       timer: 5000
-                })
+                })*/
+                $.toast({
+                    text: "Thank you for placing an order with us. You will receive a notification once your book is ready to be dispatched.", // Text that is to be shown in the toast
+                    showHideTransition: 'slide', // fade, slide or plain
+                    allowToastClose: true, // Boolean value true or false
+                    hideAfter: 6000, // false to make it sticky or number representing the miliseconds as time after which toast needs to be hidden
+                    stack: 1, // false if there should be only one toast at a time or a number representing the maximum number of toasts to be shown at a time
+                    position: 'mid-center', // bottom-left or bottom-right or bottom-center or top-left or top-right or top-center or mid-center or an object representing the left, right, top, bottom values
+                    bgColor: '#000000',  // Background color of the toast
+                    textColor: '#ffffff',  // Text color of the toast
+                    textAlign: 'center',  // Text alignment i.e. left, right or center
+                    loader: false,  // Whether to show loader or not. True by default
+                    loaderBg: '#ffffff',  // Background color of the toast loader
+                    
+                });
 
             $cookies.mobile = $scope.mobile;
 
@@ -1599,12 +1895,26 @@ $scope.buyProducts= function(){
             if(status==403)
             {
                 //alert(data.meessage);
-                
-                swal({
+                $.toast({
+                    text: data.meessage, // Text that is to be shown in the toast
+                    icon:'error',
+                    showHideTransition: 'slide', // fade, slide or plain
+                    allowToastClose: true, // Boolean value true or false
+                    hideAfter: 4000, // false to make it sticky or number representing the miliseconds as time after which toast needs to be hidden
+                    stack: 1, // false if there should be only one toast at a time or a number representing the maximum number of toasts to be shown at a time
+                    position: 'mid-center', // bottom-left or bottom-right or bottom-center or top-left or top-right or top-center or mid-center or an object representing the left, right, top, bottom values
+                    bgColor: '#000000',  // Background color of the toast
+                    textColor: '#ffffff',  // Text color of the toast
+                    textAlign: 'center',  // Text alignment i.e. left, right or center
+                    loader: false,  // Whether to show loader or not. True by default
+                    loaderBg: '#ffffff',  // Background color of the toast loader
+                    
+                });
+                /*swal({
                       title: '',
                       text: data.meessage,
                       timer: 5000
-                    })
+                    })*/
 
                 $scope.message=data.meessage;
                 $('body').removeClass('modal-open');
@@ -1659,11 +1969,25 @@ $scope.sendOrganizationReq =function()
             {
                 //alert('Organization addedd successfully.You will be nofified once it is verified.');
                
-                swal({
+                /*swal({
                       title: '',
                       text: 'Organization addedd successfully.You will be nofified once it is verified.',
                       timer: 5000
-                    })
+                    })*/
+                $.toast({
+                    text: 'Organization addedd successfully.You will be nofified once it is verified.', // Text that is to be shown in the toast
+                    showHideTransition: 'slide', // fade, slide or plain
+                    allowToastClose: true, // Boolean value true or false
+                    hideAfter: 4000, // false to make it sticky or number representing the miliseconds as time after which toast needs to be hidden
+                    stack: 1, // false if there should be only one toast at a time or a number representing the maximum number of toasts to be shown at a time
+                    position: 'bottom-center', // bottom-left or bottom-right or bottom-center or top-left or top-right or top-center or mid-center or an object representing the left, right, top, bottom values
+                    bgColor: '#000000',  // Background color of the toast
+                    textColor: '#ffffff',  // Text color of the toast
+                    textAlign: 'center',  // Text alignment i.e. left, right or center
+                    loader: false,  // Whether to show loader or not. True by default
+                    loaderBg: '#ffffff',  // Background color of the toast loader
+                    
+                });
                 $('body').removeClass('modal-open');
                 $("#login-modal1").modal('hide');
             }
@@ -1676,7 +2000,7 @@ $scope.sendOrganizationReq =function()
 
 
 bookApp.controller('ordersCtrl', function ($scope,$rootScope,$interval, $http,$cookies,$location,$stateParams,$window){
-
+$.toast().reset('all');
 if(interval!=null||interval==null)
 {
     if(angular.isDefined($cookies.id_user)&&$cookies.id_user!=''){
@@ -1741,11 +2065,25 @@ $scope.changeTransactionStatus = function(id_subtransaction,order_status){
                     //alert(data.message);
                     $('body').removeClass('modal-open');
                     $("#returnreview").modal('hide');
-                     swal({
+                     /*swal({
                       title: '',
                       text: data.message,
                       timer: 5000
-                    })
+                    })*/
+                     $.toast({
+                        text: data.message, // Text that is to be shown in the toast
+                        showHideTransition: 'slide', // fade, slide or plain
+                        allowToastClose: true, // Boolean value true or false
+                        hideAfter: 4000, // false to make it sticky or number representing the miliseconds as time after which toast needs to be hidden
+                        stack: 1, // false if there should be only one toast at a time or a number representing the maximum number of toasts to be shown at a time
+                        position: 'bottom-center', // bottom-left or bottom-right or bottom-center or top-left or top-right or top-center or mid-center or an object representing the left, right, top, bottom values
+                        bgColor: '#000000',  // Background color of the toast
+                        textColor: '#ffffff',  // Text color of the toast
+                        textAlign: 'center',  // Text alignment i.e. left, right or center
+                        loader: false,  // Whether to show loader or not. True by default
+                        loaderBg: '#ffffff',  // Background color of the toast loader
+                        
+                    });
                     if(order_status=='in_progress'){
                         $scope.id_subtransaction="";
                         $scope.status="";
@@ -1765,7 +2103,7 @@ $scope.changeTransactionStatus = function(id_subtransaction,order_status){
 
 
 bookApp.controller('registerCtrl', function ($scope,$rootScope,$interval, $http,$cookies,$location,$stateParams,$window){
-
+$.toast().reset('all');
 if(interval!=null||interval==null)
     {
         if(angular.isDefined($cookies.id_user)&&$cookies.id_user!=''){
@@ -1777,7 +2115,7 @@ if(interval!=null||interval==null)
 });
 
 bookApp.controller('faqCtrl', function ($scope,$rootScope,$interval, $http,$cookies,$location,$stateParams,$window){
-
+$.toast().reset('all');
 if(interval!=null||interval==null)
     {
         if(angular.isDefined($cookies.id_user)&&$cookies.id_user!=''){
@@ -1790,7 +2128,7 @@ if(interval!=null||interval==null)
     $scope.groups = [
     {
         "title" : "How much will I earn per book?",
-        "content" : "You will earn Rs.5/day for each book you lend to Chainreaders",
+        "content" : "You will earn Rs.10/week/book for each book you lend to Chainreaders",
         "open" : false
     },
     {
@@ -1800,12 +2138,12 @@ if(interval!=null||interval==null)
     },
     {
         "title" : "For how many days can I borrow a book?",
-        "content" : "You can borrow a book for any number of days. There is no late fee levied by Chainreaders",
+        "content" : "You can borrow any book for a maximum of 3 weeks @ Rs. 29/week/book. From the 22nd day onwars you will be charged @ Rs.39/week/book",
         "open" : false
     },
     {
         "title" : "What is the total number of books at Chainreaders?",
-        "content" : "Chainreaders has a collection of around 5000 books. We are striving hard to expand our collection each and every day.",
+        "content" : "Chainreaders has a collection of around 1000+ books. We are striving hard to expand our collection each and every day.",
         "open" : false
     },
     {
@@ -1815,12 +2153,12 @@ if(interval!=null||interval==null)
     },
     {
         "title" : "What is the charge per book?",
-        "content" : "Each book is charged at Rs 5/day. The cost per day is not dependent on the marked price of the book.",
+        "content" : "Each book is charged at Rs.29/week. The cost per day is not dependent on the marked price of the book.",
         "open" : false
     },
     {
         "title" : "How much do people at ChainReaders earn?",
-        "content" : "Chainreaders is a startup. For every book that is transacted through our website we earn Rs.5/day",
+        "content" : "Chainreaders is a startup. For every book that is transacted through our website we earn Rs.19/week",
         "open" : false
     },
     {
@@ -1840,7 +2178,7 @@ if(interval!=null||interval==null)
     },
     {
         "title" : "How many books can I order in a single go?",
-        "content" : "There is no limit on the number of books that can be ordered.",
+        "content" : "Youcan rent a maximum of 3 books as part of one order",
         "open" : false
     },
     {
@@ -1852,7 +2190,7 @@ if(interval!=null||interval==null)
 });
 
 bookApp.controller('aboutUsCtrl', function ($scope,$rootScope,$interval, $http,$cookies,$location,$stateParams,$window){
-
+$.toast().reset('all');
 if(interval!=null||interval==null)
     {
         if(angular.isDefined($cookies.id_user)&&$cookies.id_user!=''){
@@ -1865,7 +2203,7 @@ if(interval!=null||interval==null)
 });
 
 bookApp.controller('termsCtrl', function ($scope,$rootScope,$interval, $http,$cookies,$location,$stateParams,$window){
-
+$.toast().reset('all');
 if(interval!=null||interval==null)
     {
         if(angular.isDefined($cookies.id_user)&&$cookies.id_user!=''){
